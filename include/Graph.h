@@ -1,18 +1,33 @@
 
 typedef void* Pointer;
-typedef struct graph* Graph;
-typedef struct graphLinkedList;
 
-typedef struct graph {
+typedef struct Node;
+typedef struct NodeNeighborsLinkedList;
+
+typedef struct Node {
     char* name;
-    GraphLinkedList* destinations;
-} * Graph;
+    
+    NodeNeighborsLinkedList* destinations;
+} * Node;
 
-typedef struct graphLinkedList {
-    Graph* dest;
+typedef struct NodeNeighborsLinkedList {
+   Node* dest;
     double cost;
-    // recall type var;
+    double time_cost;
     graphLinkedList* next;
-} * GraphLinkedList;
+} * NodeNeighborsLinkedList;
 
 
+//We need to think a way to chouse 2D or 3D
+//depending on the given graph 
+
+typedef struct Destinations2D {
+    decimanl x;
+    decimanl y;
+}*   Destinations2D
+
+typedef struct Destinations3D {
+    decimanl x;
+    decimanl y;
+    decimanl z;
+}*   Destinations3D
