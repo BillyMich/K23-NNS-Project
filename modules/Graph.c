@@ -1,6 +1,6 @@
 #include "include/Graph.h"
 
-Graph createGraph() {
+Graph intiGraph() {
     Graph graph = (Graph)malloc(sizeof(Graph));
     if (graph == NULL)
         return NULL;
@@ -23,7 +23,7 @@ void freeGraph(Graph graph) {
 }
 
 //TODO:Need to check if this works!
-Graph createGraphFromBinaryFile(const String filename) {
+Graph createGraphFromBinaryFile(const String filename, int dimensions) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
         perror("Error opening file");
@@ -31,35 +31,27 @@ Graph createGraphFromBinaryFile(const String filename) {
     }
 
     // Create an empty graph
-    Graph* graph = createGraph();
+    Graph graph = initGraph();
     if (graph == NULL) {
         fclose(file);
         perror("Error creating graph");
         return NULL;
     }
 
+    String buffer[256];
     // Read and process data from the binary file
     while (!feof(file)) {
-        char nodeName[256];
+    
         int numNeighbors;
         double cost, timeCost;
 
-        // Read node name
-        //TODO:This might need to be taken of!
-        if (fread(nodeName, sizeof(nodeName), 1, file) != 1) {
-            if (feof(file)) {
-                break;
-            }
-            perror("Error reading node name");
-            freeGraph(graph);
-            fclose(file);
-            return NULL;
-        }
+        // fread(buffer, );        
+        
         //TODO:We need to constact the dimensions before createNode!
         //we need a dimension create
 
         // Create the node
-        Node node = createNode(nodeName);
+        Node node = createNode();
         if (node == NULL) {
             perror("Error creating node");
             freeGraph(graph);

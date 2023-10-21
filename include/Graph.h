@@ -9,9 +9,9 @@ typedef struct NodeNeighborsLinkedList;
 typedef struct Graph;
 
 typedef struct Node {
-    String name;
     Dimension dimension;
     NodeNeighborsLinkedList* destinations;
+    Node nextNode;
 } * Node;
 
 typedef struct NodeNeighborsLinkedList {
@@ -33,7 +33,7 @@ typedef struct Dimension{
 } * Dimension;
 
 // create a new node
-Node createNode(const String name);
+Node createNode(Dimension dimension);
 
 void freeNode(Node node);
 
@@ -42,6 +42,8 @@ NodeNeighborsLinkedList addDestination(Node node, Node dest, double cost, double
 
 void freeDestination(NodeNeighborsLinkedList destination);
 
-Graph createGraph();
+Graph initGraph();
+
+Graph createGraphFromBinaryFile(const String filename, int dimensions);
 
 void freeGraph(Graph graph);
