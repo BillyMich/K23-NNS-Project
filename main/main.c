@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "include/Graph.h"
+#include "../include/Graph.h"
 
 
 

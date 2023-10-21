@@ -8,6 +8,12 @@ typedef struct Node;
 typedef struct NodeNeighborsLinkedList;
 typedef struct Graph;
 
+typedef struct Dimension{
+    int level; 
+    double value;
+    Dimension nextDimension; //ERROR: unknown type name ‘Dimension’ - same below
+} * Dimension;
+
 typedef struct Node {
     Dimension dimension;
     NodeNeighborsLinkedList* destinations;
@@ -26,11 +32,7 @@ typedef struct Graph{
     int numNodes;
 } * Graph;
 
-typedef struct Dimension{
-    int level; 
-    double value;
-    Dimension nextDimension;
-} * Dimension;
+
 
 // create a new node
 Node createNode(Dimension dimension);
