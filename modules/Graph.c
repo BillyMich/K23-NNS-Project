@@ -1,52 +1,5 @@
 #include "include/Graph.h"
 
-Node createNode(const String name) {
-    Node node = (Node)malloc(sizeof(Node));
-    if(node == NULL)
-        return NULL;
-    node->name = (String)malloc(strlen(name) + 1);
-    if (node->name == NULL) {
-        free(node); // Clean up previously allocated memory
-        return NULL; // Memory allocation failed
-    }
-    strcpy(node->name, name);
-
-    node->destinations = NULL;
-    return node;
-}
-
-void freeNode(Node node) {
-    if (node == NULL)
-        return;
-    free(node->name);
-    NodeNeighborsLinkedList current = node->destinations;
-    while (current != NULL) {
-        NodeNeighborsLinkedList next = current->next;
-        free(current);
-        current = next;
-    }
-    free(node);
-}
-
-NodeNeighborsLinkedList addDestination(Node node, Node dest, double cost, double time_cost) {
-    NodeNeighborsLinkedList newDestination = (NodeNeighborsLinkedList)malloc(sizeof(NodeNeighborsLinkedList));
-    if (newDestination == NULL)
-        return NULL;
-    newDestination->dest = dest;
-    newDestination->cost = cost;
-    newDestination->time_cost = time_cost;
-    newDestination->next = node->destinations;
-    node->destinations = newDestination;
-    return newDestination;
-}
-
-void freeDestination(NodeNeighborsLinkedList destination) {
-    if (destination == NULL)
-        return;
-    freeNode(destination->dest);
-    free(destination);
-}
-
 Graph createGraph() {
     Graph graph = (Graph)malloc(sizeof(Graph));
     if (graph == NULL)
@@ -69,6 +22,7 @@ void freeGraph(Graph graph) {
     free(graph);
 }
 
+//TODO:Need to check if this works!
 Graph createGraphFromBinaryFile(const String filename) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
@@ -91,6 +45,7 @@ Graph createGraphFromBinaryFile(const String filename) {
         double cost, timeCost;
 
         // Read node name
+        //TODO:This might need to be taken of!
         if (fread(nodeName, sizeof(nodeName), 1, file) != 1) {
             if (feof(file)) {
                 break;
@@ -100,6 +55,8 @@ Graph createGraphFromBinaryFile(const String filename) {
             fclose(file);
             return NULL;
         }
+        //TODO:We need to constact the dimensions before createNode!
+        //we need a dimension create
 
         // Create the node
         Node node = createNode(nodeName);
@@ -109,20 +66,9 @@ Graph createGraphFromBinaryFile(const String filename) {
             fclose(file);
             return NULL;
         }
-
-        // Read and add neighbors
-        for (int i = 0; i < numNeighbors; i++) {
-            if (fread(nodeName, sizeof(nodeName), 1, file) != 1) {
-                perror("Error reading neighbor name");
-                freeGraph(graph);
-                fclose(file);
-                return NULL;
-            }
-
-        }
-
         // Add the node to the graph
     }
+
 
     fclose(file);
     return graph;

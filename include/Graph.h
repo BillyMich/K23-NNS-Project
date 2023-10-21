@@ -10,6 +10,7 @@ typedef struct Graph;
 
 typedef struct Node {
     String name;
+    Dimension dimension;
     NodeNeighborsLinkedList* destinations;
 } * Node;
 
@@ -25,19 +26,11 @@ typedef struct Graph{
     int numNodes;
 } * Graph;
 
-//We need to think a way to chouse 2D or 3D
-//depending on the given graph 
-
-typedef struct Destinations2D {
-    double x;
-    double y;
-} Destinations2D;
-
-typedef struct Destinations3D {
-    double x;
-    double y;
-    double z;
-} Destinations3D;
+typedef struct Dimension{
+    int level; 
+    double value;
+    Dimension nextDimension;
+} * Dimension;
 
 // create a new node
 Node createNode(const String name);
