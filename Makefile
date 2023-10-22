@@ -1,7 +1,4 @@
 run2D:
-	gcc -o main main.c modules/Dimension.c -DtypeOfDimension=2
-	./main
-	rm main
 	gcc -o program main/main.c modules/Graph.c modules/Node.c modules/Neighbors.c
 	./program datasets/dummy.bin 2
 	rm program
