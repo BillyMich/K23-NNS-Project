@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "common_types.h"
 
+
 typedef struct Node;
 typedef struct NodeNeighborsLinkedList;
 typedef struct Graph;
