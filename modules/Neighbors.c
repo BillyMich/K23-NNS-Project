@@ -1,8 +1,8 @@
-#include "include/Graph.h"
+#include "../include/Neighbors.h"
 
 
-NodeNeighborsLinkedList addDestination(Node node, Node dest, double cost, double time_cost) {
-    NodeNeighborsLinkedList newDestination = (NodeNeighborsLinkedList)malloc(sizeof(NodeNeighborsLinkedList));
+NodeNeighborsLinkedList* addDestination(Node* node, Node* dest, double cost, double time_cost) {
+    NodeNeighborsLinkedList* newDestination = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     if (newDestination == NULL)
         return NULL;
     newDestination->dest = dest;
@@ -13,7 +13,7 @@ NodeNeighborsLinkedList addDestination(Node node, Node dest, double cost, double
     return newDestination;
 }
 
-void freeDestination(NodeNeighborsLinkedList destination) {
+void freeDestination(NodeNeighborsLinkedList* destination) {
     if (destination == NULL)
         return;
     freeNode(destination->dest);

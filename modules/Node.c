@@ -1,8 +1,8 @@
-#include "include/Graph.h"
+#include "../include/Node.h"
 
 //TODO:dimension need to be created before sending it here!
-Node createNode(const Dimension dimension) {
-    Node node = (Node)malloc(sizeof(Node));
+Node* createNode(Dimension* dimension) {
+    Node* node = (Node*)malloc(sizeof(Node));
     if(node == NULL)
         return NULL;
 
@@ -15,12 +15,12 @@ Node createNode(const Dimension dimension) {
 }
 
 
-void  freeNode(Node node) {
+void  freeNode(Node* node) {
     if (node == NULL)
         return;
-    NodeNeighborsLinkedList current = node->destinations;
+    NodeNeighborsLinkedList* current = node->destinations;
     while (current != NULL) {
-        NodeNeighborsLinkedList next = current->next;
+        NodeNeighborsLinkedList* next = current->next;
         free(current);
         current = next;
     }
