@@ -1,13 +1,16 @@
-#pragma once
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "common_types.h"
+#ifndef DIMENSION_H
+#define DIMENSION_H
 
 typedef struct Dimension Dimension;
 
+
 typedef struct Dimension{
-    int level; 
+    int dimensionValue;
     double value;
-    Dimension* nextDimension; //ERROR: unknown type name ‘Dimension’ - same below
+    Dimension* next;
 }Dimension;
+
+void printDimensions(Dimension *pointer);
+void addDimension(Dimension** head, int dimValue, double val);
+
+#endif 
