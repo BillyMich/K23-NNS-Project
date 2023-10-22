@@ -6,8 +6,8 @@
 
 typedef struct Dimension Dimension;
 
-struct Dimension{
+typedef struct Dimension{
     int level; 
     double value;
     Dimension* nextDimension; //ERROR: unknown type name ‘Dimension’ - same below
-};
+}Dimension;

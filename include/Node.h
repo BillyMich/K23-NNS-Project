@@ -1,4 +1,5 @@
-#pragma once
+#ifndef NODE_H
+#define NODE_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,14 +8,17 @@
 #include "Neighbors.h"
 
 typedef struct Node Node;
+typedef struct NodeNeighborsLinkedList NodeNeighborsLinkedList;
 
-struct Node {
+typedef struct Node {
     Dimension* dimension;
     NodeNeighborsLinkedList* destinations;
     Node* nextNode;
-};
+}Node;
 
 // create a new node
 Node* createNode(Dimension* dimension);
 
 void freeNode(Node* node);
+
+#endif // NODE_H

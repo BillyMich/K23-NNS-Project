@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRAPH_H
+#define GRAPH_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,13 +8,15 @@
 
 typedef struct Graph Graph;
 
-struct Graph{
+typedef struct Graph{
     Node* nodes;
     int numNodes;
-};
+}Graph;
 
 Graph* initGraph();
 
 Graph* createGraphFromBinaryFile(String filename, int dimensions);
 
 void freeGraph(Graph* graph);
+
+#endif // GRAPH_H
