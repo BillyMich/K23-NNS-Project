@@ -13,12 +13,12 @@ typedef struct NodeNeighborsLinkedList NodeNeighborsLinkedList;
 typedef struct Node {
     Dimension* dimension;
     NodeNeighborsLinkedList* destinations;
-    Node* nextNode;
+    Node* next;
 }Node;
 
 // create a new node
 Node* createNode(Dimension* dimension);
-
+void addNode(Node** head,Dimension* dimension);
 void freeNode(Node* node);
 
 #endif // NODE_H
