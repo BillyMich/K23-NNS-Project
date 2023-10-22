@@ -1,6 +1,5 @@
 {
     "files.associations": {
-        "*.py": "python",
-        "node.h": "c"
+        "dimension.h": "c"
     }
 }

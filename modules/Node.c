@@ -9,10 +9,23 @@ Node* createNode(Dimension* dimension) {
     //Here we will add the dimensions
     node->dimension = dimension;
     node->destinations = NULL;
-    node->nextNode = NULL;
+    node->next = NULL;
 
     return node;
 }
+
+
+
+void addNode(Node** head,Dimension* dimension) {
+    Node* newNode = createNode(dimension);
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->next = *head;
+    *head = newNode;
+}
+
 
 
 void  freeNode(Node* node) {
