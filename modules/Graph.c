@@ -39,27 +39,31 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
         return NULL;
     }
 
-    char buffer[sizeof(double)];
     double coordinate;
-    Node* nodeHead;
+    Node** headNode = &graph->nodes; 
     // Read and process data from the binary file
     while (!feof(file)) {
     
         int numNeighbors;
         double cost, timeCost;
         Dimension* headDimension = NULL;
-        //TODO:We need to constact the dimensions before createNode!
+
         for (int i = 0; i < dimensions; i++){
             fread(&coordinate, sizeof(double), 1, file); // Read one double at a time
-        // coordinate = atof(buffer); // string to double - another function: strtod 
-            addDimension(&headDimension,i,coordinate);
+            // printf("%d-%f\n", i, coordinate);
+            addDimension(&headDimension, i, coordinate);
         }
-                 
-        addNode(&nodeHead,headDimension);
-        free(headDimension);
+
+        if (headDimension == NULL){
+            printf("fuck\n");
+        }
+        
+             
+        addNode(headNode, headDimension);
+        //printDimensions(headDimension);
     }
 
-    graph->nodes=nodeHead;
+    // graph->nodes=nodeHead;
     fclose(file);
     return graph;
 }

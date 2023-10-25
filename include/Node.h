@@ -17,8 +17,8 @@ typedef struct Node {
 }Node;
 
 // create a new node
-Node* createNode(Dimension* dimension);
-void addNode(Node** head,Dimension* dimension);
+Node* initNode();
+void addNode(Node** headNode, Dimension* headDimension);
 void freeNode(Node* node);
 
 #endif // NODE_H
