@@ -10,7 +10,7 @@ typedef struct Dimension{
     Dimension* next;
 }Dimension;
 
-void printDimensions(Dimension *pointer);
+void printDimensions(Dimension *head);
 void addDimension(Dimension** head, int dimValue, double val);
 
 #endif 
