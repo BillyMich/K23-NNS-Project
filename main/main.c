@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "../include/Graph.h"
+#include "../include/MathematicalFunctions.h"
 
 
 int main(int argc, char *argv[])
@@ -9,8 +10,9 @@ int main(int argc, char *argv[])
 
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
 
-    printf("We created the graph!");
+    euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
 
+    printf("We created the graph!");
 
     freeGraph(graph);
     return 0;
