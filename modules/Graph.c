@@ -50,14 +50,9 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
 
         for (int i = 0; i < dimensions; i++){
             fread(&coordinate, sizeof(double), 1, file); // Read one double at a time
-            // printf("%d-%f\n", i, coordinate);
+            // printf("%d --- %f\n", i, coordinate);
             addDimension(&headDimension, i, coordinate);
         }
-
-        if (headDimension == NULL){
-            printf("fuck\n");
-        }
-        
              
         addNode(headNode, headDimension);
         //printDimensions(headDimension);

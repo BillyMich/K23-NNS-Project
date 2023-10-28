@@ -113,32 +113,32 @@ void testCreateGraphFromBinaryFile() {
     
 	Node* currentNode = graph->nodes;
     i = 0;
-	int j = 0;
 
-    while (currentNode->next != NULL) {
-		TEST_ASSERT(currentNode != NULL);
+    while (currentNode != NULL) {
+
+		TEST_ASSERT(currentNode->dimension != NULL);
 		
-		// printf("\ncurrentNode->dimension->value: %f, cor[]: %f \n", currentNode->dimension->value, coordinates[i]);
-		// printf("currentNode->dimension->dimensionValue: %d, j: %d \n", currentNode->dimension->dimensionValue, j);
+		// printf("\ncurrentNode->dimension->value: %f, cor[%d]: %f \n", currentNode->dimension->value, i, coordinates[i]);
+		// printf("currentNode->dimension->dimensionValue: %d \n", currentNode->dimension->dimensionValue);
         
 		TEST_ASSERT(currentNode->dimension != NULL);
-        // TEST_ASSERT(currentNode->dimension->dimensionValue == j);
-        // TEST_ASSERT(currentNode->dimension->value == coordinates[i]); 
+        TEST_ASSERT(currentNode->dimension->dimensionValue == 0);
+        TEST_ASSERT(currentNode->dimension->value == coordinates[i]); 
 
         currentNode = currentNode->next;
         i= i + 4;
-		j++;
     }
 
-    TEST_ASSERT(currentNode->next == NULL);
+    TEST_ASSERT(currentNode == NULL);
 
 	int numNodes = 0;
 	Node* currentNode2 = graph->nodes;
-	while (currentNode2->next != NULL) {
+	while (currentNode2 != NULL) {
     	numNodes++;
     	currentNode2 = currentNode2->next;
 	}
-	TEST_ASSERT(numNodes == dimensions);
+	// printf("num = %d\n", numNodes);
+	TEST_ASSERT(numNodes == 4);
 
     freeGraph(graph);
 }
