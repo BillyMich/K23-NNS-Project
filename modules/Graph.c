@@ -40,26 +40,26 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
 
     double coordinate;
     Node** headNode = &graph->nodes; 
+    int flag = 0; // Flag for feof  
+
     // Read and process data from the binary file
     while (!feof(file)) {
-        printf("%d\n", feof(file));
-        int numNeighbors;
-        double cost, timeCost;
+        
         Dimension* headDimension = NULL;
-
 
         for (int i = 0; i < dimensions; i++){
             fread(&coordinate, sizeof(double), 1, file); // Read one double at a time
-            if(feof(file))
+            if(feof(file)){
+                flag = 1;
                 break;
+            }
             addDimension(&headDimension, i, coordinate);
-            printf("%d ---- %f\n", i, coordinate);
+            // printf("%d ---- %f\n", i, coordinate);
         }
 
-        addNode(headNode, headDimension);
-        //printDimensions(headDimension);
+        if(flag == 0)
+            addNode(headNode, headDimension);
 
-        
     }
 
     // graph->nodes=nodeHead;
