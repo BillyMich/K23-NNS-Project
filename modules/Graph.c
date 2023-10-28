@@ -3,9 +3,10 @@
 
 Graph* initGraph() {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
-    if (graph == NULL)
-        return NULL;
-    
+    if (graph == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
     graph->nodes = NULL;
     graph->numNodes = 0;
     return graph;
@@ -73,7 +74,7 @@ void makeFile(String filename){
     FILE* file = fopen(filename, "wb");
     if (file == NULL) {
         perror("Error opening file");
-        return NULL;
+        exit(1);
     }
     
     double coordinate[] = {1.000000,   0.000000,   1.000000,   0.000000,
