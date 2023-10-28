@@ -116,13 +116,13 @@ void testCreateGraphFromBinaryFile() {
     while (currentNode != NULL) {
 
 		TEST_ASSERT(currentNode->dimension != NULL);
-		TEST_ASSERT(currentNode->dimension != NULL);
         TEST_ASSERT(currentNode->dimension->dimensionValue == 0);
         TEST_ASSERT(currentNode->dimension->value == coordinates[i]); 
 
         currentNode = currentNode->next;
         i= i + 4;
     }
+
 
     TEST_ASSERT(currentNode == NULL);
 
@@ -136,8 +136,6 @@ void testCreateGraphFromBinaryFile() {
 
     freeGraph(graph);
 }
-
-
 
 
 TEST_LIST = {

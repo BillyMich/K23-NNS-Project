@@ -86,6 +86,7 @@ void testAddDestinationAndCheck() {
     freeNode(node2);
 }
 
+
 TEST_LIST = {
     {"testInitNode", testInitNode},
     {"testAddNode", testAddNode},
