@@ -11,8 +11,13 @@ typedef struct Dimension{
 }Dimension;
 
 void printDimensions(Dimension *head);
+
+Dimension* initDimension();
+
 void addDimension(Dimension** head, int dimValue, double val);
+
 void freeDimensions(Dimension* dimension);
+
 void freeDimensionLinkedList(Dimension* head);
 
 #endif 

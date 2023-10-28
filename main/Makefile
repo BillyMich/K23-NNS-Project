@@ -36,4 +36,4 @@ run3D: $(EXEC)
 	./$(EXEC) $(ARGS3D)
 
 valgrind: $(EXEC)
-	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGS)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGS2D)

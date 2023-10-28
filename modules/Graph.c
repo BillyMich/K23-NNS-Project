@@ -3,9 +3,10 @@
 
 Graph* initGraph() {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
-    if (graph == NULL)
-        return NULL;
-    
+    if (graph == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
     graph->nodes = NULL;
     graph->numNodes = 0;
     return graph;
@@ -23,7 +24,6 @@ void freeGraph(Graph* graph) {
     free(graph);
 }
 
-//TODO:Need to check if this works!
 Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
@@ -41,24 +41,46 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
 
     double coordinate;
     Node** headNode = &graph->nodes; 
+    int flag = 0; // Flag for feof  
+
     // Read and process data from the binary file
     while (!feof(file)) {
-    
-        // int numNeighbors;
-        // double cost, timeCost;
+        
         Dimension* headDimension = NULL;
 
         for (int i = 0; i < dimensions; i++){
             fread(&coordinate, sizeof(double), 1, file); // Read one double at a time
-            // printf("%d --- %f\n", i, coordinate);
+            if(feof(file)){
+                flag = 1;
+                break;
+            }
             addDimension(&headDimension, i, coordinate);
+            // printf("%d ---- %f\n", i, coordinate);
         }
-             
-        addNode(headNode, headDimension);
-        //printDimensions(headDimension);
+
+        if(flag == 0)
+            addNode(headNode, headDimension);
+
     }
 
     // graph->nodes=nodeHead;
     fclose(file);
     return graph;
+}
+
+
+
+void makeFile(String filename){
+    FILE* file = fopen(filename, "wb");
+    if (file == NULL) {
+        perror("Error opening file");
+        exit(1);
+    }
+    
+    double coordinate[] = {1.000000,   0.000000,   1.000000,   0.000000,
+                            1.000000,   0.139767,   1.000000,   0.139767,
+                            1.000000,   0.278025,   1.000000,   0.278025,
+                            1.000000,   0.416209,   1.000000,   0.416209};      
+    fwrite(coordinate, sizeof(double)*16, 1, file); // Read one double at a time
+
 }

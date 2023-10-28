@@ -10,10 +10,29 @@ int main(int argc, char *argv[])
 
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
 
+    Node* tempNode = graph->nodes;
+    int i=0;
+
+    printf("We created the graph!\n");
+
+    while (tempNode != NULL) {
+        Dimension* tempDime = tempNode->dimension;
+        while (tempDime != NULL) {
+           printf("Node %d dim: %d - %f\n", i, tempDime->dimensionValue, tempDime->value);
+           tempDime = tempDime->next;
+        } 
+        tempNode = tempNode->next;
+        i++;
+    }
+
     euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
 
-    printf("\nWe created the graph!\n");
-    
+    printf("We created the graph agaiiin!\n");
+
     freeGraph(graph);
+
+
+    // makeFile(argv[1]);
+
     return 0;
 }
