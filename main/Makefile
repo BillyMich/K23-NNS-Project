@@ -22,6 +22,8 @@ ARGS2D = $(DATASETS)/dummy.bin 2
 
 ARGS3D = $(DATASETS)/dummy.bin 3
 
+ARGSMAKEFILE = $(DATASETS)/dummy2.bin 
+
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
 	@if [ -f $(EXEC).exe ]; then ln -sf $(EXEC).exe $(EXEC); fi
@@ -34,6 +36,9 @@ run: $(EXEC)
 
 run3D: $(EXEC)
 	./$(EXEC) $(ARGS3D)
+
+runM: $(EXEC)
+	./$(EXEC) $(ARGSMAKEFILE)
 
 valgrind: $(EXEC)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGS2D)

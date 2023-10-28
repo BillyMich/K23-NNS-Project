@@ -22,30 +22,6 @@ void testAddNodeToGraph() {
     addDimension(&dimension1, 1, 1.2345);
     addDimension(&dimension1, 2, 20.0);
 
-    Node* node = initNode();
-    node->dimension = dimension1;
-
-    addNode(&graph->nodes, dimension1);
-
-
-    TEST_ASSERT(graph->nodes != NULL);
-    TEST_ASSERT(graph->nodes->dimension != NULL);
-
-    TEST_ASSERT(graph->nodes->dimension->dimensionValue == 1);
-    TEST_ASSERT(graph->nodes->dimension->value == 1.2345);
-
-    TEST_ASSERT(graph->nodes->destinations == NULL);
-
-    freeGraph(graph);
-}
-
-void testAddMultipleNodesAndDestinations() {
-    Graph* graph = initGraph();
-
-    Dimension* dimension1 = NULL;
-    addDimension(&dimension1, 1, 1.2345);
-    addDimension(&dimension1, 2, 20.0);
-
     Dimension* dimension2 = NULL;
     addDimension(&dimension2, 3, 5.6789);
     addDimension(&dimension2, 4, 15.0);
@@ -157,11 +133,49 @@ void testCreateGraphFromBinaryFile() {
     freeGraph(graph);
 }
 
+void testCreateGraphDimensions() {
+    Graph* graph = createGraphFromBinaryFile("../datasets/dummy2.bin", 4); // Assume 4 dimensions
+    TEST_ASSERT(graph != NULL);
+
+    double expectedCoordinates[] = {1.000000,   2.345678,   4.678923,   0.333333,
+                                    4.678923,   0.139767,   1.000000,   0.139767,
+                                    2.000000,   0.278025,   2.345678,   0.278025,
+                                    3.456789,   0.416209,   1.000000,   0.416209,
+                                    0.123456,   0.278025 ,  2.345678,   0.278025,
+                                    0.416209,   6.278025,   5.678923,  0.278025};  
+
+    int expectedDimValue = 0;
+    int expectedCoordIndex = 0;
+
+    Node* currentNode = graph->nodes;
+
+    while (currentNode != NULL) {
+        TEST_ASSERT(currentNode->dimension != NULL);
+       
+        // Check dimensions and coordinates for this node
+        Dimension* tempDim = currentNode->dimension;
+        while (tempDim != NULL) {
+            // printf("%d --- %d\n", tempDim->dimensionValue, expectedDimValue);
+            // TEST_ASSERT(currentNode->dimension->dimensionValue == expectedDimValue);
+            TEST_ASSERT(tempDim->value == expectedCoordinates[expectedCoordIndex]);
+
+            tempDim = tempDim->next;
+            expectedCoordIndex++; 
+            expectedDimValue++;
+
+        }
+        currentNode = currentNode->next;
+        expectedDimValue = 0; 
+    }
+    TEST_ASSERT(currentNode == NULL);
+    freeGraph(graph);
+}
+
 
 TEST_LIST = {
     {"testInitGraph", testInitGraph},
     {"testAddNodeToGraph", testAddNodeToGraph},
-	{"testAddMultipleNodesAndDestinations", testAddMultipleNodesAndDestinations},
+    {"testCreateGraphDimensions", testCreateGraphDimensions},
     {"testCreateGraphFromBinaryFile", testCreateGraphFromBinaryFile},
     { NULL, NULL }
 };

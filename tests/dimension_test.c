@@ -38,8 +38,33 @@ void testAddDimension() {
     freeDimension(head);
 }
 
+void testDimension() {
+    Dimension* headDimension = NULL;
+    addDimension(&headDimension, 1, 1.2345);
+    addDimension(&headDimension, 2, 2.3456);
+    addDimension(&headDimension, 3, 3.4567);
+    addDimension(&headDimension, 4, 4.5678);
+
+    double expectedValues[] = {1.2345, 2.3456, 3.4567, 4.5678};
+    
+    Dimension* tempDimension = headDimension;
+    int count = 0;
+
+    while (tempDimension != NULL) {
+        TEST_ASSERT(tempDimension->dimensionValue == count + 1); 
+        TEST_ASSERT(tempDimension->value == expectedValues[count]);
+        
+        tempDimension = tempDimension->next;
+        count++;
+    }
+
+    freeDimension(headDimension);
+}
+
+
 TEST_LIST = {
     {"testInitDimension", testInitDimension},
     {"testAddDimension", testAddDimension},
+    {"testDimensionAdd", testDimension},
     {NULL, NULL}
 };
