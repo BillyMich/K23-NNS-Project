@@ -122,9 +122,29 @@ void testCreateGraphFromBinaryFile() {
         currentNode = currentNode->next;
         i= i + 4;
     }
-
-
     TEST_ASSERT(currentNode == NULL);
+
+    Node* tempNode = graph->nodes;
+    i=0;
+    int countDiam = 0;
+    int numOfArray = 0;
+    while (tempNode != NULL) {
+        Dimension* tempDime = tempNode->dimension;
+        while (tempDime != NULL) {
+        //    printf("Node %d : dim: %d - %d --- val: %f - %f\n", i, tempDime->dimensionValue, countDiam, tempDime->value, coordinates[numOfArray]);
+           
+           TEST_ASSERT(tempDime->dimensionValue == countDiam);
+           TEST_ASSERT(tempDime->value == coordinates[numOfArray]);
+           
+           tempDime = tempDime->next;
+           countDiam++;
+           numOfArray++;
+        } 
+        tempNode = tempNode->next;
+        
+        i++;
+        countDiam = 0;
+    }
 
 	int numNodes = 0;
 	Node* currentNode2 = graph->nodes;

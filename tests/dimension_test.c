@@ -27,7 +27,7 @@ void testAddDimension() {
     TEST_ASSERT(head->dimensionValue == 1);  
     TEST_ASSERT(head->value == 10.0);  
     TEST_ASSERT(head->next != NULL);  
-    
+
     // Check the second dimension
     Dimension* second = head->next;
     TEST_ASSERT(second != NULL);

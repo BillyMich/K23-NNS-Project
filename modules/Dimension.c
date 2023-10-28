@@ -43,7 +43,7 @@ void printDimensions(Dimension *head) {
     }
 }
 
-void freeDimensions(Dimension* dimension) {
+void freeDimension(Dimension* dimension) {
     if (dimension == NULL)
         return;
     // Free the linked list of dimensions
@@ -56,5 +56,5 @@ void freeDimensions(Dimension* dimension) {
 
 // Function to free the entire linked list of dimensions
 void freeDimensionLinkedList(Dimension* head) {
-    freeDimensions(head);
+    freeDimension(head);
 }
