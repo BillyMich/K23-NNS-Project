@@ -105,7 +105,6 @@ void testCreateGraphFromBinaryFile() {
     while (!feof(file) && i < dimensions) {
         for (int j = 0; j < dimensions; j++) {
             fread(&coordinates[i * dimensions + j], sizeof(double), 1, file);
-			// printf(" coordinates: %f \n", coordinates[i * dimensions + j]);
         }
         i++;
     }
@@ -117,10 +116,6 @@ void testCreateGraphFromBinaryFile() {
     while (currentNode != NULL) {
 
 		TEST_ASSERT(currentNode->dimension != NULL);
-		
-		// printf("\ncurrentNode->dimension->value: %f, cor[%d]: %f \n", currentNode->dimension->value, i, coordinates[i]);
-		// printf("currentNode->dimension->dimensionValue: %d \n", currentNode->dimension->dimensionValue);
-        
 		TEST_ASSERT(currentNode->dimension != NULL);
         TEST_ASSERT(currentNode->dimension->dimensionValue == 0);
         TEST_ASSERT(currentNode->dimension->value == coordinates[i]); 
@@ -137,7 +132,6 @@ void testCreateGraphFromBinaryFile() {
     	numNodes++;
     	currentNode2 = currentNode2->next;
 	}
-	// printf("num = %d\n", numNodes);
 	TEST_ASSERT(numNodes == 4);
 
     freeGraph(graph);
