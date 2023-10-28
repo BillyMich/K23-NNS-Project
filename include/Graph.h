@@ -19,4 +19,6 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions);
 
 void freeGraph(Graph* graph);
 
+void makeFile(String filename);
+
 #endif // GRAPH_H

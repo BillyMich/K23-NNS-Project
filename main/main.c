@@ -15,5 +15,9 @@ int main(int argc, char *argv[])
     printf("We created the graph!");
 
     freeGraph(graph);
+
+
+    // makeFile(argv[1]);
+
     return 0;
 }

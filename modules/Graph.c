@@ -23,7 +23,6 @@ void freeGraph(Graph* graph) {
     free(graph);
 }
 
-//TODO:Need to check if this works!
 Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
@@ -43,27 +42,44 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     Node** headNode = &graph->nodes; 
     // Read and process data from the binary file
     while (!feof(file)) {
-    
+        printf("%d\n", feof(file));
         int numNeighbors;
         double cost, timeCost;
         Dimension* headDimension = NULL;
 
+
         for (int i = 0; i < dimensions; i++){
             fread(&coordinate, sizeof(double), 1, file); // Read one double at a time
-            // printf("%d-%f\n", i, coordinate);
+            if(feof(file))
+                break;
             addDimension(&headDimension, i, coordinate);
+            printf("%d ---- %f\n", i, coordinate);
         }
 
-        if (headDimension == NULL){
-            printf("fuck\n");
-        }
-        
-             
         addNode(headNode, headDimension);
         //printDimensions(headDimension);
+
+        
     }
 
     // graph->nodes=nodeHead;
     fclose(file);
     return graph;
+}
+
+
+
+void makeFile(String filename){
+    FILE* file = fopen(filename, "wb");
+    if (file == NULL) {
+        perror("Error opening file");
+        return NULL;
+    }
+    
+    double coordinate[] = {1.000000,   0.000000,   1.000000,   0.000000,
+                            1.000000,   0.139767,   1.000000,   0.139767,
+                            1.000000,   0.278025,   1.000000,   0.278025,
+                            1.000000,   0.416209,   1.000000,   0.416209};      
+    fwrite(coordinate, sizeof(double)*16, 1, file); // Read one double at a time
+
 }
