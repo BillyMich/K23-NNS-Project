@@ -37,3 +37,5 @@ runG: $(EXECG)
 runN: $(EXECN)
 	./$(EXECN) $(ARGS)
 
+valgrind: $(EXECG)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECG)

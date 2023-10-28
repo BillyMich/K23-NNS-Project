@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 
     euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
 
-    printf("We created the graph!");
-
+    printf("\nWe created the graph!\n");
+    
     freeGraph(graph);
     return 0;
 }

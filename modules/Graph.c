@@ -44,8 +44,8 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     // Read and process data from the binary file
     while (!feof(file)) {
     
-        int numNeighbors;
-        double cost, timeCost;
+        // int numNeighbors;
+        // double cost, timeCost;
         Dimension* headDimension = NULL;
 
         for (int i = 0; i < dimensions; i++){
