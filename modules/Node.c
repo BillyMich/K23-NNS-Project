@@ -8,12 +8,11 @@ Node* initNode() {
 
     //Here we will add the dimensions
     node->dimension = NULL;//dimension;
-    node->destinations = NULL;
+    node->destinations = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     node->next = NULL;
 
     return node;
 }
-
 
 
 void addNode(Node** headNode, Dimension* headDimension) {
