@@ -12,7 +12,7 @@ typedef struct NodeNeighborsLinkedList NodeNeighborsLinkedList;
 
 typedef struct Node {
     Dimension* dimension;
-    NodeNeighborsLinkedList* destinations;
+    NodeNeighborsLinkedList* neighbors;
     Node* next;
 }Node;
 

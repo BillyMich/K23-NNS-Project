@@ -15,7 +15,7 @@ typedef struct Graph{
 
 Graph* initGraph();
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions);
+Graph* createGraphFromBinaryFile(String filename, int dimensions, int K);
 
 void freeGraph(Graph* graph);
 
