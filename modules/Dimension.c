@@ -43,18 +43,10 @@ void printDimensions(Dimension *head) {
     }
 }
 
-void freeDimension(Dimension* dimension) {
-    if (dimension == NULL)
-        return;
-    // Free the linked list of dimensions
-    while (dimension != NULL) {
-        Dimension* nextDimension = dimension->next;
-        free(dimension);
-        dimension = nextDimension;
+void freeDimensions(Dimension* dimensions) {
+    while (dimensions != NULL) {
+        Dimension* next = dimensions->next;
+        free(dimensions);
+        dimensions = next;
     }
-}
-
-// Function to free the entire linked list of dimensions
-void freeDimensionLinkedList(Dimension* head) {
-    freeDimension(head);
 }

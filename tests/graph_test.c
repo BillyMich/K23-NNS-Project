@@ -35,8 +35,8 @@ void testAddNodeToGraph() {
     addNode(&graph->nodes, dimension2);
 
     // Add destinations between nodes
-    addDestination(node1, node2, 5.0, 10.0);
-    addDestination(node2, node1, 3.0, 8.0);
+    addNeighbor(&(node1->neighbors), node2, 5.0, 10.0);
+    addNeighbor(&(node2->neighbors), node1, 3.0, 8.0);
 
     // Check the number of nodes in the graph
     // TEST_ASSERT(graph->numNodes == 2);
@@ -51,19 +51,19 @@ void testAddNodeToGraph() {
     TEST_ASSERT(node2->dimension->dimensionValue == 3);
     TEST_ASSERT(node2->dimension->value == 5.6789);
 
-    TEST_ASSERT(node1->destinations != NULL);
-    TEST_ASSERT(node2->destinations != NULL);
+    TEST_ASSERT(node1->neighbors != NULL);
+    TEST_ASSERT(node2->neighbors != NULL);
 
-    TEST_ASSERT(node1->destinations->cost == 5.0);
-    TEST_ASSERT(node1->destinations->time_cost == 10.0);
-    TEST_ASSERT(node2->destinations->cost == 3.0);
-    TEST_ASSERT(node2->destinations->time_cost == 8.0);
+    TEST_ASSERT(node1->neighbors->cost == 5.0);
+    TEST_ASSERT(node1->neighbors->time_cost == 10.0);
+    TEST_ASSERT(node2->neighbors->cost == 3.0);
+    TEST_ASSERT(node2->neighbors->time_cost == 8.0);
 
     freeGraph(graph);
 }
 
 void testCreateGraphFromBinaryFile() {
-    Graph* graph = createGraphFromBinaryFile("../datasets/dummy.bin", 4); // Assume 4 dimensions
+    Graph* graph = createGraphFromBinaryFile("../datasets/dummy.bin", 4, 4); // Assume 4 dimensions
 
     TEST_ASSERT(graph != NULL);
 
@@ -134,7 +134,7 @@ void testCreateGraphFromBinaryFile() {
 }
 
 void testCreateGraphDimensions() {
-    Graph* graph = createGraphFromBinaryFile("../datasets/dummy2.bin", 4); // Assume 4 dimensions
+    Graph* graph = createGraphFromBinaryFile("../datasets/dummy2.bin", 4, 4); // Assume 4 dimensions
     TEST_ASSERT(graph != NULL);
 
     double expectedCoordinates[] = {1.000000,   2.345678,   4.678923,   0.333333,
@@ -142,7 +142,7 @@ void testCreateGraphDimensions() {
                                     2.000000,   0.278025,   2.345678,   0.278025,
                                     3.456789,   0.416209,   1.000000,   0.416209,
                                     0.123456,   0.278025 ,  2.345678,   0.278025,
-                                    0.416209,   6.278025,   5.678923,  0.278025};  
+                                    0.416209,   6.278025,   5.678923,   0.278025};  
 
     int expectedDimValue = 0;
     int expectedCoordIndex = 0;
@@ -164,6 +164,20 @@ void testCreateGraphDimensions() {
             expectedDimValue++;
 
         }
+        NodeNeighborsLinkedList* tempNeighbor = currentNode->neighbors;
+        int j = 0;
+        while (tempNeighbor != NULL) {
+            Dimension* tempDime2 = tempNeighbor->node->dimension;
+            TEST_ASSERT(tempNeighbor != NULL);
+            while (tempDime2 != NULL) {
+                // printf("Neig: %d, dim: %d - %f\n", j, tempDime2->dimensionValue, tempDime2->value);
+                // TEST_ASSERT();
+                tempDime2 = tempDime2->next;
+            } 
+            j++;
+            tempNeighbor = tempNeighbor->next;
+        }
+
         currentNode = currentNode->next;
         expectedDimValue = 0; 
     }

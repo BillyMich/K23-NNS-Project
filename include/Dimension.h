@@ -16,7 +16,7 @@ Dimension* initDimension();
 
 void addDimension(Dimension** head, int dimValue, double val);
 
-void freeDimension(Dimension* dimension);
+void freeDimensions(Dimension* dimension);
 
 void freeDimensionLinkedList(Dimension* head);
 

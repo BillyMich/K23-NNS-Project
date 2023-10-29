@@ -21,7 +21,7 @@ NodeNeighborsLinkedList* initNeighbor(Node* dest, double cost, double time_cost)
 // add a destination to a node
 void addNeighbor(NodeNeighborsLinkedList** head, Node* dest, double cost, double time_cost);
 
-void freeDestination(NodeNeighborsLinkedList* destination);
+void freeNeighbors(NodeNeighborsLinkedList* destination);
 
 #endif // NEIGHBORS_H
 

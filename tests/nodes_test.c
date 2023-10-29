@@ -9,6 +9,8 @@
 #include "acutest.h"
 #include "../include/Node.h"
 
+//TODO: TESTS WITH NEIGHBORS!!!!!!
+
 void testInitNode() {
     Node *node = initNode();
 
@@ -35,16 +37,16 @@ void testAddNode() {
 void testAddDestination() {
     Node *node1 = initNode();
     Node *node2 = initNode();
-    NodeNeighborsLinkedList *destination = addDestination(node1, node2, 5.0, 10.0);
+    addNeighbor(&(node1->neighbors), node2, 5.0, 10.0);
     
-    TEST_ASSERT(destination != NULL);                       // Check if the destination is not NULL (it was added successfully)
-    TEST_ASSERT(node1->destinations->dest == node2);        // Check if the destination points to node2
-    TEST_ASSERT(node1->destinations->cost == 5.0);          // Check the cost
-    TEST_ASSERT(node1->destinations->time_cost == 10.0);    // Check time_cost
+    TEST_ASSERT(node2 != NULL);                          // Check if the destination is not NULL (it was added successfully)
+    TEST_ASSERT(node1->neighbors->node == node2);        // Check if the destination points to node2
+    TEST_ASSERT(node1->neighbors->cost == 5.0);          // Check the cost
+    TEST_ASSERT(node1->neighbors->time_cost == 10.0);    // Check time_cost
 
-    NodeNeighborsLinkedList *destinationNode2 = node1->destinations;
+    NodeNeighborsLinkedList *destinationNode2 = node1->neighbors;
     while (destinationNode2 != NULL){
-        if (destinationNode2->dest == node2)
+        if (destinationNode2->node == node2)
             break; // Found node2 as a destination
         destinationNode2 = destinationNode2->next;
     }
@@ -74,13 +76,13 @@ void testAddNodeWithMultipleDimensions() {
 void testAddDestinationAndCheck() {
     Node *node1 = initNode();
     Node *node2 = initNode();
-    NodeNeighborsLinkedList *destination = addDestination(node1, node2, 5.0, 10.0);
+    addNeighbor(&(node1->neighbors), node2, 5.0, 10.0);
 
-    TEST_ASSERT(destination != NULL);
-    TEST_ASSERT(node1->destinations != NULL);
-    TEST_ASSERT(node1->destinations->dest == node2);
-    TEST_ASSERT(node1->destinations->cost == 5.0);
-    TEST_ASSERT(node1->destinations->time_cost == 10.0);
+    TEST_ASSERT(node2 != NULL);
+    TEST_ASSERT(node1->neighbors != NULL);
+    TEST_ASSERT(node1->neighbors->node == node2);
+    TEST_ASSERT(node1->neighbors->cost == 5.0);
+    TEST_ASSERT(node1->neighbors->time_cost == 10.0);
 
     freeNode(node1);
     freeNode(node2);

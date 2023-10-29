@@ -17,13 +17,15 @@ Graph* initGraph() {
 void freeGraph(Graph* graph) {
     if (graph == NULL)
         return;
-    for (int i = 0; i < graph->numNodes; i++) {
-        freeNode(graph->nodes + i);
+    Node* current = graph->nodes;
+    while (current != NULL) {
+        Node* next = current->next;
+        freeNode(current);
+        current = next;
     }
-
-    free(graph->nodes);
     free(graph);
 }
+
 
 Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     FILE* file = fopen(filename, "rb");
@@ -78,7 +80,7 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     Node* currentNode = graph->nodes;
 
     for(int numNode = 0; numNode < graph->numNodes; numNode++){
-        printf(" ---- Node number = %d\n", numNode);
+        // printf(" ---- Node number = %d\n", numNode);
         int usedNumbers[K];
 
         for (int i = 0; i < K; i++) {
@@ -88,10 +90,9 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
             } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
 
             usedNumbers[i] = randomNumber;
-            printf("%d\n", randomNumber);
+            // printf("%d\n", randomNumber);
 
             Node* tempNode = graph->nodes;
-            int i=0;
 
             for(int j = 0; j < randomNumber; j++){
                 tempNode = tempNode->next;
