@@ -18,7 +18,7 @@ OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODU
 EXEC = program
 
 # Args for examples
-ARGS2D = $(DATASETS)/dummy.bin 2
+ARGS2D = $(DATASETS)/dummy.bin 2 4
 
 ARGS3D = $(DATASETS)/dummy.bin 3
 

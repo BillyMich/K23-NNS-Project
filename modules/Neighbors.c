@@ -1,21 +1,37 @@
 #include "../include/Neighbors.h"
 
 
-NodeNeighborsLinkedList* addDestination(Node* node, Node* dest, double cost, double time_cost) {
-    NodeNeighborsLinkedList* newDestination = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
-    if (newDestination == NULL)
-        return NULL;
-    newDestination->dest = dest;
-    newDestination->cost = cost;
-    newDestination->time_cost = time_cost;
-    newDestination->next = node->destinations;
-    node->destinations = newDestination;
-    return newDestination;
+
+void addNeighbor(Node** head, Node* nodeNeighbor, double cost, double time_cost) {
+    NodeNeighborsLinkedList* newNeighbor = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
+    if (newNeighbor == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+    newNeighbor->node = nodeNeighbor;
+    newNeighbor->cost = cost;
+    newNeighbor->time_cost = time_cost;
+    newNeighbor->next = NULL; //node->neighbors;
+
+    (*head)->neighbors = newNeighbor;
+
+    if ((*head)->neighbors == NULL) { // the first node to be made
+        (*head)->neighbors = newNeighbor;
+    }
+    else { // 
+        NodeNeighborsLinkedList* temp = (*head)->neighbors;
+        while (temp->next!=NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNeighbor;
+    }
+
 }
 
-void freeDestination(NodeNeighborsLinkedList* destination) {
-    if (destination == NULL)
+
+void freeNeighbor(NodeNeighborsLinkedList* neighbor) {
+    if (neighbor == NULL)
         return;
-    freeNode(destination->dest);
-    free(destination);
+    freeNode(neighbor->node);
+    free(neighbor);
 }

@@ -7,8 +7,9 @@ int main(int argc, char *argv[])
 {
     // printf("This is a %dDimension graph!\n",typeOfDimension);
     int dimensions = atoi(argv[2]);
+    int K = atoi(argv[3]);
 
-    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
+    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions, K);
 
     Node* tempNode = graph->nodes;
     int i=0;
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
     while (tempNode != NULL) {
         Dimension* tempDime = tempNode->dimension;
         while (tempDime != NULL) {
-           printf("Node %d dim: %d - %f\n", i, tempDime->dimensionValue, tempDime->value);
+        //    printf("Node %d dim: %d - %f\n", i, tempDime->dimensionValue, tempDime->value);
            tempDime = tempDime->next;
         } 
         tempNode = tempNode->next;
@@ -27,10 +28,7 @@ int main(int argc, char *argv[])
 
     euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
 
-    printf("We created the graph agaiiin!\n");
-
-    freeGraph(graph);
-
+    // freeGraph(graph);
 
     // makeFile(argv[1]);
 

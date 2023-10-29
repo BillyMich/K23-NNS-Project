@@ -1,5 +1,6 @@
 #include "../include/Graph.h"
 #include <math.h>
+#include <time.h>
 
 Graph* initGraph() {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
@@ -24,7 +25,7 @@ void freeGraph(Graph* graph) {
     free(graph);
 }
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions) {
+Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
         perror("Error opening file");
@@ -58,10 +59,22 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
             // printf("%d ---- %f\n", i, coordinate);
         }
 
-        if(flag == 0)
+        if(flag == 0) {
             addNode(headNode, headDimension);
+            graph->numNodes++;
+        }
 
     }
+
+    //TODO: make neighbors list
+    time_t t;
+
+    srand((unsigned) time(&t));
+
+    for( int i = 0; i < K; i++ ) {
+        printf("%d\n", rand() % graph->numNodes);
+    }
+   
 
     // graph->nodes=nodeHead;
     fclose(file);
