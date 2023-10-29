@@ -16,8 +16,10 @@ typedef struct NodeNeighborsLinkedList {
     NodeNeighborsLinkedList* next;
 }NodeNeighborsLinkedList;
 
+NodeNeighborsLinkedList* initNeighbor(Node* dest, double cost, double time_cost);
+
 // add a destination to a node
-void addNeighbor(Node** head, Node* dest, double cost, double time_cost);
+void addNeighbor(NodeNeighborsLinkedList** head, Node* dest, double cost, double time_cost);
 
 void freeDestination(NodeNeighborsLinkedList* destination);
 

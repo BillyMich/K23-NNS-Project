@@ -68,19 +68,45 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
 
     //TODO: make neighbors list
     time_t t;
-
     srand((unsigned) time(&t));
+    
+    //TODO: make this if we need to check that case !!!!!!!
+    if(graph->numNodes < K){
 
-    for( int i = 0; i < K; i++ ) {
-        printf("%d\n", rand() % graph->numNodes);
     }
-   
+
+    Node* currentNode = graph->nodes;
+
+    for(int numNode = 0; numNode < graph->numNodes; numNode++){
+        printf(" ---- Node number = %d\n", numNode);
+        int usedNumbers[K];
+
+        for (int i = 0; i < K; i++) {
+            int randomNumber;
+            do {
+                randomNumber = rand() % graph->numNodes;
+            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
+
+            usedNumbers[i] = randomNumber;
+            printf("%d\n", randomNumber);
+
+            Node* tempNode = graph->nodes;
+            int i=0;
+
+            for(int j = 0; j < randomNumber; j++){
+                tempNode = tempNode->next;
+            }
+            
+            addNeighbor(&(currentNode->neighbors), tempNode, 1.00, 0.33);
+        }
+        currentNode = currentNode->next;
+    }
+
 
     // graph->nodes=nodeHead;
     fclose(file);
     return graph;
 }
-
 
 
 void makeFile(String filename){
@@ -96,4 +122,19 @@ void makeFile(String filename){
                             1.000000,   0.416209,   1.000000,   0.416209};      
     fwrite(coordinate, sizeof(double)*16, 1, file); // Read one double at a time
 
+}
+
+// --------------------- USUFULL FUNCTIONS --------------------- //
+
+// Function to check if a number has been used before
+int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
+    for (int i = 0; i < count; i++) {
+        if (usedNumbers[i] == number) {
+            return 1; // Number is already used
+        }
+        if ( numNode == number ){
+            return 1;
+        }
+    }
+    return 0; // Number is not used
 }

@@ -1,8 +1,6 @@
 #include "../include/Neighbors.h"
 
-
-
-void addNeighbor(Node** head, Node* nodeNeighbor, double cost, double time_cost) {
+NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost, double time_cost) {
     NodeNeighborsLinkedList* newNeighbor = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     if (newNeighbor == NULL) {
         fprintf(stderr, "Memory allocation error\n");
@@ -13,18 +11,18 @@ void addNeighbor(Node** head, Node* nodeNeighbor, double cost, double time_cost)
     newNeighbor->time_cost = time_cost;
     newNeighbor->next = NULL; //node->neighbors;
 
-    (*head)->neighbors = newNeighbor;
+    return newNeighbor;
+}
 
-    if ((*head)->neighbors == NULL) { // the first node to be made
-        (*head)->neighbors = newNeighbor;
+void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost, double time_cost) {
+    NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost, time_cost);
+
+    NodeNeighborsLinkedList* temp = *head;
+    while (temp != NULL) {
+        printf("this is a new neighbor \n");
+        temp = temp->next;
     }
-    else { // 
-        NodeNeighborsLinkedList* temp = (*head)->neighbors;
-        while (temp->next!=NULL) {
-            temp = temp->next;
-        }
-        temp->next = newNeighbor;
-    }
+    temp = newNeighbor;
 
 }
 
