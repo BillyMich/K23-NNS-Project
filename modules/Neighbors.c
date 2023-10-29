@@ -16,15 +16,21 @@ NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost, double ti
 
 void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost, double time_cost) {
     NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost, time_cost);
-
-    NodeNeighborsLinkedList* temp = *head;
-    while (temp != NULL) {
-        printf("this is a new neighbor \n");
-        temp = temp->next;
+    
+    // If the list is empty, set the new neighbor as the head
+    if (*head == NULL) {
+        printf("this is the first neighob of the node!\n");
+        *head = newNeighbor;
+    } else {
+        NodeNeighborsLinkedList* temp = *head;
+        while (temp->next != NULL) {
+            printf("Just added a neighob in the node\n");
+            temp = temp->next;
+        }
+        temp->next = newNeighbor;
     }
-    temp = newNeighbor;
-
 }
+
 
 
 void freeNeighbor(NodeNeighborsLinkedList* neighbor) {
