@@ -10,16 +10,18 @@ typedef struct NodeNeighborsLinkedList NodeNeighborsLinkedList;
 typedef struct Node Node;
 
 typedef struct NodeNeighborsLinkedList {
-    Node* dest;
+    Node* node;
     double cost;
     double time_cost;
     NodeNeighborsLinkedList* next;
 }NodeNeighborsLinkedList;
 
-// add a destination to a node
-NodeNeighborsLinkedList* addDestination(Node* node, Node* dest, double cost, double time_cost);
+NodeNeighborsLinkedList* initNeighbor(Node* dest, double cost, double time_cost);
 
-void freeDestination(NodeNeighborsLinkedList* destination);
+// add a destination to a node
+void addNeighbor(NodeNeighborsLinkedList** head, Node* dest, double cost, double time_cost);
+
+void freeNeighbors(NodeNeighborsLinkedList* destination);
 
 #endif // NEIGHBORS_H
 

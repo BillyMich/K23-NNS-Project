@@ -1,21 +1,42 @@
 #include "../include/Neighbors.h"
 
+NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost, double time_cost) {
+    NodeNeighborsLinkedList* newNeighbor = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
+    if (newNeighbor == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+    newNeighbor->node = nodeNeighbor;
+    newNeighbor->cost = cost;
+    newNeighbor->time_cost = time_cost;
+    newNeighbor->next = NULL; //node->neighbors;
 
-NodeNeighborsLinkedList* addDestination(Node* node, Node* dest, double cost, double time_cost) {
-    NodeNeighborsLinkedList* newDestination = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
-    if (newDestination == NULL)
-        return NULL;
-    newDestination->dest = dest;
-    newDestination->cost = cost;
-    newDestination->time_cost = time_cost;
-    newDestination->next = node->destinations;
-    node->destinations = newDestination;
-    return newDestination;
+    return newNeighbor;
 }
 
-void freeDestination(NodeNeighborsLinkedList* destination) {
-    if (destination == NULL)
-        return;
-    freeNode(destination->dest);
-    free(destination);
+void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost, double time_cost) {
+    NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost, time_cost);
+    
+    // If the list is empty, set the new neighbor as the head
+    if (*head == NULL) {
+        // printf("this is the first neighob of the node!\n");
+        *head = newNeighbor;
+    } else {
+        NodeNeighborsLinkedList* temp = *head;
+        while (temp->next != NULL) {
+            // printf("Just added a neighob in the node\n");
+            temp = temp->next;
+        }
+        temp->next = newNeighbor;
+    }
+}
+
+
+
+void freeNeighbors(NodeNeighborsLinkedList* neighbors) {
+    while (neighbors != NULL) {
+        NodeNeighborsLinkedList* next = neighbors->next;
+        free(neighbors);
+        neighbors = next;
+    }
 }

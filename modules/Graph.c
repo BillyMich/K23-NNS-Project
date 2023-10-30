@@ -1,5 +1,6 @@
 #include "../include/Graph.h"
 #include <math.h>
+#include <time.h>
 
 Graph* initGraph() {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
@@ -16,15 +17,17 @@ Graph* initGraph() {
 void freeGraph(Graph* graph) {
     if (graph == NULL)
         return;
-    for (int i = 0; i < graph->numNodes; i++) {
-        freeNode(graph->nodes + i);
+    Node* current = graph->nodes;
+    while (current != NULL) {
+        Node* next = current->next;
+        freeNode(current);
+        current = next;
     }
-
-    free(graph->nodes);
     free(graph);
 }
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions) {
+
+Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
         perror("Error opening file");
@@ -58,16 +61,53 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
             // printf("%d ---- %f\n", i, coordinate);
         }
 
-        if(flag == 0)
+        if(flag == 0) {
             addNode(headNode, headDimension);
+            graph->numNodes++;
+        }
 
     }
+
+    //TODO: make neighbors list
+    time_t t;
+    srand((unsigned) time(&t));
+    
+    //TODO: make this if we need to check that case !!!!!!!
+    if(graph->numNodes < K){
+
+    }
+
+    Node* currentNode = graph->nodes;
+
+    for(int numNode = 0; numNode < graph->numNodes; numNode++){
+        // printf(" ---- Node number = %d\n", numNode);
+        int usedNumbers[K];
+
+        for (int i = 0; i < K; i++) {
+            int randomNumber;
+            do {
+                randomNumber = rand() % graph->numNodes;
+            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
+
+            usedNumbers[i] = randomNumber;
+            // printf("%d\n", randomNumber);
+
+            Node* tempNode = graph->nodes;
+
+            for(int j = 0; j < randomNumber; j++){
+                tempNode = tempNode->next;
+            }
+            
+            addNeighbor(&(currentNode->neighbors), tempNode, 1.00, 0.33);
+        }
+        currentNode = currentNode->next;
+    }
+
 
     // graph->nodes=nodeHead;
     fclose(file);
     return graph;
 }
-
 
 
 void makeFile(String filename){
@@ -77,10 +117,27 @@ void makeFile(String filename){
         exit(1);
     }
     
-    double coordinate[] = {1.000000,   0.000000,   1.000000,   0.000000,
-                            1.000000,   0.139767,   1.000000,   0.139767,
-                            1.000000,   0.278025,   1.000000,   0.278025,
-                            1.000000,   0.416209,   1.000000,   0.416209};      
-    fwrite(coordinate, sizeof(double)*16, 1, file); // Read one double at a time
+    double coordinate[] = { 1.000000,   2.345678,   4.678923,   0.333333,
+                            4.678923,   0.139767,   1.000000,   0.139767,
+                            2.000000,   0.278025,   2.345678,   0.278025,
+                            3.456789,   0.416209,   1.000000,   0.416209,
+                            0.123456,   0.278025 ,  2.345678,   0.278025,
+                            0.416209,   6.278025,   5.678923,  0.278025};      
+    fwrite(coordinate, sizeof(double)*24, 1, file); // Read one double at a time
 
+}
+
+// --------------------- USUFULL FUNCTIONS --------------------- //
+
+// Function to check if a number has been used before
+int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
+    for (int i = 0; i < count; i++) {
+        if (usedNumbers[i] == number) {
+            return 1; // Number is already used
+        }
+        if ( numNode == number ){
+            return 1;
+        }
+    }
+    return 0; // Number is not used
 }

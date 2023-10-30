@@ -9,7 +9,7 @@ Node* initNode() {
     }
     //Here we will add the dimensions
     node->dimension = NULL;//dimension;
-    node->destinations = NULL;
+    node->neighbors = NULL;
     node->next = NULL;
 
     return node;
@@ -35,15 +35,11 @@ void addNode(Node** headNode, Dimension* headDimension) {
     }
 }
 
-// TODO: add freeDimension and freeNodeNeighborsLinkedList
-void  freeNode(Node* node) {
+void freeNode(Node* node) {
     if (node == NULL)
         return;
-    NodeNeighborsLinkedList* current = node->destinations;
-    while (current != NULL) {
-        NodeNeighborsLinkedList* next = current->next;
-        free(current);
-        current = next;
-    }
+
+    freeDimensions(node->dimension);
+    freeNeighbors(node->neighbors);
     free(node);
 }

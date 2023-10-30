@@ -15,10 +15,12 @@ typedef struct Graph{
 
 Graph* initGraph();
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions);
+Graph* createGraphFromBinaryFile(String filename, int dimensions, int K);
 
 void freeGraph(Graph* graph);
 
 void makeFile(String filename);
+
+int isNumberUsed(int usedNumbers[], int count, int number, int numNode);
 
 #endif // GRAPH_H
