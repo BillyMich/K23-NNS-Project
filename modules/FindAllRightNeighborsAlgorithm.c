@@ -22,16 +22,22 @@ void FindAllRightNeighbors(Graph * graph)
         OrderNodesByNeighbor(tempNode,tempNodeFor);
 
         //Here is a simple way to skip and break
-        if (tempNodeFor->next !=NULL){
+
+
+        if (tempNodeFor->next !=NULL)
+        {
+            tempNodeFor=tempNodeFor->next;
+        }else if (tempNodeFor->next ==NULL)
+        {
             tempNodeFor = headNode;
-            if (tempNode->next!=NULL){
+            if (tempNode->next!=NULL)
+            {
                 tempNode = tempNode->next;
-            }else break;
-        }        
-        
+            }else break;    
+        }
+           
     }
     
-
 }
 
 
