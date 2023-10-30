@@ -1,4 +1,5 @@
 #include "../include/Graph.h"
+#include "../include/MathematicalFunctions.h"
 #include <math.h>
 #include <time.h>
 
@@ -24,6 +25,9 @@ void freeGraph(Graph* graph) {
     free(graph->nodes);
     free(graph);
 }
+
+int isNumberUsed(int usedNumbers[], int count, int number, int numNode);
+void KRandomNodes(Graph** graph, int K);
 
 Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     FILE* file = fopen(filename, "rb");
@@ -66,45 +70,46 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
 
     }
 
-    //TODO: make neighbors list
-    time_t t;
-    srand((unsigned) time(&t));
-    
-    //TODO: make this if we need to check that case !!!!!!!
-    if(graph->numNodes < K){
-
-    }
-
-    Node* currentNode = graph->nodes;
-
-    for(int numNode = 0; numNode < graph->numNodes; numNode++){
-        printf(" ---- Node number = %d\n", numNode);
-        int usedNumbers[K];
-
-        for (int i = 0; i < K; i++) {
-            int randomNumber;
-            do {
-                randomNumber = rand() % graph->numNodes;
-            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
-
-            usedNumbers[i] = randomNumber;
-            printf("%d\n", randomNumber);
-
-            Node* tempNode = graph->nodes;
-            int i=0;
-
-            for(int j = 0; j < randomNumber; j++){
-                tempNode = tempNode->next;
-            }
-            
-            addNeighbor(&(currentNode->neighbors), tempNode, 1.00, 0.33);
-        }
-        currentNode = currentNode->next;
-    }
-
-
-    // graph->nodes=nodeHead;
     fclose(file);
+
+    // //TODO: make neighbors list
+    // time_t t;
+    // srand((unsigned) time(&t));
+    
+    // //TODO: make this if we need to check that case !!!!!!!
+    // if(graph->numNodes < K){
+
+    // }
+
+    // Node* currentNode = graph->nodes;
+
+    // for(int numNode = 0; numNode < graph->numNodes; numNode++){
+    //     printf(" ---- Node number = %d\n", numNode);
+    //     int usedNumbers[K];
+
+    //     for (int i = 0; i < K; i++) {
+    //         int randomNumber;
+    //         do {
+    //             randomNumber = rand() % graph->numNodes;
+    //         } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
+
+    //         usedNumbers[i] = randomNumber;
+    //         printf("%d\n", randomNumber);
+
+    //         Node* neighborNode = graph->nodes;
+    //         int i=0;
+
+    //         for(int j = 0; j < randomNumber; j++){
+    //             neighborNode = neighborNode->next;
+    //         }
+            
+    //         addNeighbor(&(currentNode->neighbors), neighborNode, 1.00, 0.33);
+    //     }
+    //     currentNode = currentNode->next;
+    // }
+
+    KRandomNodes(&graph, K);
+    
     return graph;
 }
 
@@ -137,4 +142,43 @@ int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
         }
     }
     return 0; // Number is not used
+}
+
+//TODO: make neighbors list
+void KRandomNodes(Graph** graph, int K) {
+    time_t t;
+    srand((unsigned) time(&t));
+    
+    //TODO: make this if we need to check that case !!!!!!!
+    // if(graph->numNodes < K){
+    // }
+
+    Node* currentNode = (*graph)->nodes;
+    int numNodes = (*graph)->numNodes;
+
+    for(int numNode = 0; numNode < numNodes; numNode++){
+        printf(" ---- Node number = %d\n", numNode);
+        int usedNumbers[K];
+
+        for (int i = 0; i < K; i++) {
+            int randomNumber;
+            do {
+                randomNumber = rand() % numNodes;
+            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
+
+            usedNumbers[i] = randomNumber;
+            printf("%d\n", randomNumber);
+
+            Node* neighborNode = (*graph)->nodes;
+
+            for(int j = 0; j < randomNumber; j++){
+                neighborNode = neighborNode->next;
+            }
+
+            double distance = euclidean_distance(&(currentNode->dimension), &(neighborNode->dimension));
+            printf("distance: %f\n", distance);
+            addNeighbor(&(currentNode->neighbors), neighborNode, distance, 0.33);
+        }
+        currentNode = currentNode->next;
+    }
 }
