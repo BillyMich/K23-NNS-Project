@@ -35,15 +35,11 @@ void addNode(Node** headNode, Dimension* headDimension) {
     }
 }
 
-// TODO: add freeDimension and freeNodeNeighborsLinkedList
-void  freeNode(Node* node) {
+void freeNode(Node* node) {
     if (node == NULL)
         return;
-    NodeNeighborsLinkedList* current = node->neighbors;
-    while (current != NULL) {
-        NodeNeighborsLinkedList* next = current->next;
-        free(current);
-        current = next;
-    }
+
+    freeDimensions(node->dimension);
+    freeNeighbors(node->neighbors);
     free(node);
 }

@@ -23,7 +23,7 @@ double euclidean_distance(Dimension** nodeDimension1 , Dimension** nodeDimension
         tempDimension2= tempDimension2->next;
     }
     double cost = sqrt(sum);
-    // printf("this is the xoros makria apo to allo node %f", cost);
+    printf("\nthis is the distance between the nodes: %f\n", cost);
     return cost;
     
 }

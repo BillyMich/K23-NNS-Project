@@ -20,7 +20,9 @@ EXEC = program
 # Args for examples
 ARGS2D = $(DATASETS)/dummy.bin 2 4
 
-ARGS3D = $(DATASETS)/dummy.bin 3
+ARGS3D = $(DATASETS)/dummy2.bin 4 4
+
+ARGSMAKEFILE = $(DATASETS)/dummy2.bin 
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
@@ -34,6 +36,9 @@ run: $(EXEC)
 
 run3D: $(EXEC)
 	./$(EXEC) $(ARGS3D)
+
+runM: $(EXEC)
+	./$(EXEC) $(ARGSMAKEFILE)
 
 valgrind: $(EXEC)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGS2D)

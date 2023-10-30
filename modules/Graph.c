@@ -18,11 +18,12 @@ Graph* initGraph() {
 void freeGraph(Graph* graph) {
     if (graph == NULL)
         return;
-    for (int i = 0; i < graph->numNodes; i++) {
-        freeNode(graph->nodes + i);
+    Node* current = graph->nodes;
+    while (current != NULL) {
+        Node* next = current->next;
+        freeNode(current);
+        current = next;
     }
-
-    free(graph->nodes);
     free(graph);
 }
 
@@ -121,11 +122,13 @@ void makeFile(String filename){
         exit(1);
     }
     
-    double coordinate[] = {1.000000,   0.000000,   1.000000,   0.000000,
-                            1.000000,   0.139767,   1.000000,   0.139767,
-                            1.000000,   0.278025,   1.000000,   0.278025,
-                            1.000000,   0.416209,   1.000000,   0.416209};      
-    fwrite(coordinate, sizeof(double)*16, 1, file); // Read one double at a time
+    double coordinate[] = { 1.000000,   2.345678,   4.678923,   0.333333,
+                            4.678923,   0.139767,   1.000000,   0.139767,
+                            2.000000,   0.278025,   2.345678,   0.278025,
+                            3.456789,   0.416209,   1.000000,   0.416209,
+                            0.123456,   0.278025 ,  2.345678,   0.278025,
+                            0.416209,   6.278025,   5.678923,  0.278025};      
+    fwrite(coordinate, sizeof(double)*24, 1, file); // Read one double at a time
 
 }
 

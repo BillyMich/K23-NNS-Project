@@ -19,12 +19,12 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
     
     // If the list is empty, set the new neighbor as the head
     if (*head == NULL) {
-        printf("this is the first neighob of the node!\n");
+        // printf("this is the first neighob of the node!\n");
         *head = newNeighbor;
     } else {
         NodeNeighborsLinkedList* temp = *head;
         while (temp->next != NULL) {
-            printf("Just added a neighob in the node\n");
+            // printf("Just added a neighob in the node\n");
             temp = temp->next;
         }
         temp->next = newNeighbor;
@@ -33,9 +33,10 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 
 
 
-void freeNeighbor(NodeNeighborsLinkedList* neighbor) {
-    if (neighbor == NULL)
-        return;
-    freeNode(neighbor->node);
-    free(neighbor);
+void freeNeighbors(NodeNeighborsLinkedList* neighbors) {
+    while (neighbors != NULL) {
+        NodeNeighborsLinkedList* next = neighbors->next;
+        free(neighbors);
+        neighbors = next;
+    }
 }
