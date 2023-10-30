@@ -11,8 +11,7 @@ int main(int argc, char *argv[])
 
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions, K);
 
-    Node* tempNode = graph->nodes;
-    int i=0;
+    //Node* tempNode = graph->nodes;
 
     printf("We created the graph!\n");
 
@@ -42,9 +41,7 @@ int main(int argc, char *argv[])
 
     euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
 
-    // freeGraph(graph);
-
+    freeGraph(graph);
     // makeFile(argv[1]);
-
     return 0;
 }
