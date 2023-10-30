@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "../include/Graph.h"
 #include "../include/MathematicalFunctions.h"
+#include "../include/FindAllRightNeighborsAlgorithm.h"
 
 
 int main(int argc, char *argv[])
@@ -39,8 +40,8 @@ int main(int argc, char *argv[])
     //     i++;
     // }
 
-    euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
-
+    //euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
+    FindAllRightNeighbors(graph);
     freeGraph(graph);
     // makeFile(argv[1]);
     return 0;
