@@ -23,7 +23,7 @@ double euclidean_distance(Dimension** nodeDimension1 , Dimension** nodeDimension
         tempDimension2= tempDimension2->next;
     }
     double cost = sqrt(sum);
-    printf("\nthis is the distance between the nodes: %f\n", cost);
+    // printf("\nthis is the distance between the nodes: %f\n", cost);
     return cost;
     
 }

@@ -73,42 +73,6 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
 
     fclose(file);
 
-    // //TODO: make neighbors list
-    // time_t t;
-    // srand((unsigned) time(&t));
-    
-    // //TODO: make this if we need to check that case !!!!!!!
-    // if(graph->numNodes < K){
-
-    // }
-
-    // Node* currentNode = graph->nodes;
-
-    // for(int numNode = 0; numNode < graph->numNodes; numNode++){
-    //     printf(" ---- Node number = %d\n", numNode);
-    //     int usedNumbers[K];
-
-    //     for (int i = 0; i < K; i++) {
-    //         int randomNumber;
-    //         do {
-    //             randomNumber = rand() % graph->numNodes;
-    //         } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
-
-    //         usedNumbers[i] = randomNumber;
-    //         printf("%d\n", randomNumber);
-
-    //         Node* neighborNode = graph->nodes;
-    //         int i=0;
-
-    //         for(int j = 0; j < randomNumber; j++){
-    //             neighborNode = neighborNode->next;
-    //         }
-            
-    //         addNeighbor(&(currentNode->neighbors), neighborNode, 1.00, 0.33);
-    //     }
-    //     currentNode = currentNode->next;
-    // }
-
     KRandomNodes(&graph, K);
     
     return graph;
@@ -126,8 +90,8 @@ void makeFile(String filename){
                             4.678923,   0.139767,   1.000000,   0.139767,
                             2.000000,   0.278025,   2.345678,   0.278025,
                             3.456789,   0.416209,   1.000000,   0.416209,
-                            0.123456,   0.278025 ,  2.345678,   0.278025,
-                            0.416209,   6.278025,   5.678923,  0.278025};      
+                            0.123456,   0.278025,   2.345678,   0.278025,
+                            0.416209,   6.278025,   5.678923,   0.278025  };      
     fwrite(coordinate, sizeof(double)*24, 1, file); // Read one double at a time
 
 }
@@ -160,7 +124,7 @@ void KRandomNodes(Graph** graph, int K) {
     int numNodes = (*graph)->numNodes;
 
     for(int numNode = 0; numNode < numNodes; numNode++){
-        printf(" ---- Node number = %d\n", numNode);
+        // printf(" ---- Node number = %d\n", numNode);
         int usedNumbers[K];
 
         for (int i = 0; i < K; i++) {
@@ -170,7 +134,7 @@ void KRandomNodes(Graph** graph, int K) {
             } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
 
             usedNumbers[i] = randomNumber;
-            printf("%d\n", randomNumber);
+            // printf("%d\n", randomNumber);
 
             Node* neighborNode = (*graph)->nodes;
 
@@ -179,7 +143,7 @@ void KRandomNodes(Graph** graph, int K) {
             }
 
             double distance = euclidean_distance(&(currentNode->dimension), &(neighborNode->dimension));
-            printf("distance: %f\n", distance);
+            // printf("distance: %f\n", distance);
             addNeighbor(&(currentNode->neighbors), neighborNode, distance, 0.33);
         }
         currentNode = currentNode->next;
