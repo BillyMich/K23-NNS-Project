@@ -24,6 +24,7 @@ void addNode(Node** headNode, Dimension* headDimension) {
     //3. put node at the correct place
     if (*headNode == NULL) { // the first node to be made
         // printf("head node init\n");
+        newNode->nodeNameInt = 0;
         *headNode = newNode;
     }
     else { // 
@@ -31,6 +32,7 @@ void addNode(Node** headNode, Dimension* headDimension) {
         while (temp->next!=NULL) {
             temp = temp->next;
         }
+        newNode->nodeNameInt = temp->nodeNameInt + 1;
         temp->next = newNode;
     }
 }
