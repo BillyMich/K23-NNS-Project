@@ -98,7 +98,7 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
                 tempNode = tempNode->next;
             }
             
-            //addNeighbor(&(currentNode->neighbors), tempNode, 1.00, 0.33);
+            addNeighbor(&(currentNode->neighbors), tempNode, 1.00, 0.33);
         }
         currentNode = currentNode->next;
     }
