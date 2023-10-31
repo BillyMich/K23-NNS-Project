@@ -16,12 +16,12 @@ CFLAGS = -Wall -Werror -g -I$(INCLUDE)
 LDFLAGS = -lm -fsanitize=address
 
 # .o files
-OBJS = $(SRC_MAIN)/main.o $(SRC_MODULES)/Graph.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/MathematicalFunctions.o
+OBJS = $(SRC_MAIN)/main.o $(SRC_MODULES)/Graph.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o
 
 # Test objects
-OBJSG = $(SRC_TESTS)/graph_test.o $(SRC_MODULES)/Graph.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/MathematicalFunctions.o
-OBJSN = $(SRC_TESTS)/nodes_test.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/MathematicalFunctions.o
-OBJSD = $(SRC_TESTS)/dimension_test.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/MathematicalFunctions.o
+OBJSG = $(SRC_TESTS)/graph_test.o $(SRC_MODULES)/Graph.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o
+OBJSN = $(SRC_TESTS)/nodes_test.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o
+OBJSD = $(SRC_TESTS)/dimension_test.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o
 
 # Executables
 EXEC = program
