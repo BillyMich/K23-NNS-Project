@@ -19,7 +19,11 @@ void FindAllRightNeighbors(Graph * graph)
     {
         printf("%d\n",i++);
         //Here we find the cost of the 2 nodes (how close is the neightbor)
-        OrderNodesByNeighbor(tempNode,tempNodeFor);
+        if (tempNode->nodeNameInt != tempNodeFor->nodeNameInt)
+        {
+            OrderNodesByNeighbor(tempNode,tempNodeFor);
+        }
+        
 
         //Here is a simple way to skip and break
 
@@ -34,9 +38,11 @@ void FindAllRightNeighbors(Graph * graph)
             {
                 tempNode = tempNode->next;
             }else break;    
-        }
-           
+        }   
     }
+
+    //need to implement!;
+    //writeNeightborsInAFile()
     
 }
 
