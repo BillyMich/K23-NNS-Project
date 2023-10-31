@@ -12,7 +12,7 @@ CFLAGS = -Wall  -g -I$(INCLUDE)
 LDFLAGS = -lm -fsanitize=address
 
 # .o files
-OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o
+OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o
 
 # Executable
 EXEC = program
