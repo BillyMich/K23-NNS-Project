@@ -11,6 +11,7 @@ typedef struct Node Node;
 typedef struct NodeNeighborsLinkedList NodeNeighborsLinkedList;
 
 typedef struct Node {
+    int nodeNameInt;
     Dimension* dimension;
     NodeNeighborsLinkedList* neighbors;
     Node* next;
