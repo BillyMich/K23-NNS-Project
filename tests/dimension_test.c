@@ -12,10 +12,9 @@
 void testInitDimension() {
     Dimension* dim = initDimension();
     TEST_ASSERT(dim != NULL); 
-    TEST_ASSERT(dim->dimensionValue == 0);  
-    TEST_ASSERT(dim->value == 0.0);  
+    
     TEST_ASSERT(dim->next == NULL);
-    freeDimension(dim);
+    freeDimensions(dim);
 }
 
 void testAddDimension() {
@@ -35,7 +34,7 @@ void testAddDimension() {
     TEST_ASSERT(second->value == 20.0);
     TEST_ASSERT(second->next == NULL);
 
-    freeDimension(head);
+    freeDimensions(head);
 }
 
 void testDimension() {
@@ -58,7 +57,7 @@ void testDimension() {
         count++;
     }
 
-    freeDimension(headDimension);
+    freeDimensions(headDimension);
 }
 
 

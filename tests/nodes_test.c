@@ -31,7 +31,6 @@ void testAddNode() {
 
     // Clean up
     freeNode(headNode);
-    freeDimension(dimension1);
 }
 
 void testAddDestination() {
@@ -70,7 +69,6 @@ void testAddNodeWithMultipleDimensions() {
     TEST_ASSERT(headNode->dimension->value == 10.0);
 
     freeNode(headNode);
-    freeDimension(dimension1);
 }
 
 void testAddDestinationAndCheck() {
