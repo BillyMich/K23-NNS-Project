@@ -12,7 +12,7 @@ double euclidean_distance(Dimension** nodeDimension1 , Dimension** nodeDimension
 
     while (tempDimension1 != NULL)
     {
-        printf(" \n %f and this %f \n ", tempDimension1->value,tempDimension2->value );
+        // printf(" \n %f and this %f \n ", tempDimension1->value,tempDimension2->value );
         double dif =  tempDimension1->value - tempDimension2->value;
         // printf(" \n %f = diff ", dif );
         sum += dif * dif ;
@@ -23,5 +23,10 @@ double euclidean_distance(Dimension** nodeDimension1 , Dimension** nodeDimension
     double cost = sqrt(sum);
     // printf("\nthis is the distance between the nodes: %f\n", cost);
     return cost;
+    
+}
+
+double manhattan(Dimension** nodeDimension1 , Dimension** nodeDimension2){
+
     
 }

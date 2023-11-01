@@ -12,13 +12,13 @@ CFLAGS = -Wall  -g -I$(INCLUDE)
 LDFLAGS = -lm -fsanitize=address
 
 # .o files
-OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o
+OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 
 # Executable
 EXEC = program
 
 # Args for examples
-ARGS2D = $(DATASETS)/dummy.bin 2 4
+ARGS2D = $(DATASETS)/dummy.bin 2 2
 
 ARGS3D = $(DATASETS)/dummy2.bin 4 4
 

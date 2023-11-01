@@ -10,6 +10,7 @@ Node* initNode() {
     //Here we will add the dimensions
     node->dimension = NULL;//dimension;
     node->neighbors = NULL;
+    node->reversedNeighbors = NULL;
     node->next = NULL;
 
     return node;
@@ -43,5 +44,6 @@ void freeNode(Node* node) {
 
     freeDimensions(node->dimension);
     freeNeighbors(node->neighbors);
+    freeNeighbors(node->reversedNeighbors);
     free(node);
 }
