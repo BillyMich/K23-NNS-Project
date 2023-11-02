@@ -1,21 +1,16 @@
 #include "../include/knn.h"
-#include "../include/MathematicalFunctions.h"
 #include <time.h>
+#include <string.h>
 
-int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
-    for (int i = 0; i < count; i++) {
-        if (usedNumbers[i] == number) {
-            return 1; // Number is already used
-        }
-        if ( numNode == number ){
-            return 1;
-        }
-    }
-    return 0; // Number is not used
+//TODOOOOOO
+void knn_algorithm(Graph** graph, int K, String distance_function){
+    
+    KRandomNodes(graph, K, distance_function);
+
 }
 
-//TODO: make neighbors list
-void KRandomNodes(Graph** graph, int K) {
+
+void KRandomNodes(Graph** graph, int K, String distance_function) {
     time_t t;
     srand((unsigned) time(&t));
     
@@ -45,11 +40,32 @@ void KRandomNodes(Graph** graph, int K) {
                 neighborNode = neighborNode->next;
             }
 
-            double distance = euclidean_distance(&(currentNode->dimension), &(neighborNode->dimension));
-            // printf("distance: %f\n", distance);
+            double distance = 0.0;
+
+            if(strcmp(distance_function, "euclidean") == 0){
+                distance = euclidean_distance(&(currentNode->dimension), &(neighborNode->dimension));
+                // printf("distance eu: %f\n", distance);
+            }
+            else if(strcmp(distance_function, "manhattan") == 0){
+                distance = manhattan_distance(currentNode->dimension, neighborNode->dimension);
+                // printf("distance man: %f\n", distance);
+            }
+
             addNeighbor(&(currentNode->neighbors), neighborNode, distance);
             addNeighbor(&(neighborNode->reversedNeighbors), currentNode, distance);
         }
         currentNode = currentNode->next;
     }
+}
+
+int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
+    for (int i = 0; i < count; i++) {
+        if (usedNumbers[i] == number) {
+            return 1; // Number is already used
+        }
+        if ( numNode == number ){
+            return 1;
+        }
+    }
+    return 0; // Number is not used
 }

@@ -1,5 +1,4 @@
 #include "../include/Graph.h"
-#include "../include/knn.h"
 
 Graph* initGraph() {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
@@ -26,7 +25,7 @@ void freeGraph(Graph* graph) {
 }
 
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
+Graph* createGraphFromBinaryFile(String filename, int dimensions, int K, String distance_function) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
         perror("Error opening file");
@@ -68,8 +67,6 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     }
 
     fclose(file);
-
-    KRandomNodes(&graph, K);
     
     return graph;
 }

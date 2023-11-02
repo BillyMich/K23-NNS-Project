@@ -1,18 +1,17 @@
 #include <stdio.h>
 #include "../include/Graph.h"
-#include "../include/MathematicalFunctions.h"
 #include "../include/FindAllRightNeighborsAlgorithm.h"
+#include "../include/knn.h"
 
 
-int main(int argc, char *argv[])
-{
-    // printf("This is a %dDimension graph!\n",typeOfDimension);
+int main(int argc, char *argv[]) {
+
     int dimensions = atoi(argv[2]);
     int K = atoi(argv[3]);
+    String distance_function = argv[4];
 
-    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions, K);
-
-    //Node* tempNode = graph->nodes;
+    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions, K, distance_function);
+    knn_algorithm(&graph, K, distance_function);
 
     printf("We created the graph!\n");
 
@@ -43,9 +42,9 @@ int main(int argc, char *argv[])
         i++;
     }
 
-    //euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
     FindAllRightNeighbors(graph);
     freeGraph(graph);
+
     // makeFile(argv[1]);
     return 0;
 }

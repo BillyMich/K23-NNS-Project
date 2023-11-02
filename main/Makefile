@@ -20,7 +20,9 @@ EXEC = program
 # Args for examples
 ARGS2D = $(DATASETS)/dummy.bin 2 2
 
-ARGS3D = $(DATASETS)/dummy2.bin 4 4
+ARGSEUCL = $(DATASETS)/dummy.bin 2 2 euclidean
+
+ARGSMAN = $(DATASETS)/dummy.bin 2 2 manhattan
 
 ARGSMAKEFILE = $(DATASETS)/dummy2.bin 
 
@@ -34,8 +36,11 @@ clean:
 run: $(EXEC)
 	./$(EXEC) $(ARGS2D)
 
-run3D: $(EXEC)
-	./$(EXEC) $(ARGS3D)
+run-euclidean: $(EXEC)
+	./$(EXEC) $(ARGSEUCL)
+
+run-manhattan: $(EXEC)
+	./$(EXEC) $(ARGSMAN)
 
 runM: $(EXEC)
 	./$(EXEC) $(ARGSMAKEFILE)
