@@ -2,11 +2,53 @@
 #include <time.h>
 #include <string.h>
 
+// Check if the 
+int check( int NeighborsNodeName, NodeNeighborsLinkedList** nodeNeighbors){
+
+    NodeNeighborsLinkedList* tempNode = *nodeNeighbors;
+    while (tempNode != NULL) {
+        if(NeighborsNodeName == tempNode->node->nodeNameInt)
+            return 1;
+        tempNode = tempNode->next;
+    }
+    return 0;
+}
+
+// Check if the neighbor's of a Node(-neighbor) is neighbor of the source Node
+void checkNeighborOfNeighbor(Node** sourceNode, Node** neighbor, String distance_function){
+    
+    NodeNeighborsLinkedList* tempNeighbors = (*neighbor)->neighbors;
+
+    while (tempNeighbors != NULL) {
+        
+        if (check(tempNeighbors->node->nodeNameInt, (*sourceNode)->neighbors) == 0) {
+            double distance = 0.0;
+
+            if(strcmp(distance_function, "euclidean") == 0){
+                distance = euclidean_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
+                // printf("distance eu: %f\n", distance);
+            }
+            else if(strcmp(distance_function, "manhattan") == 0){
+                distance = manhattan_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
+                // printf("distance man: %f\n", distance);
+            }
+
+            // addNeighbor();
+            // delete();
+        }
+
+
+        tempNeighbors = tempNeighbors->next;
+    }
+    
+}
+
 //TODOOOOOO
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
     KRandomNodes(graph, K, distance_function);
-
+    
+    
 }
 
 

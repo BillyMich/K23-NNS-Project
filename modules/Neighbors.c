@@ -15,7 +15,7 @@ NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost) {
 
 void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost) {
     NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost);
-
+    int count = 1;
     // If the list is empty, set the new neighbor as the head
     if (*head == NULL || cost < (*head)->cost) {
         newNeighbor->next = *head;
@@ -24,13 +24,25 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
         NodeNeighborsLinkedList* current = *head;
         while (current->next != NULL && current->next->cost < cost) {
             current = current->next;
+            count++;
         }
         newNeighbor->next = current->next;
         current->next = newNeighbor;
     }
+    // if (count > K){
+    //     NodeNeighborsLinkedList* current = *head;
+    //     while (current->next->next != NULL){
+    //         current = current->next;
+    //     }
+    //     current->next = NULL;        
+    // }
 }
 
 
+void delete(NodeNeighborsLinkedList** head, int K) {
+    ///
+
+}
 
 void freeNeighbors(NodeNeighborsLinkedList* neighbors) {
     while (neighbors != NULL) {
