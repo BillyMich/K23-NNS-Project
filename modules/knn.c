@@ -2,64 +2,79 @@
 #include <time.h>
 #include <string.h>
 
-// Check if the 
-int check( int NeighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors){
-
-    NodeNeighborsLinkedList* tempNode = nodeNeighbors;
-    while (tempNode != NULL) {
-        if(NeighborsNodeName == tempNode->node->nodeNameInt)
-            return 1;
-        tempNode = tempNode->next;
-    }
-    return 0;
-}
-
-
-void checkNeighborOfNeighbor(Node** sourceNode, Node** neighbor, String distance_function){
-    
-    NodeNeighborsLinkedList* tempNeighbors = (*neighbor)->neighbors;
-
-    while (tempNeighbors != NULL) {
-        
-        if (check(tempNeighbors->node->nodeNameInt, (*sourceNode)->neighbors) == 0) {
-            double cost = 0.0;
-
-            if(strcmp(distance_function, "euclidean") == 0){
-                cost = euclidean_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
-            }
-            else if(strcmp(distance_function, "manhattan") == 0){
-                cost = manhattan_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
-            }
-
-            addNeighbor(&(*sourceNode)->neighbors,tempNeighbors->node,cost);
-            deleteLastNeighborNode((*sourceNode)->neighbors);
-        }
-
-        tempNeighbors = tempNeighbors->next;
-    }
-    
-}
+double** matrixNodes;
 
 //TODOOOOOO
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
+    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
+    for(int i = 0; i < (*graph)->numNodes; i++){
+        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
+        for(int j = 0; j < (*graph)->numNodes; j++){
+            matrixNodes[i][j] = -1.0;
+        }
+    }
+
     KRandomNodes(graph, K, distance_function);
+    
     Node * head = (*graph)->nodes;
     Node * tempNode = head;
-
-    while (tempNode !=NULL)
+    int changes = 10;
+    while (changes>1)
     {
+        printf("hello\n");
+    changes=0;
+    while (tempNode !=NULL) {
         NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
-        while (tempNodeNeighborList !=NULL)
-        {
-            checkNeighborOfNeighbor(&tempNode, &tempNodeNeighborList->node, distance_function);
+        while (tempNodeNeighborList != NULL) {
+        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
             tempNodeNeighborList = tempNodeNeighborList->next;
         }
         
-        tempNode= tempNode->next;
+        NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
+        while (tempReversedNeighbors != NULL) {
+        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+            tempReversedNeighbors = tempReversedNeighbors->next;
+        }
+        tempNode = tempNode->next;
+
     }
+            tempNode = (*graph)->nodes;
+            printf(" this is count %d\n",changes);
+    }
+    for (int i = 0; i < (*graph)->numNodes; i++)
+        free(matrixNodes[i]);
+    free(matrixNodes);
     
+}
+
+
+int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
+    NodeNeighborsLinkedList* tempNeighbors = neighbor;
+    int count = 0;
+    while (tempNeighbors != NULL) {
+        int neighborName = tempNeighbors->node->nodeNameInt;
+        int sourceName = (*sourceNode)->nodeNameInt;
+
+        if (check(neighborName, (*sourceNode)->neighbors, sourceName) == 0) {
+            double cost = 0.0;
+            if(matrixNodes[neighborName][sourceName] != -1){
+                cost = distance(tempNeighbors->node->dimension, tempNeighbors->node->dimension, distance_function);
+            }
+            else{
+                cost = matrixNodes[neighborName][sourceName];
+            }
+            addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
+            deleteLastNeighborNode((*sourceNode)->neighbors);
+            count++;
+        }
+        tempNeighbors = tempNeighbors->next;
+    }
+
+    return count;
 }
 
 
@@ -93,19 +108,13 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
                 neighborNode = neighborNode->next;
             }
 
-            double distance = 0.0;
-
-            if(strcmp(distance_function, "euclidean") == 0){
-                distance = euclidean_distance((currentNode->dimension), (neighborNode->dimension));
-                // printf("distance eu: %f\n", distance);
-            }
-            else if(strcmp(distance_function, "manhattan") == 0){
-                distance = manhattan_distance(currentNode->dimension, neighborNode->dimension);
-                // printf("distance man: %f\n", distance);
-            }
-
-            addNeighbor(&(currentNode->neighbors), neighborNode, distance);
-            addNeighbor(&(neighborNode->reversedNeighbors), currentNode, distance);
+            double cost = distance(currentNode->dimension, neighborNode->dimension, distance_function);
+            
+            matrixNodes[numNode][randomNumber] = cost;
+            matrixNodes[randomNumber][numNode] = cost;
+            
+            addNeighbor(&(currentNode->neighbors), neighborNode, cost);
+            addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
         }
         currentNode = currentNode->next;
     }
@@ -121,4 +130,21 @@ int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
         }
     }
     return 0; // Number is not used
+}
+
+// Check if the node is already a neighbour of the source Node
+int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName) {
+
+    // if neighbor's neigbors is the sourceNode stop
+    if(neighborsNodeName == sourceNodeName){
+        return 1;
+    }
+
+    NodeNeighborsLinkedList* tempNode = nodeNeighbors;
+    while (tempNode != NULL) {
+        if(neighborsNodeName == tempNode->node->nodeNameInt)
+            return 1;
+        tempNode = tempNode->next;
+    }
+    return 0;
 }

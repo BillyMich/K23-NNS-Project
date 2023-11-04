@@ -1,7 +1,9 @@
 #include <math.h>
 #include <stddef.h>
 #include <stdio.h>
-#include"Dimension.h"
+#include "Dimension.h"
+#include "common_types.h"
+#include <string.h>
 
 double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
 
@@ -43,4 +45,15 @@ double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
     
     return distance;
     
+}
+
+double distance(Dimension* nodeDimension1 , Dimension* nodeDimension2, String distance_function){
+    double cost = 0.0;
+    if(strcmp(distance_function, "euclidean") == 0){
+        cost = euclidean_distance(nodeDimension1, nodeDimension2);
+    }
+    else if(strcmp(distance_function, "manhattan") == 0){
+        cost = manhattan_distance(nodeDimension1, nodeDimension2);
+    }
+    return cost;
 }

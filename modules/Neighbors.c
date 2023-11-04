@@ -30,7 +30,6 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 
 
 void deleteLastNeighborNode(NodeNeighborsLinkedList* head) {
-        
     NodeNeighborsLinkedList* current = head;
     
     // If there is no neighbor or only one neighbor, there's nothing to delete
