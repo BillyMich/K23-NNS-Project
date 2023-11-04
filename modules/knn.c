@@ -20,8 +20,8 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     Node * head = (*graph)->nodes;
     Node * tempNode = head;
     int changes = 10;
-    // while (changes>1)
-    // {
+    while (changes>1)
+    {
     changes=0;
     while (tempNode !=NULL) {
         printf("hello!\n");
@@ -42,10 +42,11 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 
     }
         printf(" this is count %d\n",changes);
-   // }
-    // for (int i = 0; i < (*graph)->numNodes; i++)
-    //     free(matrixNodes[i]);
-    // free(matrixNodes);
+   }
+
+    for (int i = 0; i < (*graph)->numNodes; i++)
+        free(matrixNodes[i]);
+    free(matrixNodes);
     
 }
 
@@ -58,18 +59,18 @@ int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbo
         int neighborName = tempNeighbors->node->nodeNameInt;
         int sourceName = (*sourceNode)->nodeNameInt;
 
-        // if (check(neighborName, (*sourceNode)->neighbors, sourceName) == 0) {
-        //     double cost = 0.0;
-        //     if(matrixNodes[neighborName][sourceName] != -1){
-               double cost  = distance(tempNeighbors->node->dimension, tempNeighbors->node->dimension, distance_function);
-        //     }
-        //     else{
-        //         cost = matrixNodes[neighborName][sourceName];
-        //     }
+        if (check(neighborName, (*sourceNode)->neighbors, sourceName) == 0) {
+            double cost = 0.0;
+            if(matrixNodes[neighborName][sourceName] == -1.00){
+                cost = distance((*sourceNode)->dimension, tempNeighbors->node->dimension, distance_function);
+            }
+            else{
+                cost = matrixNodes[neighborName][sourceName];
+            }
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
             deleteLastNeighborNode((*sourceNode)->neighbors);
-            //count++;
-        //}
+            count++;
+        }
         tempNeighbors = tempNeighbors->next;
     }
 
