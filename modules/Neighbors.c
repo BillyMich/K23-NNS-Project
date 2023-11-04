@@ -35,7 +35,8 @@ void deleteLastNeighborNode(NodeNeighborsLinkedList* head) {
     while (current->next->next != NULL){
         current = current->next;
     }
-     current->next = NULL;        
+    free(current->next->next);
+    current->next = NULL;
 }
 
 void freeNeighbors(NodeNeighborsLinkedList* neighbors) {
