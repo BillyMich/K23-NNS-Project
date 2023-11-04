@@ -23,13 +23,16 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     while (tempNode !=NULL) {
         NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
         while (tempNodeNeighborList != NULL) {
-            checkNeighbor(&tempNode, tempNodeNeighborList, tempNodeNeighborList->node->dimension, distance_function);
+            checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+            checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+
             tempNodeNeighborList = tempNodeNeighborList->next;
         }
         
         NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
         while (tempReversedNeighbors != NULL) {
-            checkNeighbor(&tempNode, tempReversedNeighbors, tempReversedNeighbors->node->dimension, distance_function);
+            checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+            checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
             tempReversedNeighbors = tempReversedNeighbors->next;
         }
         tempNode = tempNode->next;
@@ -45,7 +48,7 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 }
 
 
-void checkNeighbor(Node** sourceNode, NodeNeighborsLinkedList* neighbor, Dimension* dimension ,String distance_function){
+void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
 
@@ -56,7 +59,7 @@ void checkNeighbor(Node** sourceNode, NodeNeighborsLinkedList* neighbor, Dimensi
         if (check(neighborName, (*sourceNode)->neighbors, sourceName) == 0) {
             double cost = 0.0;
             if(matrixNodes[neighborName][sourceName] != -1){
-                cost = distance(dimension, tempNeighbors->node->dimension, distance_function);
+                cost = distance(tempNeighbors->node->dimension, tempNeighbors->node->dimension, distance_function);
             }
             else{
                 cost = matrixNodes[neighborName][sourceName];
