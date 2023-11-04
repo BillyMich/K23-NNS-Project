@@ -72,6 +72,36 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K, String 
 }
 
 
+double findAccurationResult(Graph* graph , Graph* graphRightResults){
+
+    Node * tempNodeKNS = graph->nodes;
+    Node * tempNodeRight = graphRightResults->nodes;
+    double count = 0 ;
+    double correct = 0;
+
+    while (tempNodeKNS != NULL && tempNodeRight!= NULL  )
+    {    
+        NodeNeighborsLinkedList * tempNodeListKNS = tempNodeKNS->neighbors; 
+        NodeNeighborsLinkedList * tempNodeListRight = tempNodeRight->neighbors;
+
+        while (tempNodeListKNS != NULL && tempNodeListRight != NULL )
+        {
+            count++;
+            if (tempNodeListKNS->node->nodeNameInt == tempNodeListRight->node->nodeNameInt) correct++;
+            tempNodeListKNS = tempNodeListKNS->next;
+            tempNodeListRight = tempNodeListRight->next;
+        }
+        
+        tempNodeKNS = tempNodeKNS->next;
+        tempNodeRight = tempNodeRight->next;
+    }
+    
+    return  (correct / count )* 100;
+}
+
+
+
+
 void makeFile(String filename){
     FILE* file = fopen(filename, "wb");
     if (file == NULL) {

@@ -19,28 +19,31 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     
     Node * head = (*graph)->nodes;
     Node * tempNode = head;
-
+    int changes = 10;
+    while (changes>1)
+    {
+        printf("hello\n");
+    changes=0;
     while (tempNode !=NULL) {
         NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
         while (tempNodeNeighborList != NULL) {
-            checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
-            checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
-
+        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
             tempNodeNeighborList = tempNodeNeighborList->next;
         }
         
         NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
         while (tempReversedNeighbors != NULL) {
-            checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
-            checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
             tempReversedNeighbors = tempReversedNeighbors->next;
         }
         tempNode = tempNode->next;
+
     }
-
-    ///
-    
-
+            tempNode = (*graph)->nodes;
+            printf(" this is count %d\n",changes);
+    }
     for (int i = 0; i < (*graph)->numNodes; i++)
         free(matrixNodes[i]);
     free(matrixNodes);
@@ -48,10 +51,10 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 }
 
 
-void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
+int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
-
+    int count = 0;
     while (tempNeighbors != NULL) {
         int neighborName = tempNeighbors->node->nodeNameInt;
         int sourceName = (*sourceNode)->nodeNameInt;
@@ -66,10 +69,12 @@ void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighb
             }
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
             deleteLastNeighborNode((*sourceNode)->neighbors);
+            count++;
         }
         tempNeighbors = tempNeighbors->next;
     }
-    
+
+    return count;
 }
 
 

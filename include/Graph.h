@@ -17,6 +17,8 @@ Graph* initGraph();
 
 Graph* createGraphFromBinaryFile(String filename, int dimensions, int K, String distance_function);
 
+double findAccurationResult(Graph* graph , Graph* graphRightResults);
+
 void freeGraph(Graph* graph);
 
 void makeFile(String filename);
