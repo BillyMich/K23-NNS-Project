@@ -5,6 +5,7 @@
         "graph.h": "c",
         "node.h": "c",
         "neighbors.h": "c",
-        "dimension_test.C": "cpp"
+        "dimension_test.C": "cpp",
+        "time.h": "c"
     }
 }
