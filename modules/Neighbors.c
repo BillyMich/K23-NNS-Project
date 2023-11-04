@@ -1,6 +1,6 @@
 #include "../include/Neighbors.h"
 
-NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost, double time_cost) {
+NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost) {
     NodeNeighborsLinkedList* newNeighbor = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     if (newNeighbor == NULL) {
         fprintf(stderr, "Memory allocation error\n");
@@ -8,16 +8,13 @@ NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost, double ti
     }
     newNeighbor->node = nodeNeighbor;
     newNeighbor->cost = cost;
-    newNeighbor->time_cost = time_cost;
-    newNeighbor->next = NULL; //node->neighbors;
+    newNeighbor->next = NULL;
 
     return newNeighbor;
 }
 
-void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost, double time_cost) {
-    NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost, time_cost);
-
-    // If the list is empty, set the new neighbor as the head
+void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost) {
+    NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost);
     if (*head == NULL || cost < (*head)->cost) {
         newNeighbor->next = *head;
         *head = newNeighbor;
@@ -32,8 +29,22 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 }
 
 
+void deleteLastNeighborNode(NodeNeighborsLinkedList* head) {
+        
+    NodeNeighborsLinkedList* current = head;
+    
+    // If there is no neighbor or only one neighbor, there's nothing to delete
+    if (current == NULL || current->next == NULL) return;
+
+    while (current->next->next != NULL) {
+        current = current->next;
+    }
+    free(current->next->next);
+    current->next->next = NULL;
+}
 
 void freeNeighbors(NodeNeighborsLinkedList* neighbors) {
+    
     while (neighbors != NULL) {
         NodeNeighborsLinkedList* next = neighbors->next;
         free(neighbors);

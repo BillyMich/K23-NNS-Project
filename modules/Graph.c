@@ -1,7 +1,4 @@
 #include "../include/Graph.h"
-#include "../include/MathematicalFunctions.h"
-#include <math.h>
-#include <time.h>
 
 Graph* initGraph() {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
@@ -16,8 +13,8 @@ Graph* initGraph() {
 
 // Function to free the entire graph
 void freeGraph(Graph* graph) {
-    if (graph == NULL)
-        return;
+    if (graph == NULL) return;
+    
     Node* current = graph->nodes;
     while (current != NULL) {
         Node* next = current->next;
@@ -27,10 +24,8 @@ void freeGraph(Graph* graph) {
     free(graph);
 }
 
-int isNumberUsed(int usedNumbers[], int count, int number, int numNode);
-void KRandomNodes(Graph** graph, int K);
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
+Graph* createGraphFromBinaryFile(String filename, int dimensions, int K, String distance_function) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
         perror("Error opening file");
@@ -72,11 +67,39 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     }
 
     fclose(file);
-
-    KRandomNodes(&graph, K);
     
     return graph;
 }
+
+
+double findAccurationResult(Graph* graph , Graph* graphRightResults){
+
+    Node * tempNodeKNS = graph->nodes;
+    Node * tempNodeRight = graphRightResults->nodes;
+    double count = 0 ;
+    double correct = 0;
+
+    while (tempNodeKNS != NULL && tempNodeRight!= NULL  )
+    {    
+        NodeNeighborsLinkedList * tempNodeListKNS = tempNodeKNS->neighbors; 
+        NodeNeighborsLinkedList * tempNodeListRight = tempNodeRight->neighbors;
+
+        while (tempNodeListKNS != NULL && tempNodeListRight != NULL )
+        {
+            count++;
+            if (tempNodeListKNS->node->nodeNameInt == tempNodeListRight->node->nodeNameInt) correct++;
+            tempNodeListKNS = tempNodeListKNS->next;
+            tempNodeListRight = tempNodeListRight->next;
+        }
+        
+        tempNodeKNS = tempNodeKNS->next;
+        tempNodeRight = tempNodeRight->next;
+    }
+    
+    return  (correct / count )* 100;
+}
+
+
 
 
 void makeFile(String filename){
@@ -96,56 +119,3 @@ void makeFile(String filename){
 
 }
 
-// --------------------- USUFULL FUNCTIONS --------------------- //
-
-// Function to check if a number has been used before
-int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
-    for (int i = 0; i < count; i++) {
-        if (usedNumbers[i] == number) {
-            return 1; // Number is already used
-        }
-        if ( numNode == number ){
-            return 1;
-        }
-    }
-    return 0; // Number is not used
-}
-
-//TODO: make neighbors list
-void KRandomNodes(Graph** graph, int K) {
-    time_t t;
-    srand((unsigned) time(&t));
-    
-    //TODO: make this if we need to check that case !!!!!!!
-    // if(graph->numNodes < K){
-    // }
-
-    Node* currentNode = (*graph)->nodes;
-    int numNodes = (*graph)->numNodes;
-
-    for(int numNode = 0; numNode < numNodes; numNode++){
-        // printf(" ---- Node number = %d\n", numNode);
-        int usedNumbers[K];
-
-        for (int i = 0; i < K; i++) {
-            int randomNumber;
-            do {
-                randomNumber = rand() % numNodes;
-            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
-
-            usedNumbers[i] = randomNumber;
-            // printf("%d\n", randomNumber);
-
-            Node* neighborNode = (*graph)->nodes;
-
-            for(int j = 0; j < randomNumber; j++){
-                neighborNode = neighborNode->next;
-            }
-
-            double distance = euclidean_distance(&(currentNode->dimension), &(neighborNode->dimension));
-            // printf("distance: %f\n", distance);
-            addNeighbor(&(currentNode->neighbors), neighborNode, distance, 0.33);
-        }
-        currentNode = currentNode->next;
-    }
-}
