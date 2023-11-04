@@ -13,8 +13,8 @@ Graph* initGraph() {
 
 // Function to free the entire graph
 void freeGraph(Graph* graph) {
-    if (graph == NULL)
-        return;
+    if (graph == NULL) return;
+    
     Node* current = graph->nodes;
     while (current != NULL) {
         Node* next = current->next;

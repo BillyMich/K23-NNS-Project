@@ -37,14 +37,13 @@ int main(int argc, char *argv[]) {
             printf("Reversed neig: %d\n", tempReversedNeighbor->node->nodeNameInt);
             tempReversedNeighbor = tempReversedNeighbor->next;
         }
-
         tempNode = tempNode->next;
         i++;
     }
 
-    FindAllRightNeighbors(graph);
+    //FindAllRightNeighbors(graph);
     freeGraph(graph);
-
+    printf("Terminated succefully\n");
     // makeFile(argv[1]);
     return 0;
 }

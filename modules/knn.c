@@ -3,9 +3,9 @@
 #include <string.h>
 
 // Check if the 
-int check( int NeighborsNodeName, NodeNeighborsLinkedList** nodeNeighbors){
+int check( int NeighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors){
 
-    NodeNeighborsLinkedList* tempNode = *nodeNeighbors;
+    NodeNeighborsLinkedList* tempNode = nodeNeighbors;
     while (tempNode != NULL) {
         if(NeighborsNodeName == tempNode->node->nodeNameInt)
             return 1;
@@ -14,7 +14,7 @@ int check( int NeighborsNodeName, NodeNeighborsLinkedList** nodeNeighbors){
     return 0;
 }
 
-// Check if the neighbor's of a Node(-neighbor) is neighbor of the source Node
+
 void checkNeighborOfNeighbor(Node** sourceNode, Node** neighbor, String distance_function){
     
     NodeNeighborsLinkedList* tempNeighbors = (*neighbor)->neighbors;
@@ -22,21 +22,18 @@ void checkNeighborOfNeighbor(Node** sourceNode, Node** neighbor, String distance
     while (tempNeighbors != NULL) {
         
         if (check(tempNeighbors->node->nodeNameInt, (*sourceNode)->neighbors) == 0) {
-            double distance = 0.0;
+            double cost = 0.0;
 
             if(strcmp(distance_function, "euclidean") == 0){
-                distance = euclidean_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
-                // printf("distance eu: %f\n", distance);
+                cost = euclidean_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
             }
             else if(strcmp(distance_function, "manhattan") == 0){
-                distance = manhattan_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
-                // printf("distance man: %f\n", distance);
+                cost = manhattan_distance((*neighbor)->dimension, tempNeighbors->node->dimension);
             }
 
-            // addNeighbor();
-            // delete();
+            addNeighbor(&(*sourceNode)->neighbors,tempNeighbors->node,cost);
+            deleteLastNeighborNode((*sourceNode)->neighbors);
         }
-
 
         tempNeighbors = tempNeighbors->next;
     }
@@ -47,6 +44,20 @@ void checkNeighborOfNeighbor(Node** sourceNode, Node** neighbor, String distance
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
     KRandomNodes(graph, K, distance_function);
+    Node * head = (*graph)->nodes;
+    Node * tempNode = head;
+
+    while (tempNode !=NULL)
+    {
+        NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
+        while (tempNodeNeighborList !=NULL)
+        {
+            checkNeighborOfNeighbor(&tempNode, &tempNodeNeighborList->node, distance_function);
+            tempNodeNeighborList = tempNodeNeighborList->next;
+        }
+        
+        tempNode= tempNode->next;
+    }
     
     
 }
@@ -85,7 +96,7 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
             double distance = 0.0;
 
             if(strcmp(distance_function, "euclidean") == 0){
-                distance = euclidean_distance(&(currentNode->dimension), &(neighborNode->dimension));
+                distance = euclidean_distance((currentNode->dimension), (neighborNode->dimension));
                 // printf("distance eu: %f\n", distance);
             }
             else if(strcmp(distance_function, "manhattan") == 0){

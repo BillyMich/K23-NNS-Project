@@ -23,10 +23,7 @@ void FindAllRightNeighbors(Graph * graph)
         {
             OrderNodesByNeighbor(tempNode,tempNodeFor);
         }
-        
-
-        //Here is a simple way to skip and break
-
+    
 
         if (tempNodeFor->next !=NULL)
         {
@@ -48,6 +45,6 @@ void FindAllRightNeighbors(Graph * graph)
 
 
 void OrderNodesByNeighbor(Node *dest , Node *src){
-    addNeighbor(&dest->neighbors,src,euclidean_distance(&dest->dimension,&src->dimension));
+    addNeighbor(&dest->neighbors,src,euclidean_distance(dest->dimension,src->dimension));
     //Here or in the addNeigbor i would like to add a sorting method base on distance
 }

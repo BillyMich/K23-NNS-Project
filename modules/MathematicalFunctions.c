@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include"Dimension.h"
 
-double euclidean_distance(Dimension** nodeDimension1 , Dimension** nodeDimension2){
+double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
 
-    Dimension* tempDimension1 = *nodeDimension1;
-    Dimension* tempDimension2 = *nodeDimension2;
+    Dimension* tempDimension1 = nodeDimension1;
+    Dimension* tempDimension2 = nodeDimension2;
 
     double sum = 0.0;
 
