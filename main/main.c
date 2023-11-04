@@ -3,6 +3,7 @@
 #include "../include/FindAllRightNeighborsAlgorithm.h"
 #include "../include/knn.h"
 
+#define NUM_THREADS 8 // You can adjust the number of threads based on your CPU's capabilities
 
 int main(int argc, char *argv[]) {
 

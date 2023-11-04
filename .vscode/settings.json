@@ -6,6 +6,7 @@
         "node.h": "c",
         "neighbors.h": "c",
         "dimension_test.C": "cpp",
-        "time.h": "c"
+        "time.h": "c",
+        "knn.h": "c"
     }
 }
