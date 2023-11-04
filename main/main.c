@@ -41,9 +41,16 @@ int main(int argc, char *argv[]) {
         i++;
     }
 
-    //FindAllRightNeighbors(graph);
+    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions, K, distance_function);
+    FindAllRightNeighbors(graphRightResults);
+
+    double accurationRate =findAccurationResult(graph , graphRightResults);
+
+    printf("This is acurate by %f %% \n",accurationRate);
     freeGraph(graph);
+    freeGraph(graphRightResults);
+
+
     printf("Terminated succefully\n");
-    // makeFile(argv[1]);
     return 0;
 }
