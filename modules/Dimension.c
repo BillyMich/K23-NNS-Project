@@ -45,7 +45,6 @@ void printDimensions(Dimension *head) {
 
 void freeDimensions(Dimension* dimensions) {
     while (dimensions != NULL) {
-        printf("hello\n");
         Dimension* next = dimensions->next;
         free(dimensions);
         dimensions = next;

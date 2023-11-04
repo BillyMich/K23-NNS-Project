@@ -42,8 +42,9 @@ void freeNode(Node* node) {
     if (node == NULL)
         return;
 
-    freeDimensions(node->dimension);
     freeNeighbors(node->neighbors);
     freeNeighbors(node->reversedNeighbors);
+    freeDimensions(node->dimension);
+    
     free(node);
 }
