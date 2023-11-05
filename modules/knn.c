@@ -5,7 +5,10 @@
 double** matrixNodes;
 
 
-//knn algorithm
+/// @brief This is the base of the knn algorithm
+/// @param graph 
+/// @param K 
+/// @param distance_function 
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
     matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
@@ -60,7 +63,13 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     
 }
 
-
+/// @brief Here we add the neightbors and we cant how many
+/// where succesfully added and we count them so we can use that data
+/// for coculations
+/// @param sourceNode 
+/// @param neighbor 
+/// @param distance_function 
+/// @return 
 int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
@@ -87,7 +96,10 @@ int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbo
     return count;
 }
 
-
+/// @brief Here we make the K random nodes as the algorithm needs to run
+/// @param graph 
+/// @param K 
+/// @param distance_function 
 void KRandomNodes(Graph** graph, int K, String distance_function) {
     time_t t;
     srand((unsigned) time(&t));
@@ -129,24 +141,33 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
     }
 }
 
-
+/// @brief Quick check to see if we can add
+/// this node as a neightbor to another
+/// @param usedNumbers 
+/// @param count 
+/// @param number 
+/// @param numNode 
+/// @return 
 int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
     for (int i = 0; i < count; i++) {
         if (usedNumbers[i] == number) {
-            return 1; // Number is already used
+            return 1;
         }
         if ( numNode == number ){
             return 1;
         }
     }
-    return 0; // Number is not used
+    return 0;
 }
 
 
-// Check if the node is already a neighbour of the source Node
+/// @brief Check if the node is already a neighbour of the source Node
+/// @param neighborsNodeName 
+/// @param nodeNeighbors 
+/// @param sourceNodeName 
+/// @return 
 int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName) {
 
-    // if neighbor's neigbors is the sourceNode stop
     if(neighborsNodeName == sourceNodeName){
         return 1;
     }

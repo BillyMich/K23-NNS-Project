@@ -17,12 +17,11 @@ typedef struct NodeNeighborsLinkedList {
 
 NodeNeighborsLinkedList* initNeighbor(Node* dest, double cost);
 
-// add a destination to a node
 void addNeighbor(NodeNeighborsLinkedList** head, Node* dest, double cost);
 
 void deleteLastNeighborNode(NodeNeighborsLinkedList* head) ;
 
 void freeNeighbors(NodeNeighborsLinkedList* destination);
 
-#endif // NEIGHBORS_H
+#endif 
 

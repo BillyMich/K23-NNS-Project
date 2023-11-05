@@ -5,7 +5,10 @@
 #include "common_types.h"
 #include <string.h>
 
-
+/// @brief Basic use of euclidian distance theorym the distance as cost
+/// @param nodeDimension1 
+/// @param nodeDimension2 
+/// @return 
 double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
 
     Dimension* tempDimension1 = nodeDimension1;
@@ -26,7 +29,10 @@ double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
     return cost; 
 }
 
-
+/// @brief Basic use of manhattan distance theorym to return the distance as cost
+/// @param nodeDimension1 
+/// @param nodeDimension2 
+/// @return 
 double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
     
     Dimension* tempDimension1 = nodeDimension1;
@@ -45,7 +51,12 @@ double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
     return distance;
 }
 
-
+/// @brief This function decides with mathematical therym (formula ) we are going to use
+///  and returns it cost
+/// @param nodeDimension1 
+/// @param nodeDimension2 
+/// @param distance_function 
+/// @return 
 double distance(Dimension* nodeDimension1 , Dimension* nodeDimension2, String distance_function){
     double cost = 0.0;
     if(strcmp(distance_function, "euclidean") == 0){

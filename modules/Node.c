@@ -1,7 +1,8 @@
 #include "../include/Node.h"
 
 
-
+/// @brief Initialzation of a node
+/// @return 
 Node* initNode() {
     Node* node = (Node*)malloc(sizeof(Node));
     if (node == NULL) {
@@ -16,14 +17,13 @@ Node* initNode() {
     return node;
 }
 
-
+/// @brief Adds a node to list 
+/// @param headNode 
+/// @param headDimension 
 void addNode(Node** headNode, Dimension* headDimension) {
-    //1. make the node
     Node* newNode = initNode();
-    //2. initialize node
     newNode->dimension = headDimension;
-    //3. put node at the correct place
-    if (*headNode == NULL) { // the first node to be made
+    if (*headNode == NULL) {
         newNode->nodeNameInt = 0;
         *headNode = newNode;
     }
