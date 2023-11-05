@@ -4,19 +4,19 @@
 #include "Graph.h"
 #include "MathematicalFunctions.h"
 
-
-//TODO: ALGORITHM
+// ALGORITHM
 void knn_algorithm(Graph** graph, int K, String distance_function);
 
 // Function to make K random neighbors (and reversed neighbors) for the Nodes
 void KRandomNodes(Graph** graph, int K, String distance_function);
 
+// check the neighbours of the neighbor of the Node-sourceNode
 int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function );
 
 // Function to check if a number has been used before
 int isNumberUsed(int usedNumbers[], int count, int number, int numNode);
 
-//
+// check if the node is already existing in the list of neighbors of the sourceNode
 int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName);
 
 #endif

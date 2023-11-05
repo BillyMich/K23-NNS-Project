@@ -5,6 +5,7 @@
 #include "common_types.h"
 #include <string.h>
 
+
 double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
 
     Dimension* tempDimension1 = nodeDimension1;
@@ -14,19 +15,17 @@ double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
 
     while (tempDimension1 != NULL)
     {
-        // printf(" \n %f and this %f \n ", tempDimension1->value,tempDimension2->value );
         double dif =  tempDimension1->value - tempDimension2->value;
-        // printf(" \n %f = diff ", dif );
         sum += dif * dif ;
-        // printf(" \n %f = sum ", sum );
+
         tempDimension1 = tempDimension1->next;
         tempDimension2 = tempDimension2->next;
     }
     double cost = sqrt(sum);
-    // printf("\nthis is the distance between the nodes: %f\n", cost);
-    return cost;
     
+    return cost; 
 }
+
 
 double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
     
@@ -44,8 +43,8 @@ double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
     }
     
     return distance;
-    
 }
+
 
 double distance(Dimension* nodeDimension1 , Dimension* nodeDimension2, String distance_function){
     double cost = 0.0;

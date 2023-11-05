@@ -1,5 +1,6 @@
 #include "../include/Neighbors.h"
 
+
 NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost) {
     NodeNeighborsLinkedList* newNeighbor = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     if (newNeighbor == NULL) {
@@ -12,6 +13,7 @@ NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost) {
 
     return newNeighbor;
 }
+
 
 void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost) {
     NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost);
@@ -41,6 +43,7 @@ void deleteLastNeighborNode(NodeNeighborsLinkedList* head) {
     free(current->next->next);
     current->next->next = NULL;
 }
+
 
 void freeNeighbors(NodeNeighborsLinkedList* neighbors) {
     

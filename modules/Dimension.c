@@ -23,12 +23,10 @@ void addDimension(Dimension** head, int dimValue, double val) {
     newDimension->value = val;
     //3. put dimension at the correct place
     if (*head == NULL) { // the first node to be made
-        // printf("first time\n");
         *head = newDimension;
     }
-    else { // 
+    else {
         Dimension* temp = *head;
-        // printf("second time\n");
         while (temp->next!=NULL) {
             temp = temp->next;
         }
@@ -36,12 +34,14 @@ void addDimension(Dimension** head, int dimValue, double val) {
     }
 }
 
+
 void printDimensions(Dimension *head) {
     while (head != NULL) {
         printf("%f \n", head->value);
         head = head->next;
     }
 }
+
 
 void freeDimensions(Dimension* dimensions) {
     while (dimensions != NULL) {
