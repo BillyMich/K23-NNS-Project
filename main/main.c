@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 
     printf("We created the graph!\n");
 
-    Node* tempNode = graph->nodes;
-    int i=0;
+    // Node* tempNode = graph->nodes;
+    // int i=0;
 
     // while (tempNode != NULL) {
     //     Dimension* tempDime = tempNode->dimension;

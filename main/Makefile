@@ -20,9 +20,9 @@ EXEC = program
 # Args for examples
 ARGS2D = $(DATASETS)/dummy.bin 2 2
 
-ARGSEUCL = $(DATASETS)/asciiData3.bin 10 50 euclidean
+ARGSEUCL = $(DATASETS)/dummy2.bin 10 50 euclidean
 
-ARGSMAN = $(DATASETS)/asciiData3.bin 10 50 manhattan
+ARGSMAN = $(DATASETS)/dummy2.bin 4 4 manhattan
 
 ARGSMAKEFILE = $(DATASETS)/asciiData3.bin 
 
