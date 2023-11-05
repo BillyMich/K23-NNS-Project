@@ -14,7 +14,6 @@ Dimension* initDimension() {
     return newDimension;
 }
 
-
 void addDimension(Dimension** head, int dimValue, double val) {
     //1. make the dimension
     Dimension* newDimension = initDimension();
@@ -34,14 +33,12 @@ void addDimension(Dimension** head, int dimValue, double val) {
     }
 }
 
-
 void printDimensions(Dimension *head) {
     while (head != NULL) {
         printf("%f \n", head->value);
         head = head->next;
     }
 }
-
 
 void freeDimensions(Dimension* dimensions) {
     while (dimensions != NULL) {

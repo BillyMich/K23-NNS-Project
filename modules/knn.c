@@ -20,11 +20,12 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     
     Node * tempNode = (*graph)->nodes;
     double countLevel=0;
-    int changes = 10;
+    int changes = 1;
+    int round = 0;
     
-    for (int i = 0; i < 1; i++)
+    while (changes>=1)
     {
-        printf("Started level : %d\n",i);
+        printf("Started level : %d\n",++round);
         changes=0;
         while (tempNode !=NULL) {
 
@@ -48,7 +49,7 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
             printf("Finished %f %%\n",percent);
         }
 
-        printf("-- this is count %d\n",changes);
+        printf("-- this is count %d of round %d\n",changes,round);
         tempNode = (*graph)->nodes;
         countLevel=0;
     }
