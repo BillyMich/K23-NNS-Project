@@ -11,20 +11,21 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     for(int i = 0; i < (*graph)->numNodes; i++){
         matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
         for(int j = 0; j < (*graph)->numNodes; j++){
-            matrixNodes[i][j] = -1.0;
+            matrixNodes[i][j] = -1.00;
         }
     }
 
     KRandomNodes(graph, K, distance_function);
     
-    Node * head = (*graph)->nodes;
-    Node * tempNode = head;
+    Node * tempNode = (*graph)->nodes;
+    double countLevel=0;
     int changes = 10;
-    while (changes>1)
+    for (int i = 0; i < 1; i++)
     {
-    changes=0;
+        printf("Started level : %d\n",i);
+        changes=0;
     while (tempNode !=NULL) {
-        printf("hello!\n");
+        //printf("%d , %d \n",tempNode->nodeNameInt, i);
         NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
         while (tempNodeNeighborList != NULL) {
         changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
@@ -38,11 +39,15 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
         changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
         tempReversedNeighbors = tempReversedNeighbors->next;
         }
+        
         tempNode = tempNode->next;
-
+        double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
+        printf("Finished %f %%\n",percent);
     }
         printf(" this is count %d\n",changes);
-   }
+        tempNode = (*graph)->nodes;
+        countLevel=0;
+    }
 
     for (int i = 0; i < (*graph)->numNodes; i++)
         free(matrixNodes[i]);
