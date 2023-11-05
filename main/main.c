@@ -26,7 +26,6 @@ int main(int argc, char *argv[]) {
     
     freeGraph(graph);
     freeGraph(graphRightResults);
-
     printf("Terminated succefully\n");
 
     return 0;

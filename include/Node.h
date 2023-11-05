@@ -18,11 +18,10 @@ typedef struct Node {
     Node* next;
 }Node;
 
-// create a new node
 Node* initNode();
 
 void addNode(Node** headNode, Dimension* headDimension);
 
 void freeNode(Node* node);
 
-#endif // NODE_H
+#endif 

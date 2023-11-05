@@ -3,9 +3,13 @@
 #include <string.h>
 
 double** matrixNodes;
+int changes = 0;
 
 
-//knn algorithm
+/// @brief This is the base of the knn algorithm
+/// @param graph 
+/// @param K 
+/// @param distance_function 
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
     matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
@@ -20,25 +24,24 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     
     Node * tempNode = (*graph)->nodes;
     double countLevel=0;
-    int changes = 10;
+    int round = 0;
     
-    for (int i = 0; i < 1; i++)
-    {
-        printf("Started level : %d\n",i);
-        changes=0;
+    
+    do {
+        printf("Started level : %d\n",++round);
         while (tempNode !=NULL) {
 
             NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
             while (tempNodeNeighborList != NULL) {
-                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
-                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
                 tempNodeNeighborList = tempNodeNeighborList->next;
             }
             
             NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
             while (tempReversedNeighbors != NULL) {
-                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
-                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
                 tempReversedNeighbors = tempReversedNeighbors->next;
             }
             
@@ -48,10 +51,10 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
             printf("Finished %f %%\n",percent);
         }
 
-        printf("-- this is count %d\n",changes);
+        printf("-- this is count %d of round %d\n",changes,round);
         tempNode = (*graph)->nodes;
         countLevel=0;
-    }
+    } while (changes>=1);
 
     for (int i = 0; i < (*graph)->numNodes; i++)
         free(matrixNodes[i]);
@@ -59,11 +62,17 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     
 }
 
-
-int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
+/// @brief Here we add the neightbors and we cant how many
+/// where succesfully added and we count them so we can use that data
+/// for coculations
+/// @param sourceNode 
+/// @param neighbor 
+/// @param distance_function 
+/// @return 
+void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
-    int count = 0;
+
     while (tempNeighbors != NULL) {
         int neighborName = tempNeighbors->node->nodeNameInt;
         int sourceName = (*sourceNode)->nodeNameInt;
@@ -78,15 +87,16 @@ int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbo
             }
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
             deleteLastNeighborNode((*sourceNode)->neighbors);
-            count++;
+            changes++;
         }
         tempNeighbors = tempNeighbors->next;
     }
-
-    return count;
 }
 
-
+/// @brief Here we make the K random nodes as the algorithm needs to run
+/// @param graph 
+/// @param K 
+/// @param distance_function 
 void KRandomNodes(Graph** graph, int K, String distance_function) {
     time_t t;
     srand((unsigned) time(&t));
@@ -128,24 +138,33 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
     }
 }
 
-
+/// @brief Quick check to see if we can add
+/// this node as a neightbor to another
+/// @param usedNumbers 
+/// @param count 
+/// @param number 
+/// @param numNode 
+/// @return 
 int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
     for (int i = 0; i < count; i++) {
         if (usedNumbers[i] == number) {
-            return 1; // Number is already used
+            return 1;
         }
         if ( numNode == number ){
             return 1;
         }
     }
-    return 0; // Number is not used
+    return 0;
 }
 
 
-// Check if the node is already a neighbour of the source Node
+/// @brief Check if the node is already a neighbour of the source Node
+/// @param neighborsNodeName 
+/// @param nodeNeighbors 
+/// @param sourceNodeName 
+/// @return 
 int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName) {
 
-    // if neighbor's neigbors is the sourceNode stop
     if(neighborsNodeName == sourceNodeName){
         return 1;
     }
