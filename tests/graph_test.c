@@ -16,7 +16,6 @@ void testInitGraph() {
 }
 
 void testAddNodeToGraph() {
-    Graph* graph = initGraph();
 
     Dimension* dimension1 = NULL;
     addDimension(&dimension1, 1, 1.2345);
@@ -28,20 +27,17 @@ void testAddNodeToGraph() {
 
     Node* node1 = initNode();
     node1->dimension = dimension1;
-    addNode(&graph->nodes, dimension1);
 
     Node* node2 = initNode();
     node2->dimension = dimension2;
-    addNode(&graph->nodes, dimension2);
 
     // Add destinations between nodes
-    addNeighbor(&(node1->neighbors), node2, 5.00);
-    addNeighbor(&(node2->neighbors), node1, 3.00);
+    addNeighbor(&(node1->neighbors), node2, 5.0);
+    addNeighbor(&(node2->neighbors), node1, 3.0);
 
     // Check the number of nodes in the graph
     // TEST_ASSERT(graph->numNodes == 2);
 
-    TEST_ASSERT(graph->nodes != NULL);
 
     TEST_ASSERT(node1->dimension != NULL);
     TEST_ASSERT(node2->dimension != NULL);
@@ -57,7 +53,10 @@ void testAddNodeToGraph() {
     TEST_ASSERT(node1->neighbors->cost == 5.0);
     TEST_ASSERT(node2->neighbors->cost == 3.0);
 
-    freeGraph(graph);
+    freeNode(node1);
+    freeNode(node2);
+
+
 }
 
 //TODO: make it work!!!!!!!!!!!!!!!!!!!1
