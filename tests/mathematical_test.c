@@ -15,11 +15,9 @@
 void testEuclideanDistance() {
     Dimension *dimension1 = NULL;
     addDimension(&dimension1, 1, 10.0);
-    addDimension(&dimension1, 2, 20.0);
 
     Dimension *dimension2 = NULL;
-    addDimension(&dimension2, 1, 5.0);
-    addDimension(&dimension2, 2, 15.0);
+    addDimension(&dimension2, 1, 20.0);
 
     double cost = euclidean_distance(dimension1, dimension2);
 
@@ -32,15 +30,30 @@ void testEuclideanDistance() {
 void testManhattanDistance() {
     Dimension *dimension1 = NULL;
     addDimension(&dimension1, 1, 10.0);
-    addDimension(&dimension1, 2, 20.0);
 
     Dimension *dimension2 = NULL;
-    addDimension(&dimension2, 1, 5.0);
-    addDimension(&dimension2, 2, 15.0);
+    addDimension(&dimension2, 1, 15.0);
 
     double cost = manhattan_distance(dimension1, dimension2);
 
-    TEST_ASSERT(cost == 20.0);
+    TEST_ASSERT(cost == 5.0);
+
+    freeDimensions(dimension1);
+    freeDimensions(dimension2);
+}
+
+void testDistanceFunc() {
+    Dimension *dimension1 = NULL;
+    addDimension(&dimension1, 1, 1.000);
+
+    Dimension *dimension2 = NULL;
+    addDimension(&dimension2, 1, 0.500);
+
+    double cost = distance(dimension1, dimension2, "manhattan");
+    TEST_ASSERT(cost == 0.5);
+
+    cost = distance(dimension1, dimension2, "euclidean");
+    TEST_ASSERT(cost == 0.5);
 
     freeDimensions(dimension1);
     freeDimensions(dimension2);
@@ -49,5 +62,6 @@ void testManhattanDistance() {
 TEST_LIST = {
     {"testEuclideanDistance", testEuclideanDistance},
     {"testManhattanDistance", testManhattanDistance},
+    {"testDistanceFunc", testDistanceFunc},
     {NULL, NULL}
 };
