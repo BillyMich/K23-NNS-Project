@@ -12,13 +12,13 @@ int changes = 0;
 /// @param distance_function 
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
-    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
-    for(int i = 0; i < (*graph)->numNodes; i++){
-        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
-        for(int j = 0; j < (*graph)->numNodes; j++){
-            matrixNodes[i][j] = -1.00;
-        }
-    }
+    // matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
+    // for(int i = 0; i < (*graph)->numNodes; i++){
+    //     matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
+    //     for(int j = 0; j < (*graph)->numNodes; j++){
+    //         matrixNodes[i][j] = -1.00;
+    //     }
+    // }
 
     KRandomNodes(graph, K, distance_function);
     
@@ -107,6 +107,14 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
+
+    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
+    for(int i = 0; i < (*graph)->numNodes; i++){
+        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
+        for(int j = 0; j < (*graph)->numNodes; j++){
+            matrixNodes[i][j] = -1.00;
+        }
+    }
 
     for(int numNode = 0; numNode < numNodes; numNode++){
         // printf(" ---- Node number = %d\n", numNode);
