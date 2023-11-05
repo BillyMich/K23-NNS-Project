@@ -146,11 +146,10 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 /// @param numNode 
 /// @return 
 int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
+    if ( numNode == number ) return 1;
+    
     for (int i = 0; i < count; i++) {
         if (usedNumbers[i] == number) {
-            return 1;
-        }
-        if ( numNode == number ){
             return 1;
         }
     }

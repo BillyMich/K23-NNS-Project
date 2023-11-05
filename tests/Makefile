@@ -19,6 +19,8 @@ OBJSN = $(TESTS)/nodes_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES
 
 OBJSD = $(TESTS)/dimension_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o
 
+OBJSNEI = $(TESTS)/neighbours_test.o $(MODULES)/Neighbors.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o 
+
 OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MODULES)/Dimension.o
 
 
@@ -30,6 +32,8 @@ EXECG = graph_test
 EXECN = nodes_test
 
 EXECD = dimension_test
+
+EXECNEI = neighbours_test
 
 EXECMATH = mathFunctions_test
 
@@ -45,11 +49,14 @@ $(EXECN): $(OBJSN)
 $(EXECD): $(OBJSD)
 	$(CC) $(OBJSD) -o $(EXECD) $(LDFLAGS)
 
+$(EXECNEI): $(OBJSNEI)
+	$(CC) $(OBJSNEI) -o $(EXECNEI) $(LDFLAGS)
+
 $(EXECMATH): $(OBJSMATH)
 	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
 
 clean:
-	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECMATH)
+	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)
 
 runKNN: $(EXECKNN)
 	./$(EXECKNN)
@@ -63,10 +70,13 @@ runN: $(EXECN)
 runD: $(EXECD)
 	./$(EXECD)
 
+runNEI: $(EXECNEI)
+	./$(EXECNEI)
+
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
-run-all: runKNN runG runN runD runMath
+run-all: runKNN runG runN runD runNEI runMath
 
 valgrind-graph: $(EXECG)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECG)
@@ -76,6 +86,9 @@ valgrind-dimension: $(EXECD)
 
 valgrind-node: $(EXECN)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECN)
+
+valgrind-neighbours: $(EXECNEI)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECNEI)
 
 valgrind-knn: $(EXECKNN)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECKNN)
