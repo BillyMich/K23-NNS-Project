@@ -3,6 +3,7 @@
 #include <string.h>
 
 double** matrixNodes;
+int changes = 0;
 
 
 /// @brief This is the base of the knn algorithm
@@ -23,26 +24,24 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     
     Node * tempNode = (*graph)->nodes;
     double countLevel=0;
-    int changes = 1;
     int round = 0;
     
-    while (changes>=1)
-    {
+    
+    do {
         printf("Started level : %d\n",++round);
-        changes=0;
         while (tempNode !=NULL) {
 
             NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
             while (tempNodeNeighborList != NULL) {
-                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
-                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
                 tempNodeNeighborList = tempNodeNeighborList->next;
             }
             
             NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
             while (tempReversedNeighbors != NULL) {
-                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
-                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
                 tempReversedNeighbors = tempReversedNeighbors->next;
             }
             
@@ -55,7 +54,7 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
         printf("-- this is count %d of round %d\n",changes,round);
         tempNode = (*graph)->nodes;
         countLevel=0;
-    }
+    } while (changes>=1);
 
     for (int i = 0; i < (*graph)->numNodes; i++)
         free(matrixNodes[i]);
@@ -70,10 +69,10 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 /// @param neighbor 
 /// @param distance_function 
 /// @return 
-int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
+void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
-    int count = 0;
+
     while (tempNeighbors != NULL) {
         int neighborName = tempNeighbors->node->nodeNameInt;
         int sourceName = (*sourceNode)->nodeNameInt;
@@ -88,12 +87,10 @@ int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbo
             }
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
             deleteLastNeighborNode((*sourceNode)->neighbors);
-            count++;
+            changes++;
         }
         tempNeighbors = tempNeighbors->next;
     }
-
-    return count;
 }
 
 /// @brief Here we make the K random nodes as the algorithm needs to run
