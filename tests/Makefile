@@ -8,18 +8,25 @@ TESTS = ../tests
 CC = gcc
 
 CFLAGS = -Wall -Werror -g -I$(INCLUDE)
-LDFLAGS = -lm -fsanitize=address
+LDFLAGS = -lm
 
 # .o files
-OBJSG = $(TESTS)/graph_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
+OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 
-OBJSN = $(TESTS)/nodes_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o
+OBJSG = $(TESTS)/graph_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 
-OBJSD = $(TESTS)/dimension_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o
+OBJSN = $(TESTS)/nodes_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o 
+
+OBJSD = $(TESTS)/dimension_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o
+
+OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MODULES)/Dimension.o
+
 
 OBJSK = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 
 # Executables
+EXECKNN = knn_test
+
 EXECG = graph_test
 
 EXECN = nodes_test
@@ -27,6 +34,10 @@ EXECN = nodes_test
 EXECD = dimension_test
 
 EXECK = knn_test
+EXECMATH = mathFunctions_test
+
+$(EXECKNN): $(OBJSKNN)
+	$(CC) $(OBJSKNN) -o $(EXECKNN) $(LDFLAGS)
 
 $(EXECG): $(OBJSG)
 	$(CC) $(OBJSG) -o $(EXECG) $(LDFLAGS)
@@ -42,12 +53,20 @@ $(EXECK): $(OBJSK)
 
 clean:
 	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(EXECG) $(EXECN) $(EXECD) $(EXECK)
+$(EXECMATH): $(OBJSMATH)
+	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
+
+clean:
+	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECMATH)
+
+runKNN: $(EXECKNN)
+	./$(EXECKNN)
 
 runG: $(EXECG)
-	./$(EXECG) $(ARGS)
+	./$(EXECG)
 
 runN: $(EXECN)
-	./$(EXECN) $(ARGS)
+	./$(EXECN)
 
 runD: $(EXECD)
 	./$(EXECD)
@@ -58,3 +77,19 @@ runK: $(EXECK)
 
 valgrind: $(EXECG)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECG)
+runMath: $(EXECMATH)
+	./$(EXECMATH)
+
+run-all: runKNN runG runN runD runMath
+
+valgrind-graph: $(EXECG)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECG)
+
+valgrind-dimension: $(EXECD)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECD)
+
+valgrind-node: $(EXECN)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECN)
+
+valgrind-knn: $(EXECKNN)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECKNN)
