@@ -1,23 +1,23 @@
 #include <stdio.h>
 #include "../include/Graph.h"
-#include "../include/MathematicalFunctions.h"
 #include "../include/FindAllRightNeighborsAlgorithm.h"
+#include "../include/knn.h"
 
+#define NUM_THREADS 8 // You can adjust the number of threads based on your CPU's capabilities
 
-int main(int argc, char *argv[])
-{
-    // printf("This is a %dDimension graph!\n",typeOfDimension);
+int main(int argc, char *argv[]) {
+
     int dimensions = atoi(argv[2]);
     int K = atoi(argv[3]);
+    String distance_function = argv[4];
 
-    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions, K);
-
-    //Node* tempNode = graph->nodes;
+    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions, K, distance_function);
+    knn_algorithm(&graph, K, distance_function);
 
     printf("We created the graph!\n");
 
-    // Node* tempNode = graph->nodes;
-    // int i=0;
+    Node* tempNode = graph->nodes;
+    int i=0;
 
     // while (tempNode != NULL) {
     //     Dimension* tempDime = tempNode->dimension;
@@ -25,26 +25,33 @@ int main(int argc, char *argv[])
     //     //    printf("Node %d dim: %d - %f\n", i, tempDime->dimensionValue, tempDime->value);
     //        tempDime = tempDime->next;
     //     } 
-
+    //     printf("---- Node %d ----\n", i);
     //     NodeNeighborsLinkedList* tempNeighbor = tempNode->neighbors;
-    //     int j = 0;
     //     while (tempNeighbor != NULL) {
-    //         Dimension* tempDime2 = tempNeighbor->node->dimension;
-    //         while (tempDime2 != NULL) {
-    //             printf("Node %d, neig: %d, dim: %d - %f\n", i, j, tempDime2->dimensionValue, tempDime2->value);
-    //             tempDime2 = tempDime2->next;
-    //         } 
-    //         printf("---cost: %f---\n", tempNeighbor->cost);
-    //         j++;
+    //         printf("Neig: %d\n", tempNeighbor->node->nodeNameInt);
+    //         // printf("---cost: %f---\n", tempNeighbor->cost);
     //         tempNeighbor = tempNeighbor->next;
+    //     }
+
+    //     NodeNeighborsLinkedList* tempReversedNeighbor = tempNode->reversedNeighbors;
+    //     while (tempReversedNeighbor != NULL) {
+    //         printf("Reversed neig: %d\n", tempReversedNeighbor->node->nodeNameInt);
+    //         tempReversedNeighbor = tempReversedNeighbor->next;
     //     }
     //     tempNode = tempNode->next;
     //     i++;
     // }
 
-    //euclidean_distance(&graph->nodes->dimension,&graph->nodes->next->next->dimension);
-    FindAllRightNeighbors(graph);
+    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions, K, distance_function);
+    FindAllRightNeighbors(graphRightResults);
+    
+    double accurationRate =findAccurationResult(graph , graphRightResults);
+
+    printf("This is acurate by %f %% \n",accurationRate);
     freeGraph(graph);
-    // makeFile(argv[1]);
+    freeGraph(graphRightResults);
+
+
+    printf("Terminated succefully\n");
     return 0;
 }

@@ -14,6 +14,7 @@ typedef struct Node {
     int nodeNameInt;
     Dimension* dimension;
     NodeNeighborsLinkedList* neighbors;
+    NodeNeighborsLinkedList* reversedNeighbors;
     Node* next;
 }Node;
 

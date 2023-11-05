@@ -9,20 +9,22 @@ CC = gcc
 # Compile options. Το -I<dir> tells to compiler where to find the include files
 # -Werror when complite code add -Werror 
 CFLAGS = -Wall  -g -I$(INCLUDE)
-LDFLAGS = -lm -fsanitize=address
+LDFLAGS = -lm -fsanitize=address -pthread
 
 # .o files
-OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o
+OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 
 # Executable
 EXEC = program
 
 # Args for examples
-ARGS2D = $(DATASETS)/dummy.bin 2 4
+ARGS2D = $(DATASETS)/dummy.bin 2 2
 
-ARGS3D = $(DATASETS)/dummy2.bin 4 4
+ARGSEUCL = $(DATASETS)/asciiData3.bin 10 50 euclidean
 
-ARGSMAKEFILE = $(DATASETS)/dummy2.bin 
+ARGSMAN = $(DATASETS)/asciiData3.bin 10 50 manhattan
+
+ARGSMAKEFILE = $(DATASETS)/asciiData3.bin 
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
@@ -34,11 +36,14 @@ clean:
 run: $(EXEC)
 	./$(EXEC) $(ARGS2D)
 
-run3D: $(EXEC)
-	./$(EXEC) $(ARGS3D)
+run-euclidean: $(EXEC)
+	./$(EXEC) $(ARGSEUCL)
+
+run-manhattan: $(EXEC)
+	./$(EXEC) $(ARGSMAN)
 
 runM: $(EXEC)
 	./$(EXEC) $(ARGSMAKEFILE)
 
 valgrind: $(EXEC)
-	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGS2D)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGSEUCL)
