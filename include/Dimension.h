@@ -3,7 +3,6 @@
 
 typedef struct Dimension Dimension;
 
-
 typedef struct Dimension{
     int dimensionValue;
     double value;

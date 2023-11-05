@@ -6,7 +6,6 @@
 #include "../include/FindAllRightNeighborsAlgorithm.h"
 
 
-
 void FindAllRightNeighbors(Graph * graph)
 {
     Node *headNode = graph->nodes;

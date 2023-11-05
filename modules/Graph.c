@@ -1,5 +1,6 @@
 #include "../include/Graph.h"
 
+
 Graph* initGraph() {
     Graph* graph = (Graph*)malloc(sizeof(Graph));
     if (graph == NULL) {
@@ -25,7 +26,7 @@ void freeGraph(Graph* graph) {
 }
 
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions, int K, String distance_function) {
+Graph* createGraphFromBinaryFile(String filename, int dimensions, int K) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
         perror("Error opening file");
@@ -56,18 +57,15 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions, int K, String 
                 break;
             }
             addDimension(&headDimension, i, coordinate);
-            // printf("%d ---- %f\n", i, coordinate);
         }
 
         if(flag == 0) {
             addNode(headNode, headDimension);
             graph->numNodes++;
         }
-
     }
 
     fclose(file);
-    
     return graph;
 }
 
@@ -98,8 +96,6 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults){
     
     return  (correct / count )* 100;
 }
-
-
 
 
 void makeFile(String filename){

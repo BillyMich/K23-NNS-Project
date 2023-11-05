@@ -4,7 +4,8 @@
 
 double** matrixNodes;
 
-//TODOOOOOO
+
+//knn algorithm
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
     matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
@@ -20,31 +21,34 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     Node * tempNode = (*graph)->nodes;
     double countLevel=0;
     int changes = 10;
+    
     for (int i = 0; i < 1; i++)
     {
         printf("Started level : %d\n",i);
         changes=0;
-    while (tempNode !=NULL) {
-        //printf("%d , %d \n",tempNode->nodeNameInt, i);
-        NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
-        while (tempNodeNeighborList != NULL) {
-        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
-        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
-        tempNodeNeighborList = tempNodeNeighborList->next;
+        while (tempNode !=NULL) {
+
+            NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
+            while (tempNodeNeighborList != NULL) {
+                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+                tempNodeNeighborList = tempNodeNeighborList->next;
+            }
+            
+            NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
+            while (tempReversedNeighbors != NULL) {
+                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+                tempReversedNeighbors = tempReversedNeighbors->next;
+            }
+            
+            tempNode = tempNode->next;
+            
+            double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
+            printf("Finished %f %%\n",percent);
         }
-        
-        NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
-        while (tempReversedNeighbors != NULL) {
-        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
-        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
-        tempReversedNeighbors = tempReversedNeighbors->next;
-        }
-        
-        tempNode = tempNode->next;
-        double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
-        printf("Finished %f %%\n",percent);
-    }
-        printf(" this is count %d\n",changes);
+
+        printf("-- this is count %d\n",changes);
         tempNode = (*graph)->nodes;
         countLevel=0;
     }
@@ -105,7 +109,6 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
             } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
 
             usedNumbers[i] = randomNumber;
-            // printf("%d\n", randomNumber);
 
             Node* neighborNode = (*graph)->nodes;
 
@@ -125,6 +128,7 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
     }
 }
 
+
 int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
     for (int i = 0; i < count; i++) {
         if (usedNumbers[i] == number) {
@@ -136,6 +140,7 @@ int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
     }
     return 0; // Number is not used
 }
+
 
 // Check if the node is already a neighbour of the source Node
 int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName) {
