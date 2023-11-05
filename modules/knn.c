@@ -4,53 +4,72 @@
 
 double** matrixNodes;
 
-//TODOOOOOO
+
+/// @brief This is the base of the knn algorithm
+/// @param graph 
+/// @param K 
+/// @param distance_function 
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
     matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
     for(int i = 0; i < (*graph)->numNodes; i++){
         matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
         for(int j = 0; j < (*graph)->numNodes; j++){
-            matrixNodes[i][j] = -1.0;
+            matrixNodes[i][j] = -1.00;
         }
     }
 
     KRandomNodes(graph, K, distance_function);
     
-    Node * head = (*graph)->nodes;
-    Node * tempNode = head;
-    int changes = 10;
-    while (changes>1)
+    Node * tempNode = (*graph)->nodes;
+    double countLevel=0;
+    int changes = 1;
+    int round = 0;
+    
+    while (changes>=1)
     {
-        printf("hello\n");
-    changes=0;
-    while (tempNode !=NULL) {
-        NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
-        while (tempNodeNeighborList != NULL) {
-        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
-        changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
-            tempNodeNeighborList = tempNodeNeighborList->next;
-        }
-        
-        NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
-        while (tempReversedNeighbors != NULL) {
-        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
-        changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
-            tempReversedNeighbors = tempReversedNeighbors->next;
-        }
-        tempNode = tempNode->next;
+        printf("Started level : %d\n",++round);
+        changes=0;
+        while (tempNode !=NULL) {
 
+            NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
+            while (tempNodeNeighborList != NULL) {
+                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+                changes +=checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+                tempNodeNeighborList = tempNodeNeighborList->next;
+            }
+            
+            NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
+            while (tempReversedNeighbors != NULL) {
+                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+                changes +=checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+                tempReversedNeighbors = tempReversedNeighbors->next;
+            }
+            
+            tempNode = tempNode->next;
+            
+            double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
+            printf("Finished %f %%\n",percent);
+        }
+
+        printf("-- this is count %d of round %d\n",changes,round);
+        tempNode = (*graph)->nodes;
+        countLevel=0;
     }
-            tempNode = (*graph)->nodes;
-            printf(" this is count %d\n",changes);
-    }
+
     for (int i = 0; i < (*graph)->numNodes; i++)
         free(matrixNodes[i]);
     free(matrixNodes);
     
 }
 
-
+/// @brief Here we add the neightbors and we cant how many
+/// where succesfully added and we count them so we can use that data
+/// for coculations
+/// @param sourceNode 
+/// @param neighbor 
+/// @param distance_function 
+/// @return 
 int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
@@ -61,8 +80,8 @@ int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbo
 
         if (check(neighborName, (*sourceNode)->neighbors, sourceName) == 0) {
             double cost = 0.0;
-            if(matrixNodes[neighborName][sourceName] != -1){
-                cost = distance(tempNeighbors->node->dimension, tempNeighbors->node->dimension, distance_function);
+            if(matrixNodes[neighborName][sourceName] == -1.00){
+                cost = distance((*sourceNode)->dimension, tempNeighbors->node->dimension, distance_function);
             }
             else{
                 cost = matrixNodes[neighborName][sourceName];
@@ -77,7 +96,10 @@ int checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbo
     return count;
 }
 
-
+/// @brief Here we make the K random nodes as the algorithm needs to run
+/// @param graph 
+/// @param K 
+/// @param distance_function 
 void KRandomNodes(Graph** graph, int K, String distance_function) {
     time_t t;
     srand((unsigned) time(&t));
@@ -100,7 +122,6 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
             } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
 
             usedNumbers[i] = randomNumber;
-            // printf("%d\n", randomNumber);
 
             Node* neighborNode = (*graph)->nodes;
 
@@ -120,22 +141,33 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
     }
 }
 
+/// @brief Quick check to see if we can add
+/// this node as a neightbor to another
+/// @param usedNumbers 
+/// @param count 
+/// @param number 
+/// @param numNode 
+/// @return 
 int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
     for (int i = 0; i < count; i++) {
         if (usedNumbers[i] == number) {
-            return 1; // Number is already used
+            return 1;
         }
         if ( numNode == number ){
             return 1;
         }
     }
-    return 0; // Number is not used
+    return 0;
 }
 
-// Check if the node is already a neighbour of the source Node
+
+/// @brief Check if the node is already a neighbour of the source Node
+/// @param neighborsNodeName 
+/// @param nodeNeighbors 
+/// @param sourceNodeName 
+/// @return 
 int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName) {
 
-    // if neighbor's neigbors is the sourceNode stop
     if(neighborsNodeName == sourceNodeName){
         return 1;
     }

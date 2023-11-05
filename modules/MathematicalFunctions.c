@@ -5,6 +5,10 @@
 #include "common_types.h"
 #include <string.h>
 
+/// @brief Basic use of euclidian distance theorym the distance as cost
+/// @param nodeDimension1 
+/// @param nodeDimension2 
+/// @return 
 double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
 
     Dimension* tempDimension1 = nodeDimension1;
@@ -14,20 +18,21 @@ double euclidean_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
 
     while (tempDimension1 != NULL)
     {
-        // printf(" \n %f and this %f \n ", tempDimension1->value,tempDimension2->value );
         double dif =  tempDimension1->value - tempDimension2->value;
-        // printf(" \n %f = diff ", dif );
         sum += dif * dif ;
-        // printf(" \n %f = sum ", sum );
+
         tempDimension1 = tempDimension1->next;
         tempDimension2 = tempDimension2->next;
     }
     double cost = sqrt(sum);
-    // printf("\nthis is the distance between the nodes: %f\n", cost);
-    return cost;
     
+    return cost; 
 }
 
+/// @brief Basic use of manhattan distance theorym to return the distance as cost
+/// @param nodeDimension1 
+/// @param nodeDimension2 
+/// @return 
 double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2){
     
     Dimension* tempDimension1 = nodeDimension1;
@@ -44,9 +49,14 @@ double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
     }
     
     return distance;
-    
 }
 
+/// @brief This function decides with mathematical therym (formula ) we are going to use
+///  and returns it cost
+/// @param nodeDimension1 
+/// @param nodeDimension2 
+/// @param distance_function 
+/// @return 
 double distance(Dimension* nodeDimension1 , Dimension* nodeDimension2, String distance_function){
     double cost = 0.0;
     if(strcmp(distance_function, "euclidean") == 0){

@@ -14,7 +14,6 @@ Dimension* initDimension() {
     return newDimension;
 }
 
-
 void addDimension(Dimension** head, int dimValue, double val) {
     //1. make the dimension
     Dimension* newDimension = initDimension();
@@ -23,12 +22,10 @@ void addDimension(Dimension** head, int dimValue, double val) {
     newDimension->value = val;
     //3. put dimension at the correct place
     if (*head == NULL) { // the first node to be made
-        // printf("first time\n");
         *head = newDimension;
     }
-    else { // 
+    else {
         Dimension* temp = *head;
-        // printf("second time\n");
         while (temp->next!=NULL) {
             temp = temp->next;
         }

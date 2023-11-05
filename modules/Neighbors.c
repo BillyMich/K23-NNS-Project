@@ -1,5 +1,9 @@
 #include "../include/Neighbors.h"
 
+/// @brief Initialazation of a node
+/// @param nodeNeighbor 
+/// @param cost 
+/// @return 
 NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost) {
     NodeNeighborsLinkedList* newNeighbor = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     if (newNeighbor == NULL) {
@@ -13,6 +17,10 @@ NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost) {
     return newNeighbor;
 }
 
+/// @brief This is an add neightbor that adds them in coreect order
+/// @param head 
+/// @param nodeNeighbor 
+/// @param cost 
 void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost) {
     NodeNeighborsLinkedList* newNeighbor = initNeighbor(nodeNeighbor, cost);
     if (*head == NULL || cost < (*head)->cost) {
@@ -28,11 +36,11 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
     }
 }
 
-
+/// @brief Deleted last node 
+/// @param head 
 void deleteLastNeighborNode(NodeNeighborsLinkedList* head) {
     NodeNeighborsLinkedList* current = head;
     
-    // If there is no neighbor or only one neighbor, there's nothing to delete
     if (current == NULL || current->next == NULL) return;
 
     while (current->next->next != NULL) {
@@ -41,6 +49,7 @@ void deleteLastNeighborNode(NodeNeighborsLinkedList* head) {
     free(current->next->next);
     current->next->next = NULL;
 }
+
 
 void freeNeighbors(NodeNeighborsLinkedList* neighbors) {
     
