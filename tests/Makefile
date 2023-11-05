@@ -33,7 +33,6 @@ EXECN = nodes_test
 
 EXECD = dimension_test
 
-EXECK = knn_test
 EXECMATH = mathFunctions_test
 
 $(EXECKNN): $(OBJSKNN)
@@ -48,11 +47,6 @@ $(EXECN): $(OBJSN)
 $(EXECD): $(OBJSD)
 	$(CC) $(OBJSD) -o $(EXECD) $(LDFLAGS)
 
-$(EXECK): $(OBJSK)
-	$(CC) $(OBJSK) -o $(EXECK) $(LDFLAGS)
-
-clean:
-	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(EXECG) $(EXECN) $(EXECD) $(EXECK)
 $(EXECMATH): $(OBJSMATH)
 	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
 
@@ -71,12 +65,6 @@ runN: $(EXECN)
 runD: $(EXECD)
 	./$(EXECD)
 
-runK: $(EXECK)
-	./$(EXECK)
-
-
-valgrind: $(EXECG)
-	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECG)
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
