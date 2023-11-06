@@ -59,29 +59,31 @@ void testDeleteLastNeighborNode() {
     addNeighbor(&neighbors, node2, 3.333);
     addNeighbor(&neighbors, node3, 8.888);
 
-    deleteLastNeighborNode(neighbors);
+    deleteLastNeighborNode(&neighbors);
     TEST_ASSERT(neighbors != NULL);
     TEST_ASSERT(neighbors->node == node2);
     TEST_ASSERT(neighbors->next->node == node1);
+    TEST_ASSERT(neighbors->next->next == NULL);
+
 
     // Delete last neighbor when there are more than one neighbors
-    deleteLastNeighborNode(neighbors);
+    deleteLastNeighborNode(&neighbors);
     TEST_ASSERT(neighbors != NULL);
     TEST_ASSERT(neighbors->node == node2);
     TEST_ASSERT(neighbors->next == NULL);
 
     // Delete last neighbor when there is only one neighbor
-    deleteLastNeighborNode(neighbors);
+    deleteLastNeighborNode(&neighbors);
     TEST_ASSERT(neighbors == NULL);
 
     // Delete last neighbor when there are no neighbors (nothing should change)
-    deleteLastNeighborNode(neighbors);
+    deleteLastNeighborNode(&neighbors);
     TEST_ASSERT(neighbors == NULL);
 
     freeNode(node1);
     freeNode(node2);
     freeNode(node3);
-    freeNeighbors(neighbors);
+    // freeNeighbors(neighbors);
 }
 
 
