@@ -15,7 +15,7 @@ typedef struct Graph{
 
 Graph* initGraph();
 
-Graph* createGraphFromBinaryFile(String filename, int dimensions, int K);
+Graph* createGraphFromBinaryFile(String filename, int dimensions);
 
 double findAccurationResult(Graph* graph , Graph* graphRightResults);
 
