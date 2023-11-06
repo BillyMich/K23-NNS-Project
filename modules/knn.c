@@ -85,9 +85,8 @@ void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighb
             else{
                 cost = matrixNodes[neighborName][sourceName];
             }
-            printf("add0");
+            
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
-            printf("add1");
             deleteLastNeighborNode((*sourceNode)->neighbors);
             changes++;
         }
