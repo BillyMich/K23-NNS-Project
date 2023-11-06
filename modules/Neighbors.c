@@ -41,13 +41,6 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
     NodeNeighborsLinkedList* current = *head;
     NodeNeighborsLinkedList* previous;
-    // if (current == NULL || current->next == NULL) return;
-
-    // while (current->next->next != NULL) {
-    //     current = current->next;
-    // }
-    // free(current->next->next);
-    // current->next->next = NULL;
 
     if (current == NULL) return;
     //one neighbor
