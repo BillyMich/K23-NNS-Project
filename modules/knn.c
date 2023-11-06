@@ -12,13 +12,13 @@ int changes = 0;
 /// @param distance_function 
 void knn_algorithm(Graph** graph, int K, String distance_function){
     
-    // matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
-    // for(int i = 0; i < (*graph)->numNodes; i++){
-    //     matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
-    //     for(int j = 0; j < (*graph)->numNodes; j++){
-    //         matrixNodes[i][j] = -1.00;
-    //     }
-    // }
+    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
+    for(int i = 0; i < (*graph)->numNodes; i++){
+        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
+        for(int j = 0; j < (*graph)->numNodes; j++){
+            matrixNodes[i][j] = -1.00;
+        }
+    }
 
     KRandomNodes(graph, K, distance_function);
     
@@ -85,7 +85,6 @@ void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighb
             else{
                 cost = matrixNodes[neighborName][sourceName];
             }
-            
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
             deleteLastNeighborNode((*sourceNode)->neighbors);
             changes++;
@@ -101,19 +100,16 @@ void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighb
 void KRandomNodes(Graph** graph, int K, String distance_function) {
     time_t t;
     srand((unsigned) time(&t));
+    
+    //TODO: make this if we need to check that case !!!!!!!
+    // if(graph->numNodes < K){
+    // }
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
 
-    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
-    for(int i = 0; i < (*graph)->numNodes; i++){
-        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
-        for(int j = 0; j < (*graph)->numNodes; j++){
-            matrixNodes[i][j] = -1.00;
-        }
-    }
-
     for(int numNode = 0; numNode < numNodes; numNode++){
+        // printf(" ---- Node number = %d\n", numNode);
         int usedNumbers[K];
 
         for (int i = 0; i < K; i++) {
@@ -150,11 +146,11 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 /// @param numNode 
 /// @return 
 int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
-    if ( numNode == number ){
-        return 1;
-    }
     for (int i = 0; i < count; i++) {
         if (usedNumbers[i] == number) {
+            return 1;
+        }
+        if ( numNode == number ){
             return 1;
         }
     }

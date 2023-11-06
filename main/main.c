@@ -11,13 +11,13 @@ int main(int argc, char *argv[]) {
 
     printf("Starting Creating Graph\n");
 
-    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
+    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions, K);
     
     knn_algorithm(&graph, K, distance_function);
 
     printf("We created the graph!\n");
 
-    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
+    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions, K);
     FindAllRightNeighbors(graphRightResults);
     
     double accurationRate =findAccurationResult(graph , graphRightResults);
