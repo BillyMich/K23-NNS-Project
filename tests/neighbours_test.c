@@ -83,7 +83,6 @@ void testDeleteLastNeighborNode() {
     freeNode(node1);
     freeNode(node2);
     freeNode(node3);
-    // freeNeighbors(neighbors);
 }
 
 
