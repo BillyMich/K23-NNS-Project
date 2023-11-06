@@ -1,8 +1,8 @@
 # Paths to source files
-SRC_MAIN = main
-SRC_MODULES = modules
-SRC_DATASETS = datasets
-SRC_TESTS = tests
+MAIN = main
+MODULES = modules
+DATASETS = datasets
+TESTS = tests
 
 # Paths to include files
 INCLUDE = include
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Werror -g -I$(INCLUDE)
 LDFLAGS = -lm
 
 # .o files
-OBJS = $(SRC_MAIN)/main.o $(SRC_MODULES)/Graph.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
+OBJS = $(MAIN)/main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 
 # Test objects
 OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
