@@ -61,7 +61,7 @@ void testAddNodeToGraph() {
 
 //TODO: make it work!!!!!!!!!!!!!!!!!!!1
 void testCreateGraphFromBinaryFile() {
-    Graph* graph = createGraphFromBinaryFile("../datasets/dummy.bin", 4, 4); // Assume 4 dimensions
+    Graph* graph = createGraphFromBinaryFile("../datasets/dummy.bin", 4); // Assume 4 dimensions
 
     TEST_ASSERT(graph != NULL);
 
@@ -133,7 +133,7 @@ void testCreateGraphFromBinaryFile() {
 
 //TODO: FIX THE LEAKS
 void testCreateGraphDimensions() {
-    Graph* graph = createGraphFromBinaryFile("../datasets/dummy2.bin", 4, 4); // Assume 4 dimensions
+    Graph* graph = createGraphFromBinaryFile("../datasets/dummy2.bin", 4); // Assume 4 dimensions
     TEST_ASSERT(graph != NULL);
 
     double expectedCoordinates[] = {1.000000,   2.345678,   4.678923,   0.333333,
