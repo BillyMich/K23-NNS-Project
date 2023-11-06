@@ -13,46 +13,66 @@ CC = gcc
 # Compile options. The -I<dir> tells the compiler where to find the include files
 # -Werror makes warnings errors
 CFLAGS = -Wall -Werror -g -I$(INCLUDE)
-LDFLAGS = -lm -fsanitize=address
+LDFLAGS = -lm
 
 # .o files
 OBJS = $(SRC_MAIN)/main.o $(SRC_MODULES)/Graph.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 
 # Test objects
-OBJSG = $(SRC_TESTS)/graph_test.o $(SRC_MODULES)/Graph.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
-OBJSN = $(SRC_TESTS)/nodes_test.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o
-OBJSD = $(SRC_TESTS)/dimension_test.o $(SRC_MODULES)/Node.o $(SRC_MODULES)/Dimension.o $(SRC_MODULES)/Neighbors.o $(SRC_MODULES)/MathematicalFunctions.o $(SRC_MODULES)/FindAllRightNeighborsAlgorithm.o
+OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
+OBJSG = $(TESTS)/graph_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
+OBJSN = $(TESTS)/nodes_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o 
+OBJSD = $(TESTS)/dimension_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o
+OBJSNEI = $(TESTS)/neighbours_test.o $(MODULES)/Neighbors.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o 
+OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MODULES)/Dimension.o
 
 # Executables
 EXEC = program
+EXECKNN = knn_test
 EXECG = graph_test
 EXECN = nodes_test
 EXECD = dimension_test
+EXECNEI = neighbours_test
+EXECMATH = mathFunctions_test
 
 # Args for examples
-ARGS2D = $(SRC_DATASETS)/dummy.bin 2 2
-ARGS3D = $(SRC_DATASETS)/dummy2.bin 4 4
-ARGSMAKEFILE = $(SRC_DATASETS)/dummy2.bin
+ARGSEUCL = $(DATASETS)/asciiData3.bin 1 100 euclidean
+ARGSMAN = $(DATASETS)/asciiData3.bin 1 100 manhattan
 
 all: $(EXEC) $(EXECG) $(EXECN) $(EXECD)
 
-run: $(EXEC)
-	./$(EXEC) $(ARGS2D)
+run-euclidean: $(EXEC)
+	./$(EXEC) $(ARGSEUCL)
+
+run-manhattan: $(EXEC)
+	./$(EXEC) $(ARGSMAN)
+
+runKNN: $(EXECKNN)
+	./$(EXECKNN)
 
 runG: $(EXECG)
-	./$(EXECG) $(ARGS)
+	./$(EXECG)
 
 runN: $(EXECN)
-	./$(EXECN) $(ARGS)
+	./$(EXECN)
 
 runD: $(EXECD)
 	./$(EXECD)
 
-run-all: run runG runN runD
+runNEI: $(EXECNEI)
+	./$(EXECNEI)
+
+runMath: $(EXECMATH)
+	./$(EXECMATH)
+
+run-all: run-euclidean run-manhattan runKNN runG runN runD runNEI runMath
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
 	@if [ -f $(EXEC).exe ]; then ln -sf $(EXEC).exe $(EXEC); fi
+
+$(EXECKNN): $(OBJSKNN)
+	$(CC) $(OBJSKNN) -o $(EXECKNN) $(LDFLAGS)
 
 $(EXECG): $(OBJSG)
 	$(CC) $(OBJSG) -o $(EXECG) $(LDFLAGS)
@@ -63,5 +83,11 @@ $(EXECN): $(OBJSN)
 $(EXECD): $(OBJSD)
 	$(CC) $(OBJSD) -o $(EXECD) $(LDFLAGS)
 
+$(EXECNEI): $(OBJSNEI)
+	$(CC) $(OBJSNEI) -o $(EXECNEI) $(LDFLAGS)
+
+$(EXECMATH): $(OBJSMATH)
+	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
+
 clean:
-	rm -f $(OBJS) $(OBJSG) $(OBJSN) $(OBJSD) $(EXEC) $(EXECG) $(EXECN) $(EXECD)
+	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)

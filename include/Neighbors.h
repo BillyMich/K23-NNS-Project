@@ -19,7 +19,7 @@ NodeNeighborsLinkedList* initNeighbor(Node* dest, double cost);
 
 void addNeighbor(NodeNeighborsLinkedList** head, Node* dest, double cost);
 
-void deleteLastNeighborNode(NodeNeighborsLinkedList* head) ;
+void deleteLastNeighborNode(NodeNeighborsLinkedList** head) ;
 
 void freeNeighbors(NodeNeighborsLinkedList* destination);
 

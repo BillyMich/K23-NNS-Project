@@ -87,7 +87,7 @@ void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighb
             }
             
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
-            deleteLastNeighborNode((*sourceNode)->neighbors);
+            deleteLastNeighborNode(&((*sourceNode)->neighbors));
             changes++;
         }
         tempNeighbors = tempNeighbors->next;
