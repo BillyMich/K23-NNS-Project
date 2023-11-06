@@ -126,64 +126,10 @@ void testKRandomNodesWithManhattan() {
     testKRandomNodes(graphManhattan);
 }
 
-void testCheckNeighborofNeighbors() {
-    //graph with (1,2) (3,4) (5,6) (7,8) (9,20)
-    Graph* graph = createGraphFromBinaryFile("../datasets/check_neighbors_test.bin", 2); //2 dimensions
-    KRandomNodes(&graph, 2, "euclidean"); //2 neighbors
-    Node* sourceNode = graph->nodes;
-printf("1");
-    //one neighbor (1,1) - cost should be smaller for (1,2) of graph
-    Dimension* dimension0 = (Dimension*)malloc(sizeof(Dimension));
-    dimension0->dimensionValue = 0;
-    dimension0->value = 1;
-    Dimension* dimension1 = (Dimension*)malloc(sizeof(Dimension));
-    dimension1->dimensionValue = 1;
-    dimension1->value = 1;
-
-    dimension0->next = dimension1;
-    dimension1->next = NULL;
-    printf("2");
-    Node* nodeNeighbor = (Node*)malloc(sizeof(Node));
-    nodeNeighbor->dimension = dimension0;
-    nodeNeighbor->neighbors = NULL;
-    nodeNeighbor->next = NULL;
-    nodeNeighbor->nodeNameInt = 20;
-    nodeNeighbor->reversedNeighbors = NULL;
-printf("3");
-    NodeNeighborsLinkedList* neighbor = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
-    neighbor->node = nodeNeighbor;
-    neighbor->next = NULL;
-printf("4");
-    checkNeighborofNeighbors(&sourceNode, neighbor, "euclidean");
-    // NodeNeighborsLinkedList* sourceNeighbors = sourceNode->neighbors;
-    // while (sourceNeighbors)
-    // {
-    //     if(sourceNeighbors->node->nodeNameInt == 20){
-    //         TEST_ASSERT(1); //the new node found at neighbors 
-    //     }
-    //     sourceNeighbors = sourceNeighbors->next;
-    // }
-    printf("5");
-
-    //den mporw na to elexjw giati einai o matrix
-    //isws sto knn
-
-}
-
-void testCheckNeighborofNeighborsWithEuclidean() {
-    
-}
-
-void testCheckNeighborofNeighborsWithManhattan() {
-    
-}
-
 TEST_LIST = {
     {"testCheck",testCheck},
     {"testIsNumberUsed", testIsNumberUsed},
     {"testKRandomNodesWithEuclidean", testKRandomNodesWithEuclidean},
     {"testKRandomNodesWithManhattan", testKRandomNodesWithManhattan},
-    {"testCheckNeighborofNeighborsWithEuclidean",testCheckNeighborofNeighbors},
-    {"testCheckNeighborofNeighborsWithManhattan",testCheckNeighborofNeighborsWithManhattan},
     {NULL, NULL}
 };
