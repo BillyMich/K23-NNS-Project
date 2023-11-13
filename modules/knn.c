@@ -16,24 +16,23 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     
     Node * tempNode = (*graph)->nodes;
     double countLevel=0;
-    // int round = 0;
+    int round = 0;
     
     
     do {
         changes = 0;
         printf("%d\n", changes);
-        // printf("Started level : %d\n",++round);
+        printf("Started level : %d\n",++round);
         while (tempNode !=NULL) {
 
-            NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
+            NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->reversedNeighbors;
             while (tempNodeNeighborList != NULL) {
+                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
                 checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
-                // printf("node name int ---- %d----\n", tempNodeNeighborList->node->reversedNeighbors->node->nodeNameInt ); 
-                // checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
                 tempNodeNeighborList = tempNodeNeighborList->next;
             }
             
-            NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
+            NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->neighbors;
             while (tempReversedNeighbors != NULL) {
                 checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
                 checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
@@ -43,7 +42,7 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
             tempNode = tempNode->next;
             
             double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
-            // printf("Finished %f %%\n",percent);
+            printf("Finished %f %%\n",percent);
         }
 
         // printf("-- this is count %d of round %d\n",changes,round);
@@ -100,7 +99,7 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
-
+    free(matrixNodes);
     matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
     for(int i = 0; i < (*graph)->numNodes; i++){
         matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));

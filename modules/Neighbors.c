@@ -46,7 +46,7 @@ void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
     //one neighbor
     if (current->next ==NULL) {
         *head = NULL;
-        free(current);
+        //free(current);
         return;
     }
     //more than one neighbor
@@ -56,9 +56,8 @@ void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
         }
         current = current->next;        
     }
-    previous->next = NULL;
-    free(current);
-
+    //free(current->next);
+    current->next=NULL;
 }
 
 
