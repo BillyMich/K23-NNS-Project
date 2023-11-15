@@ -9,7 +9,7 @@ CC = gcc
 # Compile options. Το -I<dir> tells to compiler where to find the include files
 # -Werror when complite code add -Werror 
 CFLAGS = -Wall  -g -I$(INCLUDE)
-LDFLAGS = -lm -fsanitize=address -pthread
+LDFLAGS = -lm -fsanitize=address
 
 # .o files
 OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
@@ -18,7 +18,7 @@ OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODU
 EXEC = program
 
 # Args for examples
-ARGSEUCL = $(DATASETS)/asciiData3.bin 8 50 euclidean
+ARGSEUCL = $(DATASETS)/asciiData3.bin 5 80 euclidean
 
 ARGSMAN = $(DATASETS)/asciiData3.bin 8 50 manhattan
 

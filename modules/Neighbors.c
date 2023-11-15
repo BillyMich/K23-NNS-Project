@@ -38,26 +38,51 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 
 /// @brief Deleted last node 
 /// @param head 
-void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
-    NodeNeighborsLinkedList* current = *head;
-    NodeNeighborsLinkedList* previous;
+// void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
+//     NodeNeighborsLinkedList* current = *head;
+//     NodeNeighborsLinkedList* previous;
 
-    if (current == NULL) return;
-    //one neighbor
-    if (current->next ==NULL) {
-        *head = NULL;
-        //free(current);
-        return;
-    }
-    //more than one neighbor
+//     if (current == NULL) return;
+//     //one neighbor
+//     if (current->next ==NULL) {
+//         *head = NULL;
+//         //free(current);
+//         return;
+//     }
+//     //more than one neighbor
+//     while (current->next != NULL) {
+//         if (current->next->next == NULL) {
+//             previous = current;
+//         }
+//         current = current->next;        
+//     }
+//     //free(current->next);
+//     current->next=NULL;
+// }
+
+// New delete for last node
+void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
+    if (*head == NULL) return;
+
+    NodeNeighborsLinkedList* current = *head;
+    NodeNeighborsLinkedList* previous = NULL;
+
+    // Find the last node and its previous node
     while (current->next != NULL) {
-        if (current->next->next == NULL) {
-            previous = current;
-        }
-        current = current->next;        
+        previous = current;
+        current = current->next;
     }
-    //free(current->next);
-    current->next=NULL;
+    
+    if (previous == NULL) {
+        // There is only one neighbor
+        free(*head);
+        *head = NULL;
+    } else {
+        // There is more than one neighbor
+        free(previous->next);
+        previous->next = NULL;
+    }
+
 }
 
 
