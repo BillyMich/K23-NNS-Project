@@ -21,7 +21,7 @@ void KRandomNodes(Graph** graph, int K, String distance_function);
 /// @param neighbor 
 /// @param distance_function 
 /// @return 
-void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function );
+void checkNeighborofNeighbors(Graph** graph, Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function );
 
 /// @brief  Function to check if a number has been used before
 /// @param usedNumbers 

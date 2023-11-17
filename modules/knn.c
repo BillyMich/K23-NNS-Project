@@ -27,15 +27,15 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 
             NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->reversedNeighbors;
             while (tempNodeNeighborList != NULL) {
-                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
-                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempNodeNeighborList->node->neighbors, distance_function);
                 tempNodeNeighborList = tempNodeNeighborList->next;
             }
             
             NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->neighbors;
             while (tempReversedNeighbors != NULL) {
-                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
-                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
                 tempReversedNeighbors = tempReversedNeighbors->next;
             }
             
@@ -64,7 +64,7 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 /// @param neighbor 
 /// @param distance_function 
 /// @return 
-void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
+void checkNeighborofNeighbors(Graph** graph, Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
 
@@ -81,13 +81,20 @@ void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighb
             cost = matrixNodes[neighborName][sourceName];
         }
         if (check(neighborName, (*sourceNode)->neighbors, sourceName, cost) == 0) {
-            addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
-            deleteLastNeighborNode(&((*sourceNode)->neighbors));
+            addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost); //add the neighbor
             
-            //TODO: !!change reverse also
-            // addNeighbor(&(tempNeighbors->node->neighbors), *sourceNode, cost);
-            // deleteLastNeighborNode(&((*sourceNode)->neighbors));
+            //
+            Node* temp = (*graph)->nodes;
+            while (temp != NULL && temp->nodeNameInt != neighborName){     
+                temp = temp->next;
+            }
+            addNeighbor(&(temp->reversedNeighbors), *sourceNode, cost); //add the reverse
 
+            int nameOfDeletedNeighbor = deleteLastNeighborNode(&((*sourceNode)->neighbors)); //delete neighbor
+            if (nameOfDeletedNeighbor != -1) {
+                deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, sourceName); //delete reverse
+            }
+    
             changes++;
         }
         tempNeighbors = tempNeighbors->next;

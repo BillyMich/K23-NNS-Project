@@ -61,8 +61,8 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 // }
 
 // New delete for last node
-void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
-    if (*head == NULL) return;
+int deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
+    if (*head == NULL) return -1;
 
     NodeNeighborsLinkedList* current = *head;
     NodeNeighborsLinkedList* previous = NULL;
@@ -72,17 +72,59 @@ void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
         previous = current;
         current = current->next;
     }
+
+    int name = current->node->nodeNameInt;
     
     if (previous == NULL) {
         // There is only one neighbor
         free(*head);
         *head = NULL;
+
     } else {
         // There is more than one neighbor
         free(previous->next);
         previous->next = NULL;
     }
 
+    return name;
+}
+
+void deleteReverseNeighbor(Node** head, int nodeName, int nodeNameReverse) {
+    Node* temp = *head;
+
+    while (temp != NULL && temp->nodeNameInt != nodeName) {
+        temp = temp->next;
+    }
+
+    NodeNeighborsLinkedList** reverseHead = &(temp->reversedNeighbors);
+    NodeNeighborsLinkedList* reverseTemp = *reverseHead;
+    NodeNeighborsLinkedList* previous = NULL;
+
+    if ((*reverseHead) == NULL) {
+        fprintf(stderr, "Delete Reverse Error-NULL Head\n");
+        exit(EXIT_FAILURE);
+    }
+
+    //nodeNameReverse is in the head of the list
+    if ((*reverseHead)->node->nodeNameInt == nodeNameReverse) {
+        *reverseHead = (*reverseHead)->next;// Changed head
+        free(reverseTemp);
+        return;
+    }
+    
+    while (reverseTemp != NULL && reverseTemp->node->nodeNameInt != nodeNameReverse) {
+        previous = reverseTemp;
+        reverseTemp = reverseTemp->next;
+    }
+
+    // If name was not present in linked list
+    if (reverseTemp == NULL){
+        fprintf(stderr, "Delete Reverse Error-NULL Temp\n");
+        exit(EXIT_FAILURE);
+    }
+       
+    previous->next = reverseTemp->next;
+    free(reverseTemp);
 }
 
 
