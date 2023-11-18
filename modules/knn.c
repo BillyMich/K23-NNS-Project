@@ -15,8 +15,8 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     KRandomNodes(graph, K, distance_function);
     
     Node * tempNode = (*graph)->nodes;
-    double countLevel=0;
-    int round = 0;
+    // double countLevel=0;
+    // int round = 0;
     
     
     do {
@@ -47,7 +47,7 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 
         // printf("-- this is count %d of round %d\n",changes,round);
         tempNode = (*graph)->nodes;
-        countLevel=0;
+        // countLevel=0;
         // printf("%d\n", changes);
     } while (changes>0);
 
