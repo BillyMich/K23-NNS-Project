@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     printf("\n~ Acurate by %f %% ~\n",accurationRate);
 
     writeGraphToFile(graph, "Graph.txt"); 
-    writeGraphToFile(graph, "Graph2.txt"); 
+    writeGraphToFile(graphRightResults, "Graph2.txt"); 
 
     freeGraph(graph);
     freeGraph(graphRightResults);
