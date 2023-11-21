@@ -18,6 +18,13 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     // double countLevel=0;
     // int round = 0;
     
+    // matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
+    // for(int i = 0; i < (*graph)->numNodes; i++){
+    //     matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
+    //     for(int j = 0; j < (*graph)->numNodes; j++){
+    //         matrixNodes[i][j] = -1.00;
+    //     }
+    // }
     
     do {
         changes = 0;
@@ -112,14 +119,6 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
 
-    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
-    for(int i = 0; i < (*graph)->numNodes; i++){
-        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
-        for(int j = 0; j < (*graph)->numNodes; j++){
-            matrixNodes[i][j] = -1.00;
-        }
-    }
-
     for(int numNode = 0; numNode < numNodes; numNode++){
         int usedNumbers[K];
 
@@ -139,8 +138,8 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 
             double cost = distance(currentNode->dimension, neighborNode->dimension, distance_function);
             
-            matrixNodes[numNode][randomNumber] = cost;
-            matrixNodes[randomNumber][numNode] = cost;
+            // matrixNodes[numNode][randomNumber] = cost;
+            // matrixNodes[randomNumber][numNode] = cost;
             
             addNeighbor(&(currentNode->neighbors), neighborNode, cost);
             addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
