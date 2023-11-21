@@ -3,7 +3,7 @@
 #include <string.h>
 
 double** matrixNodes;
-int changes = 0;
+int changes;
 
 
 /// @brief This is the base of the knn algorithm
@@ -15,38 +15,41 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     KRandomNodes(graph, K, distance_function);
     
     Node * tempNode = (*graph)->nodes;
-    double countLevel=0;
-    int round = 0;
+    // double countLevel=0;
+    // int round = 0;
     
     
     do {
-        printf("Started level : %d\n",++round);
+        changes = 0;
+        // printf("%d\n", changes);
+        // printf("Started level : %d\n",++round);
         while (tempNode !=NULL) {
 
-            NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->neighbors;
+            NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->reversedNeighbors;
             while (tempNodeNeighborList != NULL) {
-                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->neighbors, distance_function);
-                checkNeighborofNeighbors(&tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempNodeNeighborList->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempNodeNeighborList->node->neighbors, distance_function);
                 tempNodeNeighborList = tempNodeNeighborList->next;
             }
             
-            NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->reversedNeighbors;
+            NodeNeighborsLinkedList* tempReversedNeighbors = tempNode->neighbors;
             while (tempReversedNeighbors != NULL) {
-                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->neighbors, distance_function);
-                checkNeighborofNeighbors(&tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempReversedNeighbors->node->neighbors, distance_function);
+                checkNeighborofNeighbors(graph, &tempNode, tempReversedNeighbors->node->reversedNeighbors, distance_function);
                 tempReversedNeighbors = tempReversedNeighbors->next;
             }
             
             tempNode = tempNode->next;
             
-            double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
-            printf("Finished %f %%\n",percent);
+            // double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
+            // printf("Finished %f %%\n",percent);
         }
 
-        printf("-- this is count %d of round %d\n",changes,round);
+        // printf("-- this is count %d of round %d\n",changes,round);
         tempNode = (*graph)->nodes;
-        countLevel=0;
-    } while (changes>=1);
+        // countLevel=0;
+        // printf("%d\n", changes);
+    } while (changes>0);
 
     for (int i = 0; i < (*graph)->numNodes; i++)
         free(matrixNodes[i]);
@@ -61,7 +64,7 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
 /// @param neighbor 
 /// @param distance_function 
 /// @return 
-void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
+void checkNeighborofNeighbors(Graph** graph, Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
     NodeNeighborsLinkedList* tempNeighbors = neighbor;
 
@@ -69,17 +72,29 @@ void checkNeighborofNeighbors(Node** sourceNode, NodeNeighborsLinkedList* neighb
         int neighborName = tempNeighbors->node->nodeNameInt;
         int sourceName = (*sourceNode)->nodeNameInt;
 
-        if (check(neighborName, (*sourceNode)->neighbors, sourceName) == 0) {
-            double cost = 0.0;
-            if(matrixNodes[neighborName][sourceName] == -1.00){
-                cost = distance((*sourceNode)->dimension, tempNeighbors->node->dimension, distance_function);
-            }
-            else{
-                cost = matrixNodes[neighborName][sourceName];
-            }
+        double cost = 0.0;
+        if(matrixNodes[neighborName][sourceName] == -1.00){
+            cost = distance((*sourceNode)->dimension, tempNeighbors->node->dimension, distance_function);
+            matrixNodes[neighborName][sourceName] = cost;
+        }
+        else{
+            cost = matrixNodes[neighborName][sourceName];
+        }
+        if (check(neighborName, (*sourceNode)->neighbors, sourceName, cost) == 0) {
+            addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost); //add the neighbor
             
-            addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost);
-            deleteLastNeighborNode(&((*sourceNode)->neighbors));
+            //
+            Node* temp = (*graph)->nodes;
+            while (temp != NULL && temp->nodeNameInt != neighborName){     
+                temp = temp->next;
+            }
+            addNeighbor(&(temp->reversedNeighbors), *sourceNode, cost); //add the reverse
+
+            int nameOfDeletedNeighbor = deleteLastNeighborNode(&((*sourceNode)->neighbors)); //delete neighbor
+            if (nameOfDeletedNeighbor != -1) {
+                deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, sourceName); //delete reverse
+            }
+    
             changes++;
         }
         tempNeighbors = tempNeighbors->next;
@@ -159,17 +174,26 @@ int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
 /// @param nodeNeighbors 
 /// @param sourceNodeName 
 /// @return 
-int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName) {
-
+int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName, double cost) {
     if(neighborsNodeName == sourceNodeName){
         return 1;
     }
 
     NodeNeighborsLinkedList* tempNode = nodeNeighbors;
+    NodeNeighborsLinkedList* lastNode = nodeNeighbors;
     while (tempNode != NULL) {
         if(neighborsNodeName == tempNode->node->nodeNameInt)
             return 1;
+
+        if (tempNode->next != NULL) 
+            lastNode = lastNode->next;
+
         tempNode = tempNode->next;
     }
+
+    if (cost >= lastNode->cost) {
+        return 1;
+    }
+
     return 0;
 }

@@ -38,27 +38,93 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 
 /// @brief Deleted last node 
 /// @param head 
-void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
-    NodeNeighborsLinkedList* current = *head;
-    NodeNeighborsLinkedList* previous;
+// void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
+//     NodeNeighborsLinkedList* current = *head;
+//     NodeNeighborsLinkedList* previous;
 
-    if (current == NULL) return;
-    //one neighbor
-    if (current->next ==NULL) {
+//     if (current == NULL) return;
+//     //one neighbor
+//     if (current->next ==NULL) {
+//         *head = NULL;
+//         //free(current);
+//         return;
+//     }
+//     //more than one neighbor
+//     while (current->next != NULL) {
+//         if (current->next->next == NULL) {
+//             previous = current;
+//         }
+//         current = current->next;        
+//     }
+//     //free(current->next);
+//     current->next=NULL;
+// }
+
+// New delete for last node
+int deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
+    if (*head == NULL) return -1;
+
+    NodeNeighborsLinkedList* current = *head;
+    NodeNeighborsLinkedList* previous = NULL;
+
+    // Find the last node and its previous node
+    while (current->next != NULL) {
+        previous = current;
+        current = current->next;
+    }
+
+    int name = current->node->nodeNameInt;
+    
+    if (previous == NULL) {
+        // There is only one neighbor
+        free(*head);
         *head = NULL;
-        free(current);
+
+    } else {
+        // There is more than one neighbor
+        free(previous->next);
+        previous->next = NULL;
+    }
+
+    return name;
+}
+
+void deleteReverseNeighbor(Node** head, int nodeName, int nodeNameReverse) {
+    Node* temp = *head;
+
+    while (temp != NULL && temp->nodeNameInt != nodeName) {
+        temp = temp->next;
+    }
+
+    NodeNeighborsLinkedList** reverseHead = &(temp->reversedNeighbors);
+    NodeNeighborsLinkedList* reverseTemp = *reverseHead;
+    NodeNeighborsLinkedList* previous = NULL;
+
+    if ((*reverseHead) == NULL) {
+        fprintf(stderr, "Delete Reverse Error-NULL Head\n");
+        exit(EXIT_FAILURE);
+    }
+
+    //nodeNameReverse is in the head of the list
+    if ((*reverseHead)->node->nodeNameInt == nodeNameReverse) {
+        *reverseHead = (*reverseHead)->next;// Changed head
+        free(reverseTemp);
         return;
     }
-    //more than one neighbor
-    while (current->next != NULL) {
-        if (current->next->next == NULL) {
-            previous = current;
-        }
-        current = current->next;        
+    
+    while (reverseTemp != NULL && reverseTemp->node->nodeNameInt != nodeNameReverse) {
+        previous = reverseTemp;
+        reverseTemp = reverseTemp->next;
     }
-    previous->next = NULL;
-    free(current);
 
+    // If name was not present in linked list
+    if (reverseTemp == NULL){
+        fprintf(stderr, "Delete Reverse Error-NULL Temp\n");
+        exit(EXIT_FAILURE);
+    }
+       
+    previous->next = reverseTemp->next;
+    free(reverseTemp);
 }
 
 

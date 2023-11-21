@@ -17,17 +17,20 @@ void testCheck(){
     node2->nodeNameInt = 2;
     NodeNeighborsLinkedList* head1 = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     head1->node = node1;
+    head1->cost = 1.0;
     NodeNeighborsLinkedList* head2 = (NodeNeighborsLinkedList*)malloc(sizeof(NodeNeighborsLinkedList));
     head2->node = node2;
+    head2->cost = 2.0;
 
     head1->next = head2;
     head2->next = NULL;
 
-    TEST_ASSERT(check(0, head1, 0) == 1); //source's and neighbor's name are the same 
-    TEST_ASSERT(check(1, head1, 0) == 1); //neighbor's name already in the head
-    TEST_ASSERT(check(2, head1, 2) == 1); //source's and neighbor's name are the same and neighbor's name already in the head
+    TEST_ASSERT(check(0, head1, 0, 1.5) == 1); //source's and neighbor's name are the same 
+    TEST_ASSERT(check(1, head1, 0, 1.5) == 1); //neighbor's name already in the head
+    TEST_ASSERT(check(2, head1, 2, 1.5) == 1); //source's and neighbor's name are the same and neighbor's name already in the head
 
-    TEST_ASSERT(check(3, head1, 0) == 0); //source's and neighbor's name are the different and neighbor's name not in the head
+    TEST_ASSERT(check(3, head1, 0, 2.5) == 1); //source's and neighbor's name are the different and neighbor's name not in the head but cost is higher
+    TEST_ASSERT(check(3, head1, 0, 1.5) == 0); //source's and neighbor's name are the different and neighbor's name not in the head and cost is lower
 
     free(node1);
     free(node2);
