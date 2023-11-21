@@ -89,7 +89,6 @@ int main(int argc, char *argv[]) {
     freeGraph(graphRightResults);
 
 
-    double accurationRate =findAccurationResult(graph , graphRightResults);
 
     return 0;
 }
