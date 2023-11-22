@@ -118,13 +118,13 @@ void testKRandomNodes(Graph* graph) {
 }
 
 void testKRandomNodesWithEuclidean() {
-    Graph* graphEuclidean = createGraphFromBinaryFile("../datasets/knn_test.bin", 2); // Assume 2 dimensions
+    Graph* graphEuclidean = createGraphFromBinaryFile("datasets/knn_test.bin", 2); // Assume 2 dimensions
     KRandomNodes(&graphEuclidean, 4, "euclidean"); //4 neighbors
     testKRandomNodes(graphEuclidean);
 }
 
 void testKRandomNodesWithManhattan() {
-    Graph* graphManhattan = createGraphFromBinaryFile("../datasets/knn_test.bin", 2); // Assume 2 dimensions
+    Graph* graphManhattan = createGraphFromBinaryFile("datasets/knn_test.bin", 2); // Assume 2 dimensions
     KRandomNodes(&graphManhattan, 4, "manhattan"); //4 neighbors
     testKRandomNodes(graphManhattan);
 }
