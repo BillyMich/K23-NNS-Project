@@ -91,3 +91,4 @@ $(EXECMATH): $(OBJSMATH)
 
 clean:
 	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)
+	rm *.txt

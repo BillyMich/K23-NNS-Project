@@ -96,3 +96,30 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults){
     
     return  (correct / count )* 100;
 }
+
+
+// Function to write the graph data to a file
+void writeGraphToFile(Graph* graph, const char* filename) {
+    FILE* file = fopen(filename, "w");
+    if (file == NULL) {
+    printf("Error opening file: %s\n", filename);
+    perror("Error");
+    return;
+    }
+
+    Node* currentNode = graph->nodes;
+    while (currentNode != NULL) {
+        fprintf(file, "Node: %d\n", currentNode->nodeNameInt);
+
+        NodeNeighborsLinkedList* currentNeighbor = currentNode->neighbors;
+        while (currentNeighbor != NULL) {
+            fprintf(file, "Neighbor: %d\n", currentNeighbor->node->nodeNameInt);
+            currentNeighbor = currentNeighbor->next;
+        }
+
+        fprintf(file, "\n");
+        currentNode = currentNode->next;
+    }
+
+    fclose(file);
+}
