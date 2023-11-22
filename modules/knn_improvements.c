@@ -1,11 +1,8 @@
-#include "../include/knn.h"
 #include "../include/knn_improvments.h"
 #include <time.h>
 #include <string.h>
 
-// double** matrixDistances;
 int changes;
-
 
 /// @brief This is the base of the knn algorithm
 /// @param graph 
@@ -14,40 +11,56 @@ int changes;
 void knn_improved_algorithm(Graph** graph, int K, String distance_function){
 
     KRandomNodes(graph, K, distance_function);
-
-    // matrixDistances = (double**)malloc((*graph)->numNodes*sizeof(double*));
-    // for(int i = 0; i < (*graph)->numNodes; i++){
-    //     matrixDistances[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
-    //     for(int j = 0; j < (*graph)->numNodes; j++){
-    //         matrixDistances[i][j] = -1.00;
-    //     }
-    // }
     
     Node * tempNode = (*graph)->nodes;    
     
     do {
         changes = 0;
         while (tempNode !=NULL) {
-
-            NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->reversedNeighbors;
-            while (tempNodeNeighborList != NULL) {
-            // localJoin   
-            }
+            localJoin(tempNode, distance_function);
             tempNode = tempNode->next;
-            
         }
+        tempNode = (*graph)->nodes;
         //changes neighbors
-        //while()
+        
+        changeNeighbors(graph);
 
         //delete list with costs
-        // freeCost
+        freeCost(tempNode->cost);
+        tempNode->cost = NULL;
+
+            //next node
+            // tempNode = tempNode->next;
+        // }
+
+        
         tempNode = (*graph)->nodes;
     } while (changes>0);
-
-    // for (int i = 0; i < (*graph)->numNodes; i++)
-    //     free(matrixNodes[i]);
-    // free(matrixNodes);
     
+}
+
+void changeNeighbors(Graph** graph) {
+
+    Node* tempNode = (*graph)->nodes;
+
+    while (tempNode !=NULL) {
+        Cost* tempCost = tempNode->cost;
+        while (tempCost != NULL) {
+            tempCost->node1;
+            tempCost->node2;
+            tempCost->cost;
+
+            //find the two nodes 
+            //add at each other as neighbor 
+            //update reverse neighbors
+
+
+            tempCost = tempCost->next;
+        }
+        // next node
+        tempNode = tempNode->next;
+    }
+
 }
 
 void localJoin(Node** node, String distance_function) { 
@@ -60,7 +73,7 @@ void localJoin(Node** node, String distance_function) {
             int nodeName1 = temp->node->nodeNameInt;
             int nodeName2 = tempNeig->node->nodeNameInt;
 
-            if ( nodeName1 != nodeName2 /*&& incrementalSearch == 0 */) {
+            if ( nodeName1 != nodeName2 /*&& incrementalSearch() == 0 */) {
                 double cost = distance(temp->node->dimension, tempNeig->node->dimension, distance_function);
                 addCost(&temp->cost, nodeName1, nodeName2, cost);
             }
@@ -72,8 +85,9 @@ void localJoin(Node** node, String distance_function) {
             int nodeName3 = temp->node->nodeNameInt;
             int nodeName4 = tempRev->node->nodeNameInt;
 
-            if (nodeName3 != nodeName4) {
+            if (nodeName3 != nodeName4 /*&& incrementalSearch() == 0 */) {
                 double cost = distance(temp->node->dimension, tempRev->node->dimension, distance_function);
+                addCost(&temp->cost, nodeName3, nodeName4, cost);
             }
             tempRev = tempRev->next;
         }
