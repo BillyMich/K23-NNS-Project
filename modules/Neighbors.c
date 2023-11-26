@@ -123,8 +123,9 @@ void deleteReverseNeighbor(Node** head, int nodeName, int nodeNameReverse) {
         fprintf(stderr, "Delete Reverse Error-NULL Temp\n");
         exit(EXIT_FAILURE);
     }
-    free(previous->next);   
-    
+       
+    previous->next = reverseTemp->next;
+    free(reverseTemp);
 }
 
 

@@ -44,7 +44,5 @@ int main(int argc, char *argv[]) {
     freeGraph(graph);
     freeGraph(graphRightResults);
 
-
-
     return 0;
 }
