@@ -2,7 +2,7 @@
 #include <time.h>
 #include <string.h>
 
-int changes;
+static int changes;
 
 /// @brief This is the base of the knn algorithm
 /// @param graph 
@@ -11,7 +11,6 @@ int changes;
 void knn_improved_algorithm(Graph** graph, int K, String distance_function){
 
     KRandomNodes(graph, K, distance_function);
-    printf("after KRandomNodes\n");
     
     Node * tempNode = (*graph)->nodes;    
     
@@ -68,7 +67,6 @@ void changeNeighbors(Graph** graph) {
                 if (nameOfDeletedNeighbor != -1) {
                     deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, tempNode2->nodeNameInt); //delete reverse
                 }
-        
                 changes++;
             }
             // in tempNode1 we add tempNode2 as neighbor
@@ -81,56 +79,78 @@ void changeNeighbors(Graph** graph) {
                 if (nameOfDeletedNeighbor != -1) {
                     deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, tempNode1->nodeNameInt); //delete reverse
                 }
-        
                 changes++;
             }
-
             tempCost = tempCost->next;
         }
-        // next node
         tempNode = tempNode->next;
     }
-
 }
+
+
 
 void localJoin(Node** node, String distance_function) { 
     //TODO: for neighbors+reverse find distances in pairs
     NodeNeighborsLinkedList* temp = (*node)->neighbors;
-    // printf("1\n");
     while(temp != NULL) {
         NodeNeighborsLinkedList* tempNeig = (*node)->neighbors;
         while(tempNeig != NULL) {
             int nodeName1 = temp->node->nodeNameInt;
             int nodeName2 = tempNeig->node->nodeNameInt;
 
-            if ( nodeName1 != nodeName2 /*&& incrementalSearch() == 0 */) {
+            if ( nodeName1 != nodeName2 && incrementalSearch((*node)->neighbors, nodeName1, nodeName2) == 1 ) {
                 double cost = distance(temp->node->dimension, tempNeig->node->dimension, distance_function);
                 addCost(&((*node)->cost), nodeName1, nodeName2, cost);
+
+                // Update the flags
+                tempNeig->flag = 0;
+                temp->flag = 0;
             }
             tempNeig = tempNeig->next;
         }
-        // printf("2\n");
         NodeNeighborsLinkedList* tempRev = (*node)->reversedNeighbors;
         while (tempRev != NULL) {
             int nodeName3 = temp->node->nodeNameInt;
             int nodeName4 = tempRev->node->nodeNameInt;
 
-            if (nodeName3 != nodeName4 /*&& incrementalSearch() == 0 */) {
+            if (nodeName3 != nodeName4 && incrementalSearch((*node)->reversedNeighbors, nodeName3, nodeName4) == 1) {
                 double cost = distance(temp->node->dimension, tempRev->node->dimension, distance_function);
                 addCost(&((*node)->cost), nodeName3, nodeName4, cost);
+                
+                // Update the flags
+                tempRev->flag = 0;
+                temp->flag = 0;
             }
             tempRev = tempRev->next;
         }
-        // printf("3\n");
         temp = temp->next;
     } 
-    // printf("4\n");
 }
 
-//incrementalSearch
+
+int incrementalSearch(NodeNeighborsLinkedList* neighbor, int node1Name, int node2Name) {
+    NodeNeighborsLinkedList* tempNeighbor = neighbor;
+    NodeNeighborsLinkedList* tempNeighbor2 = neighbor;
+
+    while (tempNeighbor != NULL && tempNeighbor->node->nodeNameInt != node1Name) {
+        tempNeighbor = tempNeighbor->next;
+    }
+
+    while (tempNeighbor2 != NULL && tempNeighbor2->node->nodeNameInt != node2Name) {
+        tempNeighbor2 = tempNeighbor2->next;
+    }
+    // printf("-- flag of tempNode:%d %d - flag of tempNode2:%d %d\n", tempNeighbor->node->nodeNameInt, tempNeighbor->flag, tempNeighbor2->node->nodeNameInt, tempNeighbor2->flag);
+
+    if (tempNeighbor == NULL || tempNeighbor2 == NULL) {
+        return -1; // One or both nodes not found
+    }
+
+    if (tempNeighbor->flag == 0 || tempNeighbor2->flag == 0)
+        return 0; // At least one flag is false, local join not allowed
+    return 1; // Both flags are true, local join allowed
+
+}
+
 
 //sampling
 //earlyTermination
-
-
-

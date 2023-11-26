@@ -8,7 +8,7 @@ CC = gcc
 
 # Compile options. Το -I<dir> tells to compiler where to find the include files
 # -Werror when complite code add -Werror 
-CFLAGS = -Wall  -g -I$(INCLUDE)
+CFLAGS = -Wall -Werror -g -I$(INCLUDE)
 LDFLAGS = -lm -fsanitize=address
 
 # .o files

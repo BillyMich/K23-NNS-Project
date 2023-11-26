@@ -3,7 +3,7 @@
 #include <string.h>
 
 double** matrixNodes;
-int changes;
+static int changes;
 
 
 /// @brief This is the base of the knn algorithm
