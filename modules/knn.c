@@ -118,16 +118,21 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
-
+    if(K > numNodes){
+        fprintf(stderr, "Too many Neighbors. The Nodes are %d\n", numNodes);
+        exit(EXIT_FAILURE);
+    }
     for(int numNode = 0; numNode < numNodes; numNode++){
         int usedNumbers[K];
 
         for (int i = 0; i < K; i++) {
+
             int randomNumber;
             do {
-                randomNumber = rand() % numNodes;
-            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
+                randomNumber = rand() % numNodes; 
+                // printf("Node = %d ------------ randomNum = %d \n", numNodes, randomNumber);
 
+            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
             usedNumbers[i] = randomNumber;
 
             Node* neighborNode = (*graph)->nodes;

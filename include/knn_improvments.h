@@ -9,7 +9,7 @@ void changeNeighbors(Graph** graph);
 
 void localJoin(Node** node, String distance_function);
 
-int incrementalSearch(NodeNeighborsLinkedList* neighbor, int node1Name, int node2Name);
+int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedList* neighbor2);
 
 //sampling
 //earlyTermination

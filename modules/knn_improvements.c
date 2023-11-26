@@ -11,7 +11,7 @@ static int changes;
 void knn_improved_algorithm(Graph** graph, int K, String distance_function){
 
     KRandomNodes(graph, K, distance_function);
-    
+
     Node * tempNode = (*graph)->nodes;    
     
     do {
@@ -90,7 +90,6 @@ void changeNeighbors(Graph** graph) {
 
 
 void localJoin(Node** node, String distance_function) { 
-    //TODO: for neighbors+reverse find distances in pairs
     NodeNeighborsLinkedList* temp = (*node)->neighbors;
     while(temp != NULL) {
         NodeNeighborsLinkedList* tempNeig = (*node)->neighbors;
@@ -98,7 +97,7 @@ void localJoin(Node** node, String distance_function) {
             int nodeName1 = temp->node->nodeNameInt;
             int nodeName2 = tempNeig->node->nodeNameInt;
 
-            if ( nodeName1 != nodeName2 && incrementalSearch((*node)->neighbors, nodeName1, nodeName2) == 1 ) {
+            if ( nodeName1 != nodeName2 && incrementalSearch(tempNeig, temp) == 1 ) {
                 double cost = distance(temp->node->dimension, tempNeig->node->dimension, distance_function);
                 addCost(&((*node)->cost), nodeName1, nodeName2, cost);
 
@@ -113,10 +112,10 @@ void localJoin(Node** node, String distance_function) {
             int nodeName3 = temp->node->nodeNameInt;
             int nodeName4 = tempRev->node->nodeNameInt;
 
-            if (nodeName3 != nodeName4 && incrementalSearch((*node)->reversedNeighbors, nodeName3, nodeName4) == 1) {
+            if (nodeName3 != nodeName4 && incrementalSearch(tempRev, temp) == 1) {
                 double cost = distance(temp->node->dimension, tempRev->node->dimension, distance_function);
                 addCost(&((*node)->cost), nodeName3, nodeName4, cost);
-                
+
                 // Update the flags
                 tempRev->flag = 0;
                 temp->flag = 0;
@@ -128,25 +127,15 @@ void localJoin(Node** node, String distance_function) {
 }
 
 
-int incrementalSearch(NodeNeighborsLinkedList* neighbor, int node1Name, int node2Name) {
-    NodeNeighborsLinkedList* tempNeighbor = neighbor;
-    NodeNeighborsLinkedList* tempNeighbor2 = neighbor;
+int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedList* neighbor2) {
 
-    while (tempNeighbor != NULL && tempNeighbor->node->nodeNameInt != node1Name) {
-        tempNeighbor = tempNeighbor->next;
-    }
-
-    while (tempNeighbor2 != NULL && tempNeighbor2->node->nodeNameInt != node2Name) {
-        tempNeighbor2 = tempNeighbor2->next;
-    }
-    // printf("-- flag of tempNode:%d %d - flag of tempNode2:%d %d\n", tempNeighbor->node->nodeNameInt, tempNeighbor->flag, tempNeighbor2->node->nodeNameInt, tempNeighbor2->flag);
-
-    if (tempNeighbor == NULL || tempNeighbor2 == NULL) {
+    if (neighbor1 == NULL || neighbor2 == NULL) {
         return -1; // One or both nodes not found
     }
 
-    if (tempNeighbor->flag == 0 || tempNeighbor2->flag == 0)
+    if (neighbor1->flag == 0 && neighbor2->flag == 0){
         return 0; // At least one flag is false, local join not allowed
+    }
     return 1; // Both flags are true, local join allowed
 
 }

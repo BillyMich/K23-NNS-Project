@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
     Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
     
-    FindAllRightNeighbors(graphRightResults);
+    FindAllRightNeighbors(graphRightResults, distance_function);
 
 
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     printf("\n~ Acurate by %f %% ~\n",accurationRate);
 
     writeGraphToFile(graph, "Graph.txt"); 
-    writeGraphToFile(graphRightResults, "Graph2.txt"); 
+    writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
 
     freeGraph(graph);
     freeGraph(graphRightResults);
