@@ -36,8 +36,8 @@ EXECNEI = neighbours_test
 EXECMATH = mathFunctions_test
 
 # Args for examples
-ARGSEUCL = $(DATASETS)/asciiData3.bin 1 100 euclidean
-ARGSMAN = $(DATASETS)/asciiData3.bin 1 100 manhattan
+ARGSEUCL = $(DATASETS)/asciiData3.bin 2 50 euclidean
+ARGSMAN = $(DATASETS)/asciiData3.bin 2 50 manhattan
 
 all: $(EXEC) $(EXECG) $(EXECN) $(EXECD)
 
@@ -91,3 +91,4 @@ $(EXECMATH): $(OBJSMATH)
 
 clean:
 	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)
+	rm *.txt

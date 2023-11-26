@@ -28,64 +28,18 @@ int main(int argc, char *argv[]) {
     knn_end = clock();
     printf("Time for KNN algorithm: %lf sec\n", (double)(knn_end - knn_start) / CLOCKS_PER_SEC);
     
-    // Prints for the graph from KNN 
-
-    // Node* node = &(*graph->nodes);
-    // while(node != NULL){
-    //     printf("Node: %d \n", node->nodeNameInt);
-    //     if (node->neighbors != NULL) {
-    //         printf("Neighbors of Node: \n");
-    //         NodeNeighborsLinkedList* neighbors = node->neighbors;
-    //         while (neighbors != NULL) {
-    //             printf("%d --- with cost %f\n", neighbors->node->nodeNameInt, neighbors->cost);
-    //             neighbors = neighbors->next;
-    //         }
-    //     }
-        // if (node->reversedNeighbors != NULL) {
-        //     printf("Reversed neighbors of Node: \n");
-        //     NodeNeighborsLinkedList* reversedNeighbors = node->reversedNeighbors;
-        //     while (reversedNeighbors != NULL) {
-        //         printf("%d --- with cost %f\n", reversedNeighbors->node->nodeNameInt, reversedNeighbors->cost);
-        //         reversedNeighbors = reversedNeighbors->next;
-        //     }
-        // }
-    //     node = node->next;
-    // }
-
-    // printf("We created the graph!\n");
 
     Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
     
     FindAllRightNeighbors(graphRightResults);
 
-    // prints the graph with the right results
-
-    // Node* node2 = &(*graphRightResults->nodes);
-    // while(node2 != NULL){
-    //     printf("Node: %d \n", node2->nodeNameInt);
-    //     if (node2->neighbors != NULL) {
-    //         printf("Neighbors of Node: \n");
-    //         NodeNeighborsLinkedList* neighbors = node2->neighbors;
-    //         while (neighbors != NULL) {
-    //             printf("%d --- with cost %f\n", neighbors->node->nodeNameInt, neighbors->cost);
-    //             neighbors = neighbors->next;
-    //         }
-    //     }
-    //     if (node2->reversedNeighbors != NULL) {
-    //         printf("Reversed neighbors of Node: \n");
-    //         NodeNeighborsLinkedList* reversedNeighbors = node2->reversedNeighbors;
-    //         while (reversedNeighbors != NULL) {
-    //             printf("%d --- with cost %f\n", reversedNeighbors->node->nodeNameInt, reversedNeighbors->cost);
-    //             reversedNeighbors = reversedNeighbors->next;
-    //         }
-    //     }
-    //     node2 = node2->next;
-    // }
 
 
     double accurationRate =findAccurationResult(graph , graphRightResults);
     printf("\n~ Acurate by %f %% ~\n",accurationRate);
-    
+
+    writeGraphToFile(graph, "Graph.txt"); 
+    writeGraphToFile(graphRightResults, "Graph2.txt"); 
 
     freeGraph(graph);
     freeGraph(graphRightResults);

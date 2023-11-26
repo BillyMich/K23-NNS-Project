@@ -22,5 +22,6 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults);
 void freeGraph(Graph* graph);
 
 void makeFile(String filename);
+void writeGraphToFile(Graph* graph, const char* filename);
 
 #endif // GRAPH_H
