@@ -12,6 +12,7 @@ typedef struct Node Node;
 typedef struct NodeNeighborsLinkedList {
     Node* node;
     double cost;
+    int flag;
     NodeNeighborsLinkedList* next;
 }NodeNeighborsLinkedList;
 
@@ -26,4 +27,3 @@ void deleteReverseNeighbor(Node** graph, int name, int nodeNameReverse);
 void freeNeighbors(NodeNeighborsLinkedList* destination);
 
 #endif 
-

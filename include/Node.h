@@ -6,6 +6,7 @@
 #include "common_types.h"
 #include "Dimension.h"
 #include "Neighbors.h"
+#include "Cost.h"
 
 typedef struct Node Node;
 typedef struct NodeNeighborsLinkedList NodeNeighborsLinkedList;
@@ -15,6 +16,7 @@ typedef struct Node {
     Dimension* dimension;
     NodeNeighborsLinkedList* neighbors;
     NodeNeighborsLinkedList* reversedNeighbors;
+    Cost* cost;
     Node* next;
 }Node;
 

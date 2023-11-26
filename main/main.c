@@ -3,6 +3,7 @@
 #include "../include/Graph.h"
 #include "../include/FindAllRightNeighborsAlgorithm.h"
 #include "../include/knn.h"
+#include "../include/knn_improvments.h"
 #include <time.h>
 
 int main(int argc, char *argv[]) {
@@ -20,8 +21,9 @@ int main(int argc, char *argv[]) {
     // Measure real time for KNN algorithm
     clock_t knn_start, knn_end;
     knn_start = clock();
-    
-    knn_algorithm(&graph, K, distance_function);
+
+    knn_improved_algorithm(&graph, K, distance_function);
+    // knn_algorithm(&graph, K, distance_function);
 
     knn_end = clock();
     printf("Time for KNN algorithm: %lf sec\n", (double)(knn_end - knn_start) / CLOCKS_PER_SEC);
@@ -29,7 +31,7 @@ int main(int argc, char *argv[]) {
 
     Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
     
-    FindAllRightNeighbors(graphRightResults);
+    FindAllRightNeighbors(graphRightResults, distance_function);
 
 
 
@@ -37,7 +39,7 @@ int main(int argc, char *argv[]) {
     printf("\n~ Acurate by %f %% ~\n",accurationRate);
 
     writeGraphToFile(graph, "Graph.txt"); 
-    writeGraphToFile(graphRightResults, "Graph2.txt"); 
+    writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
 
     freeGraph(graph);
     freeGraph(graphRightResults);

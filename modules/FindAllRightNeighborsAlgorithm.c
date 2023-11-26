@@ -6,7 +6,7 @@
 #include "../include/FindAllRightNeighborsAlgorithm.h"
 
 
-void FindAllRightNeighbors(Graph * graph)
+void FindAllRightNeighbors(Graph * graph, String distance_function)
 {
     Node *headNode = graph->nodes;
     Node *tempNode = graph->nodes;
@@ -20,7 +20,7 @@ void FindAllRightNeighbors(Graph * graph)
         //Here we find the cost of the 2 nodes (how close is the neightbor)
         if (tempNode->nodeNameInt != tempNodeFor->nodeNameInt)
         {
-            OrderNodesByNeighbor(tempNode,tempNodeFor);
+            OrderNodesByNeighbor(tempNode,tempNodeFor, distance_function);
         }
     
 
@@ -43,7 +43,7 @@ void FindAllRightNeighbors(Graph * graph)
 }
 
 
-void OrderNodesByNeighbor(Node *dest , Node *src){
-    addNeighbor(&dest->neighbors,src,euclidean_distance(dest->dimension,src->dimension));
+void OrderNodesByNeighbor(Node *dest , Node *src, String distance_function){
+    addNeighbor(&dest->neighbors,src, distance(dest->dimension,src->dimension, distance_function));
     //Here or in the addNeigbor i would like to add a sorting method base on distance
 }

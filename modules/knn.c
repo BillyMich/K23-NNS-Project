@@ -3,7 +3,7 @@
 #include <string.h>
 
 double** matrixNodes;
-int changes;
+static int changes;
 
 
 /// @brief This is the base of the knn algorithm
@@ -18,6 +18,13 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     // double countLevel=0;
     // int round = 0;
     
+    // matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
+    // for(int i = 0; i < (*graph)->numNodes; i++){
+    //     matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
+    //     for(int j = 0; j < (*graph)->numNodes; j++){
+    //         matrixNodes[i][j] = -1.00;
+    //     }
+    // }
     
     do {
         changes = 0;
@@ -111,24 +118,21 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
-
-    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
-    for(int i = 0; i < (*graph)->numNodes; i++){
-        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
-        for(int j = 0; j < (*graph)->numNodes; j++){
-            matrixNodes[i][j] = -1.00;
-        }
+    if(K > numNodes){
+        fprintf(stderr, "Too many Neighbors. The Nodes are %d\n", numNodes);
+        exit(EXIT_FAILURE);
     }
-
     for(int numNode = 0; numNode < numNodes; numNode++){
         int usedNumbers[K];
 
         for (int i = 0; i < K; i++) {
+
             int randomNumber;
             do {
-                randomNumber = rand() % numNodes;
-            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
+                randomNumber = rand() % numNodes; 
+                // printf("Node = %d ------------ randomNum = %d \n", numNodes, randomNumber);
 
+            } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
             usedNumbers[i] = randomNumber;
 
             Node* neighborNode = (*graph)->nodes;
@@ -139,8 +143,8 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 
             double cost = distance(currentNode->dimension, neighborNode->dimension, distance_function);
             
-            matrixNodes[numNode][randomNumber] = cost;
-            matrixNodes[randomNumber][numNode] = cost;
+            // matrixNodes[numNode][randomNumber] = cost;
+            // matrixNodes[randomNumber][numNode] = cost;
             
             addNeighbor(&(currentNode->neighbors), neighborNode, cost);
             addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
