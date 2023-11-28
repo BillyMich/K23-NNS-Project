@@ -8,7 +8,7 @@ static int changes;
 /// @param graph 
 /// @param K 
 /// @param distance_function 
-void knn_improved_algorithm(Graph** graph, int K, String distance_function){
+void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p){
 
     KRandomNodes(graph, K, distance_function);
 
@@ -16,7 +16,7 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function){
     
     do {
         changes = 0;
-        while (tempNode !=NULL) {
+        while (tempNode != NULL) {
             localJoin(&tempNode, distance_function);
             tempNode = tempNode->next;
         }
@@ -142,4 +142,24 @@ int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedLis
 
 
 //sampling
+NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors, NodeNeighborsLinkedList** copiedNeighbors, int pK){
+    NodeNeighborsLinkedList* tempNeighbors = neighbors;
+    NodeNeighborsLinkedList* samplingNeighbors = NULL;
+
+
+    while (tempNeighbors != NULL && pK > 0) {
+        if(tempNeighbors->flag == 1){
+            samplingNeighbors = tempNeighbors;
+            memcpy(&copiedNeighbors, samplingNeighbors, sizeof(NodeNeighborsLinkedList));
+            pK--;
+
+        }
+
+        tempNeighbors = tempNeighbors->next;
+    }
+
+    return samplingNeighbors;
+    
+}
+
 //earlyTermination
