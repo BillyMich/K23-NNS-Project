@@ -142,24 +142,51 @@ int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedLis
 
 
 //sampling
-NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors, NodeNeighborsLinkedList** copiedNeighbors, int pK){
-    NodeNeighborsLinkedList* tempNeighbors = neighbors;
-    NodeNeighborsLinkedList* samplingNeighbors = NULL;
+NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors/*, NodeNeighborsLinkedList** copiedNeighbors*/, int pK){
+    NodeNeighborsLinkedList* tempNeighbor = neighbors;
+    // NodeNeighborsLinkedList* samplingNeighbors = NULL;
+    NodeNeighborsLinkedList* samplingNeighborsHead = NULL;
 
+     while (tempNeighbor != NULL && pK > 0) {
+        if (tempNeighbor->flag == 1) {
+            // NodeNeighborsLinkedList* newNeighbor = malloc(sizeof(NodeNeighborsLinkedList));
+            // Assuming NodeNeighborsLinkedList has a data field, you might need to copy the data appropriately
+            // memcpy(newNeighbor, tempNeighbor, sizeof(NodeNeighborsLinkedList));
 
-    while (tempNeighbors != NULL && pK > 0) {
-        if(tempNeighbors->flag == 1){
-            samplingNeighbors = tempNeighbors;
-            memcpy(&copiedNeighbors, samplingNeighbors, sizeof(NodeNeighborsLinkedList));
+            addNeighbor(&samplingNeighborsHead, tempNeighbor->node, tempNeighbor->cost); //free aster use
+            
+            // newNeighbor->next = NULL;
+
+            // if (samplingNeighborsHead == NULL) {
+            //     samplingNeighborsHead = newNeighbor;
+            //     samplingNeighbors = samplingNeighborsHead;
+            // } else {
+            //     samplingNeighbors->next = newNeighbor;
+            //     samplingNeighbors = newNeighbor;
+            // }
+
             pK--;
-
         }
-
-        tempNeighbors = tempNeighbors->next;
+        tempNeighbor = tempNeighbor->next;
     }
+    return samplingNeighborsHead; 
 
-    return samplingNeighbors;
+//if the above doesnt work
+    // int trueNeighbors[pK]; //maybe malloc in order to return it and free after use
+    // for (int i = 0; i < pK; i++) {
+    //     trueNeighbors[i] = -1;
+    // }
+
+    // int count = 0;
     
+    // while (tempNeighbor != NULL && count < pK) {
+    //     if(tempNeighbor->flag == 1){
+    //         trueNeighbors[count] = tempNeighbor->node->nodeNameInt;
+    //         count++;
+    //     }
+    //     tempNeighbor = tempNeighbor->next;
+    // }
+    // return trueNeighbors;     
 }
 
 //earlyTermination
