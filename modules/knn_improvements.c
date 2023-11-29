@@ -12,12 +12,14 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
 
     KRandomNodes(graph, K, distance_function);
 
-    Node * tempNode = (*graph)->nodes;    
+    Node * tempNode = (*graph)->nodes;
     
+    int pK = p*K;
+
     do {
         changes = 0;
         while (tempNode != NULL) {
-            localJoin(&tempNode, distance_function);
+            localJoin(&tempNode, distance_function, pK);
             tempNode = tempNode->next;
         }
         
@@ -87,10 +89,12 @@ void changeNeighbors(Graph** graph) {
     }
 }
 
+//functions for improvements
 
-
-void localJoin(Node** node, String distance_function) { 
-    NodeNeighborsLinkedList* temp = (*node)->neighbors;
+void localJoin(Node** node, String distance_function, int pK) { 
+    // NodeNeighborsLinkedList* temp = (*node)->neighbors // without sampling
+    NodeNeighborsLinkedList* head = sampling((*node)->neighbors, pK);
+    NodeNeighborsLinkedList* temp = head;
     while(temp != NULL) {
         NodeNeighborsLinkedList* tempNeig = (*node)->neighbors;
         while(tempNeig != NULL) {
@@ -124,6 +128,7 @@ void localJoin(Node** node, String distance_function) {
         }
         temp = temp->next;
     } 
+    freeNeighbors(head);
 }
 
 
@@ -142,29 +147,13 @@ int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedLis
 
 
 //sampling
-NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors/*, NodeNeighborsLinkedList** copiedNeighbors*/, int pK){
+NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors, int pK){
     NodeNeighborsLinkedList* tempNeighbor = neighbors;
-    // NodeNeighborsLinkedList* samplingNeighbors = NULL;
     NodeNeighborsLinkedList* samplingNeighborsHead = NULL;
 
      while (tempNeighbor != NULL && pK > 0) {
         if (tempNeighbor->flag == 1) {
-            // NodeNeighborsLinkedList* newNeighbor = malloc(sizeof(NodeNeighborsLinkedList));
-            // Assuming NodeNeighborsLinkedList has a data field, you might need to copy the data appropriately
-            // memcpy(newNeighbor, tempNeighbor, sizeof(NodeNeighborsLinkedList));
-
-            addNeighbor(&samplingNeighborsHead, tempNeighbor->node, tempNeighbor->cost); //free aster use
-            
-            // newNeighbor->next = NULL;
-
-            // if (samplingNeighborsHead == NULL) {
-            //     samplingNeighborsHead = newNeighbor;
-            //     samplingNeighbors = samplingNeighborsHead;
-            // } else {
-            //     samplingNeighbors->next = newNeighbor;
-            //     samplingNeighbors = newNeighbor;
-            // }
-
+            addNeighbor(&samplingNeighborsHead, tempNeighbor->node, tempNeighbor->cost); //free after use
             pK--;
         }
         tempNeighbor = tempNeighbor->next;
