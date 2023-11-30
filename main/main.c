@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
     int K = atoi(argv[3]);
     String distance_function = argv[4];
     double p = atof(argv[5]);
+    double earlyTerminationParameter = atof(argv[6]);
 
     // printf("Starting Creating Graph\n");
 
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]) {
     clock_t knn_start, knn_end;
     knn_start = clock();
 
-    knn_improved_algorithm(&graph, K, distance_function, p);
+    knn_improved_algorithm(&graph, K, distance_function, p,earlyTerminationParameter);
     // knn_algorithm(&graph, K, distance_function);
 
     knn_end = clock();

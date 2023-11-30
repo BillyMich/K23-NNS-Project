@@ -3,7 +3,7 @@
 
 #include "../include/knn.h"
 
-void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p);
+void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p,double earlyTerminationParameter);
 
 void changeNeighbors(Graph** graph);
 
