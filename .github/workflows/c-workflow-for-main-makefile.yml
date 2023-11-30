@@ -2,7 +2,7 @@ name: C CI for Main Makefile
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: [ "Master" ]
 
 jobs:
   build-and-test:
