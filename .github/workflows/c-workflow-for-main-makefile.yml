@@ -19,7 +19,7 @@ jobs:
       run: cd main
 
     - name: Run euclidean 
-      run: make run-euclidean
+      run: cd main;make run-euclidean
 
     - name: Run manhattan
-      run: make run-manhattan
+      run: cd main;make run-manhattan
