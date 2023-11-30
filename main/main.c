@@ -37,7 +37,12 @@ int main(int argc, char *argv[]) {
 
 
     double accurationRate =findAccurationResult(graph , graphRightResults);
+    double accurationSuperRate =findAccurationResultSuperAccurate(graph , graphRightResults);
+
     printf("\n~ Acurate by %f %% ~\n",accurationRate);
+
+    printf("\n~ Acurate Supper  by %f %% ~\n",accurationSuperRate);
+
 
     writeGraphToFile(graph, "Graph.txt"); 
     writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
