@@ -69,8 +69,11 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     return graph;
 }
 
-
-double findAccurationResult(Graph* graph , Graph* graphRightResults){
+/// @brief  Function to find the accuration result of the KNS algorithm
+/// @param graph 
+/// @param graphRightResults 
+/// @return 
+double findAccurationResultSuperAccurate(Graph* graph , Graph* graphRightResults){
 
     Node * tempNodeKNS = graph->nodes;
     Node * tempNodeRight = graphRightResults->nodes;
@@ -97,6 +100,44 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults){
     return  (correct / count )* 100;
 }
 
+
+/// @brief  Function to find the accuration result of the KNS algorithm
+/// @param graph 
+/// @param graphRightResults 
+/// @return 
+double findAccurationResult(Graph* graph , Graph* graphRightResults){
+
+    Node * tempNodeKNS = graph->nodes;
+    Node * tempNodeRight = graphRightResults->nodes;
+    double count = 0 ;
+    double correct = 0;
+
+    while (tempNodeKNS != NULL)
+    {
+        
+        NodeNeighborsLinkedList * tempNodeListKNS = tempNodeKNS->neighbors; 
+        NodeNeighborsLinkedList * tempNodeListRight = tempNodeRight->neighbors;
+
+        while (tempNodeListKNS !=NULL)
+        {
+            count++;
+            while (tempNodeListRight != NULL)
+            {
+                if (tempNodeListKNS->node->nodeNameInt == tempNodeListRight->node->nodeNameInt) correct++;
+                tempNodeListRight = tempNodeListRight->next;
+            }
+
+            tempNodeListRight = tempNodeRight->neighbors;;
+            tempNodeListKNS = tempNodeListKNS->next;
+        }
+
+        tempNodeRight = tempNodeRight->next;
+        tempNodeKNS = tempNodeKNS->next;
+    }
+    
+    
+    return  (correct / count )* 100;
+}
 
 // Function to write the graph data to a file
 void writeGraphToFile(Graph* graph, const char* filename) {

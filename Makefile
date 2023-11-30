@@ -36,8 +36,8 @@ EXECNEI = neighbours_test
 EXECMATH = mathFunctions_test
 
 # Args for examples
-ARGSEUCL = $(DATASETS)/asciiData3.bin 2 50 euclidean
-ARGSMAN = $(DATASETS)/asciiData3.bin 2 50 manhattan
+ARGSEUCL = $(DATASETS)/asciiData3.bin 2 200 euclidean
+ARGSMAN = $(DATASETS)/asciiData3.bin 2 200 manhattan
 
 all: $(EXEC) $(EXECG) $(EXECN) $(EXECD)
 
