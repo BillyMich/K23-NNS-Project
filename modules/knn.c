@@ -118,6 +118,8 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
+    printf("The Nodes are %d\n", numNodes);
+
     if(K > numNodes){
         fprintf(stderr, "Too many Neighbors. The Nodes are %d\n", numNodes);
         exit(EXIT_FAILURE);

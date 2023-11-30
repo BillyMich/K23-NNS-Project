@@ -8,16 +8,19 @@ static int changes;
 /// @param graph 
 /// @param K 
 /// @param distance_function 
-void knn_improved_algorithm(Graph** graph, int K, String distance_function){
+void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p){
 
     KRandomNodes(graph, K, distance_function);
 
-    Node * tempNode = (*graph)->nodes;    
+    Node * tempNode = (*graph)->nodes;
     
+    int pK = p*K;
+    printf("The pK (neighbor) nodes for Sampling is %d\n", pK);
+
     do {
         changes = 0;
-        while (tempNode !=NULL) {
-            localJoin(&tempNode, distance_function);
+        while (tempNode != NULL) {
+            localJoin(&tempNode, distance_function, pK);
             tempNode = tempNode->next;
         }
         
@@ -33,7 +36,7 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function){
         }
         tempNode = (*graph)->nodes;
 
-        printf("---- changes: %d\n", changes);
+        printf("Changes: %d\n", changes);
     } while (changes>0);
     
 }
@@ -87,10 +90,16 @@ void changeNeighbors(Graph** graph) {
     }
 }
 
+//functions for improvements
 
+void localJoin(Node** node, String distance_function, int pK) { 
+    // without sampling, we use the neighbours of the Node 
+    // NodeNeighborsLinkedList* temp = (*node)->neighbors;
+    
+    // With the sampling, we create a new list of the pK neighbors (that have the flag True)
+    NodeNeighborsLinkedList* head = sampling((*node)->neighbors, pK);
+    NodeNeighborsLinkedList* temp = head;
 
-void localJoin(Node** node, String distance_function) { 
-    NodeNeighborsLinkedList* temp = (*node)->neighbors;
     while(temp != NULL) {
         NodeNeighborsLinkedList* tempNeig = (*node)->neighbors;
         while(tempNeig != NULL) {
@@ -124,6 +133,8 @@ void localJoin(Node** node, String distance_function) {
         }
         temp = temp->next;
     } 
+    // free the list of the Neighbours with true flags
+    freeNeighbors(head);
 }
 
 
@@ -142,4 +153,34 @@ int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedLis
 
 
 //sampling
-//earlyTermination
+NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors, int pK) {
+    NodeNeighborsLinkedList* tempNeighbor = neighbors;
+    NodeNeighborsLinkedList* samplingNeighborsHead = NULL;
+
+    while (tempNeighbor != NULL && pK > 0) {
+        if (tempNeighbor->flag == 1) {
+            addNeighbor(&samplingNeighborsHead, tempNeighbor->node, tempNeighbor->cost); //free after use
+            pK--;
+        }
+        tempNeighbor = tempNeighbor->next;
+    }
+    return samplingNeighborsHead; 
+
+    //if the above doesnt work
+    
+    // int trueNeighbors[pK]; //maybe malloc in order to return it and free after use
+    // for (int i = 0; i < pK; i++) {
+    //     trueNeighbors[i] = -1;
+    // }
+
+    // int count = 0;
+    
+    // while (tempNeighbor != NULL && count < pK) {
+    //     if(tempNeighbor->flag == 1){
+    //         trueNeighbors[count] = tempNeighbor->node->nodeNameInt;
+    //         count++;
+    //     }
+    //     tempNeighbor = tempNeighbor->next;
+    // }
+    // return trueNeighbors;     
+}
