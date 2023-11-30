@@ -8,12 +8,14 @@ static int changes;
 /// @param graph 
 /// @param K 
 /// @param distance_function 
-void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p){
+void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p,double earlyTerminationParameter){
 
     KRandomNodes(graph, K, distance_function);
 
     Node * tempNode = (*graph)->nodes;
     
+    double changerPersent;
+
     int pK = p*K;
     printf("The pK (neighbor) nodes for Sampling is %d\n", pK);
 
@@ -35,9 +37,14 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
             tempNode = tempNode->next;
         }
         tempNode = (*graph)->nodes;
-
+        changerPersent =  (double) changes /(double)(*graph)->numNodes * K ;
+        
         printf("Changes: %d\n", changes);
-    } while (changes>0);
+        printf("Changes-early-termination: %f\n", changerPersent);
+
+
+
+    } while (changerPersent>earlyTerminationParameter);
     
 }
 
