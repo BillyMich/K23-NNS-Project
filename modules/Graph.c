@@ -45,10 +45,12 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     Node** headNode = &graph->nodes; 
     int flag = 0; // Flag for feof  
 
+    Dimension* headDimension = NULL;
+
     // Read and process data from the binary file
     while (!feof(file)) {
         
-        Dimension* headDimension = NULL;
+        headDimension = NULL;
 
         for (int i = 0; i < dimensions; i++){
             fread(&coordinate, sizeof(double), 1, file); // Read one double at a time
@@ -64,6 +66,8 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
             graph->numNodes++;
         }
     }
+
+    freeDimensions(headDimension);
 
     fclose(file);
     return graph;
