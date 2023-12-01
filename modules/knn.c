@@ -15,21 +15,18 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
     KRandomNodes(graph, K, distance_function);
     
     Node * tempNode = (*graph)->nodes;
-    // double countLevel=0;
-    // int round = 0;
     
-    // matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
-    // for(int i = 0; i < (*graph)->numNodes; i++){
-    //     matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
-    //     for(int j = 0; j < (*graph)->numNodes; j++){
-    //         matrixNodes[i][j] = -1.00;
-    //     }
-    // }
+    matrixNodes = (double**)malloc((*graph)->numNodes*sizeof(double*));
+    for(int i = 0; i < (*graph)->numNodes; i++){
+        matrixNodes[i] = (double*)malloc((*graph)->numNodes*sizeof(double));
+        for(int j = 0; j < (*graph)->numNodes; j++){
+            matrixNodes[i][j] = -1.00;
+        }
+    }
     
     do {
         changes = 0;
-        // printf("%d\n", changes);
-        // printf("Started level : %d\n",++round);
+
         while (tempNode !=NULL) {
 
             NodeNeighborsLinkedList* tempNodeNeighborList = tempNode->reversedNeighbors;
@@ -47,15 +44,10 @@ void knn_algorithm(Graph** graph, int K, String distance_function){
             }
             
             tempNode = tempNode->next;
-            
-            // double percent  = (++countLevel/(double)(*graph)->numNodes) *100;
-            // printf("Finished %f %%\n",percent);
         }
 
-        // printf("-- this is count %d of round %d\n",changes,round);
         tempNode = (*graph)->nodes;
-        // countLevel=0;
-        // printf("%d\n", changes);
+        printf("%d\n", changes);
     } while (changes>0);
 
     for (int i = 0; i < (*graph)->numNodes; i++)
@@ -90,7 +82,6 @@ void checkNeighborofNeighbors(Graph** graph, Node** sourceNode, NodeNeighborsLin
         if (check(neighborName, (*sourceNode)->neighbors, sourceName, cost) == 0) {
             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost); //add the neighbor
             
-            //
             Node* temp = (*graph)->nodes;
             while (temp != NULL && temp->nodeNameInt != neighborName){     
                 temp = temp->next;
@@ -132,7 +123,6 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
             int randomNumber;
             do {
                 randomNumber = rand() % numNodes; 
-                // printf("Node = %d ------------ randomNum = %d \n", numNodes, randomNumber);
 
             } while (isNumberUsed(usedNumbers, i, randomNumber, numNode));   // Check if the number has been used before
             usedNumbers[i] = randomNumber;
@@ -144,9 +134,6 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
             }
 
             double cost = distance(currentNode->dimension, neighborNode->dimension, distance_function);
-            
-            // matrixNodes[numNode][randomNumber] = cost;
-            // matrixNodes[randomNumber][numNode] = cost;
             
             addNeighbor(&(currentNode->neighbors), neighborNode, cost);
             addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
