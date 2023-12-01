@@ -8,7 +8,7 @@ static int changes;
 /// @param graph 
 /// @param K 
 /// @param distance_function 
-void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p,double earlyTerminationParameter){
+void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p, double earlyTerminationParameter){
 
     KRandomNodes(graph, K, distance_function);
 
@@ -42,10 +42,7 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
         printf("Changes: %d\n", changes);
         printf("Changes-early-termination: %f\n", changerPersent);
 
-
-
     } while (changerPersent>earlyTerminationParameter);
-    
 }
 
 void changeNeighbors(Graph** graph) {
@@ -171,23 +168,5 @@ NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors, int pK) {
         }
         tempNeighbor = tempNeighbor->next;
     }
-    return samplingNeighborsHead; 
-
-    //if the above doesnt work
-    
-    // int trueNeighbors[pK]; //maybe malloc in order to return it and free after use
-    // for (int i = 0; i < pK; i++) {
-    //     trueNeighbors[i] = -1;
-    // }
-
-    // int count = 0;
-    
-    // while (tempNeighbor != NULL && count < pK) {
-    //     if(tempNeighbor->flag == 1){
-    //         trueNeighbors[count] = tempNeighbor->node->nodeNameInt;
-    //         count++;
-    //     }
-    //     tempNeighbor = tempNeighbor->next;
-    // }
-    // return trueNeighbors;     
+    return samplingNeighborsHead;     
 }

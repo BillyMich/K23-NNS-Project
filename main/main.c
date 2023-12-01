@@ -14,8 +14,6 @@ int main(int argc, char *argv[]) {
     double p = atof(argv[5]);
     double earlyTerminationParameter = atof(argv[6]);
 
-    // printf("Starting Creating Graph\n");
-
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
         
     printf("\n----- Starting KNN algorithm -----\n");
@@ -24,26 +22,21 @@ int main(int argc, char *argv[]) {
     clock_t knn_start, knn_end;
     knn_start = clock();
 
-    knn_improved_algorithm(&graph, K, distance_function, p,earlyTerminationParameter);
+    knn_improved_algorithm(&graph, K, distance_function, p, earlyTerminationParameter);
     // knn_algorithm(&graph, K, distance_function);
 
     knn_end = clock();
     printf("Time for KNN algorithm: %lf sec\n", (double)(knn_end - knn_start) / CLOCKS_PER_SEC);
     
-
     Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
     
     FindAllRightNeighbors(graphRightResults, distance_function);
 
+    double accurationRate = findAccurationResult(graph, graphRightResults);
+    double accurationSuperRate = findAccurationResultSuperAccurate(graph, graphRightResults);
 
-
-    double accurationRate =findAccurationResult(graph , graphRightResults);
-    double accurationSuperRate =findAccurationResultSuperAccurate(graph , graphRightResults);
-
-    printf("\n~ Acurate by %f %% ~\n",accurationRate);
-
-    printf("\n~ Acurate Supper  by %f %% ~\n",accurationSuperRate);
-
+    printf("\n~ Acurate by %f %% ~\n", accurationRate);
+    printf("~ Acurate Supper  by %f %% ~\n", accurationSuperRate);
 
     writeGraphToFile(graph, "Graph.txt"); 
     writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
