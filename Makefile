@@ -36,8 +36,8 @@ EXECNEI = neighbours_test
 EXECMATH = mathFunctions_test
 
 # Args for examples
-ARGSEUCL = $(DATASETS)/00000020.bin 10 65 euclidean 0.8 50.00
-ARGSMAN = $(DATASETS)/00001000-4.bin 100 399 manhattan 0.1 50.00
+ARGSEUCL = $(DATASETS)/00000020.bin 10 65 euclidean 0.8 0.001
+ARGSMAN = $(DATASETS)/00001000-4.bin 100 399 manhattan 0.1 0.001
 
 all: $(EXEC) $(EXECG) $(EXECN) $(EXECD)
 

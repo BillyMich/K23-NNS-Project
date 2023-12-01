@@ -37,7 +37,7 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
             tempNode = tempNode->next;
         }
         tempNode = (*graph)->nodes;
-        changerPersent =  (double) changes /(double)(*graph)->numNodes * K ;
+        changerPersent =  (double) changes / ((double)(*graph)->numNodes * K) ;
         
         printf("Changes: %d\n", changes);
         printf("Changes-early-termination: %f\n", changerPersent);
