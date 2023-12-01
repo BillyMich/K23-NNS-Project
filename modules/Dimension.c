@@ -15,13 +15,10 @@ Dimension* initDimension() {
 }
 
 void addDimension(Dimension** head, int dimValue, double val) {
-    //1. make the dimension
     Dimension* newDimension = initDimension();
-    //2. initialize dimension
     newDimension->dimensionValue = dimValue;
     newDimension->value = val;
-    //3. put dimension at the correct place
-    if (*head == NULL) { // the first node to be made
+    if (*head == NULL) {
         *head = newDimension;
     }
     else {

@@ -10,14 +10,10 @@ void FindAllRightNeighbors(Graph * graph, String distance_function)
 {
     Node *headNode = graph->nodes;
     Node *tempNode = graph->nodes;
-    //Find better way to call thos 
     Node *tempNodeFor = graph->nodes;
 
-    // int i = 0;
     while (tempNode !=NULL)
     {
-        // printf("%d\n",i++);
-        //Here we find the cost of the 2 nodes (how close is the neightbor)
         if (tempNode->nodeNameInt != tempNodeFor->nodeNameInt)
         {
             OrderNodesByNeighbor(tempNode,tempNodeFor, distance_function);
@@ -37,8 +33,6 @@ void FindAllRightNeighbors(Graph * graph, String distance_function)
         }   
     }
 
-    //need to implement!;
-    //writeNeightborsInAFile()
     
 }
 

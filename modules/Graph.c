@@ -25,7 +25,11 @@ void freeGraph(Graph* graph) {
     free(graph);
 }
 
-
+/// @brief This function creates a graph from given
+/// inputs
+/// @param filename 
+/// @param dimensions 
+/// @return 
 Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
@@ -109,7 +113,7 @@ double findAccurationResultSuperAccurate(Graph* graph , Graph* graphRightResults
 /// @param graph 
 /// @param graphRightResults 
 /// @return 
-double findAccurationResult(Graph* graph , Graph* graphRightResults){
+double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbors){
 
     Node * tempNodeKNS = graph->nodes;
     Node * tempNodeRight = graphRightResults->nodes;
@@ -125,12 +129,16 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults){
         while (tempNodeListKNS !=NULL)
         {
             count++;
-            while (tempNodeListRight != NULL)
-            {
-                if (tempNodeListKNS->node->nodeNameInt == tempNodeListRight->node->nodeNameInt) correct++;
-                tempNodeListRight = tempNodeListRight->next;
-            }
 
+            for (int  i = 0; i < neighbors; i++)
+            {
+                if (tempNodeListKNS->node->nodeNameInt == tempNodeListRight->node->nodeNameInt)
+                {   
+                    correct++;
+                    break;
+                }
+                tempNodeListRight = tempNodeListRight->next;            
+            }
             tempNodeListRight = tempNodeRight->neighbors;;
             tempNodeListKNS = tempNodeListKNS->next;
         }
@@ -138,9 +146,7 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults){
         tempNodeRight = tempNodeRight->next;
         tempNodeKNS = tempNodeKNS->next;
     }
-    
-    
-    return  (correct / count )* 100;
+        return  (correct / count )* 100;
 }
 
 // Function to write the graph data to a file

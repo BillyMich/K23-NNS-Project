@@ -18,7 +18,6 @@ int main(int argc, char *argv[]) {
         
     printf("\n----- Starting KNN algorithm -----\n");
 
-    // Measure real time for KNN algorithm
     clock_t knn_start, knn_end;
     knn_start = clock();
 
@@ -32,7 +31,7 @@ int main(int argc, char *argv[]) {
     
     FindAllRightNeighbors(graphRightResults, distance_function);
 
-    double accurationRate = findAccurationResult(graph, graphRightResults);
+    double accurationRate = findAccurationResult(graph, graphRightResults,K);
     double accurationSuperRate = findAccurationResultSuperAccurate(graph, graphRightResults);
 
     printf("\n~ Acurate by %f %% ~\n", accurationRate);

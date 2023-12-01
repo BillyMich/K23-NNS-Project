@@ -17,7 +17,7 @@ Graph* initGraph();
 
 Graph* createGraphFromBinaryFile(String filename, int dimensions);
 
-double findAccurationResult(Graph* graph , Graph* graphRightResults);
+double findAccurationResult(Graph* graph , Graph* graphRightResults,int neighbors);
 
 double findAccurationResultSuperAccurate(Graph* graph , Graph* graphRightResults);
 
