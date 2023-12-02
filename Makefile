@@ -41,8 +41,6 @@ EXECMATH = mathFunctions_test
 ARGSEUCL = $(DATASETS)/00000020.bin 10 65 euclidean 0.8 0.001
 ARGSMAN = $(DATASETS)/00001000-4.bin 100 399 manhattan 0.1 0.001
 
-all: $(EXEC) $(EXECG) $(EXECN) $(EXECD)
-
 run-euclidean: $(EXEC)
 	./$(EXEC) $(ARGSEUCL)
 
@@ -70,8 +68,13 @@ runNEI: $(EXECNEI)
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
-run-all: run-euclidean run-manhattan runKNN_imp runKNN runG runN runD runNEI runMath
+# for every .c file
+all: run-euclidean run-manhattan runKNN_imp runKNN runG runN runD runNEI runMath
 
+# for 2 "main"
+main-all: run-euclidean run-manhattan
+
+# for all tests
 run-all-tests: runKNN_imp runKNN runG runN runD runNEI runMath
 
 $(EXEC): $(OBJS)
