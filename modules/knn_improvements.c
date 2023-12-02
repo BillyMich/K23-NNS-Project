@@ -4,19 +4,19 @@
 
 static int changes;
 
-/// @brief This is the base of the knn algorithm
+/// @brief Main Function of KNN algorithm with improvements
 /// @param graph 
 /// @param K 
 /// @param distance_function 
 void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p, double earlyTerminationParameter){
 
+    // Using the existing function to "make" the random Nodes
     KRandomNodes(graph, K, distance_function);
 
     Node * tempNode = (*graph)->nodes;
     
-    double changerPersent;
-
     int pK = p*K;
+    double changerPersent;
     printf("The pK (neighbor) nodes for Sampling is %d\n", pK);
 
     do {
@@ -26,9 +26,9 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
             tempNode = tempNode->next;
         }
         
-        //changes neighbors
+        // Changes neighbors
         changeNeighbors(graph);
-        //delete list with costs
+        // Delete list with costs
         tempNode = (*graph)->nodes;
 
         while (tempNode !=NULL) {
@@ -36,13 +36,16 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
             tempNode->cost = NULL;
             tempNode = tempNode->next;
         }
+
         tempNode = (*graph)->nodes;
         changerPersent =  (double) changes / ((double)(*graph)->numNodes * K) ;
         
+        // We can delete those print if you want
         printf("Changes: %d\n", changes);
         printf("Changes-early-termination: %f\n", changerPersent);
 
     } while (changerPersent>earlyTerminationParameter);
+    
 }
 
 void changeNeighbors(Graph** graph) {
@@ -56,7 +59,7 @@ void changeNeighbors(Graph** graph) {
             Node* tempNode1 = (*graph)->nodes;
             Node* tempNode2 = (*graph)->nodes;
 
-            //find the two nodes 
+            // Find the two nodes 
             while (tempNode1 != NULL && tempNode1->nodeNameInt != tempCost->node1) {
                 tempNode1 = tempNode1->next;
             }
@@ -64,25 +67,25 @@ void changeNeighbors(Graph** graph) {
                 tempNode2 = tempNode2->next;
             }
 
-            // in tempNode2 we add tempNode1 as neighbor
+            // In tempNode2 we add tempNode1 as neighbor
             if (check(tempNode1->nodeNameInt, tempNode2->neighbors, tempNode2->nodeNameInt, tempCost->cost) == 0) {
-                addNeighbor(&(tempNode2->neighbors), tempNode1, tempCost->cost); //add the neighbor
-                addNeighbor(&(tempNode1->reversedNeighbors), tempNode2, tempCost->cost); //add the reverse
+                addNeighbor(&(tempNode2->neighbors), tempNode1, tempCost->cost);            //add the neighbor
+                addNeighbor(&(tempNode1->reversedNeighbors), tempNode2, tempCost->cost);    //add the reverse
 
-                //update reverse neighbors
-                int nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode2->neighbors)); //delete neighbor
+                // Update reverse neighbors
+                int nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode2->neighbors));                  //delete neighbor
                 if (nameOfDeletedNeighbor != -1) {
                     deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, tempNode2->nodeNameInt); //delete reverse
                 }
                 changes++;
             }
-            // in tempNode1 we add tempNode2 as neighbor
+            // In tempNode1 we add tempNode2 as neighbor
             if (check(tempNode2->nodeNameInt, tempNode1->neighbors, tempNode1->nodeNameInt, tempCost->cost) == 0) {
-                addNeighbor(&(tempNode1->neighbors), tempNode2, tempCost->cost); //add the neighbor
-                addNeighbor(&(tempNode2->reversedNeighbors), tempNode1, tempCost->cost); //add the reverse
+                addNeighbor(&(tempNode1->neighbors), tempNode2, tempCost->cost);            //add the neighbor
+                addNeighbor(&(tempNode2->reversedNeighbors), tempNode1, tempCost->cost);    //add the reverse
                 
-                //update reverse neighbors
-                int nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode1->neighbors)); //delete neighbor
+                // Update reverse neighbors
+                int nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode1->neighbors));                  //delete neighbor
                 if (nameOfDeletedNeighbor != -1) {
                     deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, tempNode1->nodeNameInt); //delete reverse
                 }
@@ -94,13 +97,14 @@ void changeNeighbors(Graph** graph) {
     }
 }
 
-//functions for improvements
+
+// ----- functions for improvements -----
 
 void localJoin(Node** node, String distance_function, int pK) { 
-    // without sampling, we use the neighbours of the Node 
+    // without sampling method, we use the neighbours of the Node 
     // NodeNeighborsLinkedList* temp = (*node)->neighbors;
     
-    // With the sampling, we create a new list of the pK neighbors (that have the flag True)
+    // With the Sampling method, we create a new list of the pK neighbors (that have the flag True)
     NodeNeighborsLinkedList* head = sampling((*node)->neighbors, pK);
     NodeNeighborsLinkedList* temp = head;
 
@@ -137,16 +141,16 @@ void localJoin(Node** node, String distance_function, int pK) {
         }
         temp = temp->next;
     } 
-    // free the list of the Neighbours with true flags
+    // free the list of the Neighbours with true flags -- used only in Sampling
     freeNeighbors(head);
 }
 
-
+// Incremental Search 
+// Comparing the Flags of the Nodes
 int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedList* neighbor2) {
 
-    if (neighbor1 == NULL || neighbor2 == NULL) {
+    if (neighbor1 == NULL || neighbor2 == NULL)
         return -1; // One or both nodes not found
-    }
 
     if (neighbor1->flag == 0 && neighbor2->flag == 0){
         return 0; // At least one flag is false, local join not allowed
@@ -156,7 +160,8 @@ int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedLis
 }
 
 
-//sampling
+// Sampling Method
+// Checking the flags of the Nodes and returns a list of those nodes
 NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors, int pK) {
     NodeNeighborsLinkedList* tempNeighbor = neighbors;
     NodeNeighborsLinkedList* samplingNeighborsHead = NULL;
