@@ -19,6 +19,7 @@ LDFLAGS = -lm
 OBJS = $(MAIN)/main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
 
 # Test objects
+OBJSKNN_IMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Cost.o $(MODULES)/knn_improvements.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 OBJSG = $(TESTS)/graph_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 OBJSN = $(TESTS)/nodes_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o 
@@ -28,6 +29,7 @@ OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MOD
 
 # Executables
 EXEC = program
+EXECKNN_IMP = knn_improvements_test
 EXECKNN = knn_test
 EXECG = graph_test
 EXECN = nodes_test
@@ -47,6 +49,8 @@ run-euclidean: $(EXEC)
 run-manhattan: $(EXEC)
 	./$(EXEC) $(ARGSMAN)
 
+runKNN_imp: $(EXECKNN_IMP)
+	./$(EXECKNN_IMP)
 runKNN: $(EXECKNN)
 	./$(EXECKNN)
 
@@ -71,6 +75,9 @@ $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
 	@if [ -f $(EXEC).exe ]; then ln -sf $(EXEC).exe $(EXEC); fi
 
+$(EXECKNN_IMP): $(OBJSKNN_IMP)
+	$(CC) $(OBJSKNN_IMP) -o $(EXECKNN_IMP) $(LDFLAGS)
+
 $(EXECKNN): $(OBJSKNN)
 	$(CC) $(OBJSKNN) -o $(EXECKNN) $(LDFLAGS)
 
@@ -90,5 +97,5 @@ $(EXECMATH): $(OBJSMATH)
 	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
 
 clean:
-	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)
+	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSKNN_IMP) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH) $(EXECKNN_IMP)
 	rm *.txt
