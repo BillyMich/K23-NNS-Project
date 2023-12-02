@@ -38,7 +38,39 @@ void testIncrementalSearch() {
 
 
 void testSampling() {
-   
+    // Create a list of neighbors
+    Node node1 = {1, NULL, NULL, NULL, NULL};
+    Node node2 = {2, NULL, NULL, NULL, NULL};
+    Node node3 = {3, NULL, NULL, NULL, NULL};
+    
+    NodeNeighborsLinkedList neighbor1 = {&node1, 1.0, 1, NULL};
+    NodeNeighborsLinkedList neighbor2 = {&node2, 2.0, 0, NULL};
+    NodeNeighborsLinkedList neighbor3 = {&node3, 3.0, 1, NULL};
+
+    // Create a linked list of neighbors
+    neighbor1.next = &neighbor2;
+    neighbor2.next = &neighbor3;
+
+    // pK is equal to the number of neighbors with flag set to 1
+    int pK1 = 2;
+    NodeNeighborsLinkedList* result1 = sampling(&neighbor1, pK1);
+    TEST_ASSERT(result1 != NULL);
+    TEST_ASSERT(result1->node == &node1);
+    TEST_ASSERT(result1->next != NULL);
+    TEST_ASSERT(result1->next->node == &node3);
+    TEST_ASSERT(result1->next->next == NULL);
+
+    // pK is less than the number of neighbors with flag set to 1
+    int pK2 = 1;
+    NodeNeighborsLinkedList* result2 = sampling(&neighbor1, pK2);
+    TEST_ASSERT(result2 != NULL);
+    TEST_ASSERT(result2->node != NULL);
+    TEST_ASSERT(result2->next == NULL);
+
+    // Free the memory allocated for the linked lists
+    freeNeighbors(result1);
+    freeNeighbors(result2);
+
 }
 
 
