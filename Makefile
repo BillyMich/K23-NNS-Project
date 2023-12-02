@@ -51,6 +51,7 @@ run-manhattan: $(EXEC)
 
 runKNN_imp: $(EXECKNN_IMP)
 	./$(EXECKNN_IMP)
+
 runKNN: $(EXECKNN)
 	./$(EXECKNN)
 
@@ -69,7 +70,9 @@ runNEI: $(EXECNEI)
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
-run-all: run-euclidean run-manhattan runKNN runG runN runD runNEI runMath
+run-all: run-euclidean run-manhattan runKNN_imp runKNN runG runN runD runNEI runMath
+
+run-all-tests: runKNN_imp runKNN runG runN runD runNEI runMath
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
