@@ -150,7 +150,7 @@ void localJoin(Node** node, String distance_function, int pK) {
 int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedList* neighbor2) {
 
     if (neighbor1 == NULL || neighbor2 == NULL)
-        return -1; // One or both nodes not found
+        return 0; // One or both nodes not found
 
     if (neighbor1->flag == 0 && neighbor2->flag == 0){
         return 0; // At least one flag is false, local join not allowed
