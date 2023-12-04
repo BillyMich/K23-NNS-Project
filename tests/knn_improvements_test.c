@@ -104,7 +104,7 @@ void testIncrementalSearchFailScenario3() {
     NodeNeighborsLinkedList * neighbor1 = NULL;
     NodeNeighborsLinkedList * neighbor2 = NULL;
     TEST_ASSERT(incrementalSearch(neighbor1,neighbor2) == 0); //source's and neighbor's name are the different and neighbor's name not in the head but cost is higher
-
+}
 
 void testSampling() {
     // Create a list of neighbors
@@ -178,7 +178,7 @@ void testIncrementalSearchSucessScenario3() {
 }
 
 
-void testSampling() {
+void testSampling2() {
     // Create a linked list of neighbors
     NodeNeighborsLinkedList* neighbors = initNeighbor(NULL, 1.0);
     neighbors->flag = 1;
@@ -209,6 +209,7 @@ void testSampling() {
 
 TEST_LIST = {
     {"testSampling",testSampling},
+    {"testSampling2",testSampling2},
     {"testLocalJoinAllNull", testLocalJoinAllNull},
     {"testLocalJoin", testLocalJoin},
     {"testLocalJoinOneNeighbor", testLocalJoinOneNeighbor},
