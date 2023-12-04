@@ -12,6 +12,7 @@ NodeNeighborsLinkedList* initNeighbor(Node* nodeNeighbor, double cost) {
     }
     newNeighbor->node = nodeNeighbor;
     newNeighbor->cost = cost;
+    newNeighbor->flag = 1; // the flag is TRUE
     newNeighbor->next = NULL;
 
     return newNeighbor;

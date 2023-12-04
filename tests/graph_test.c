@@ -133,7 +133,7 @@ void testCreateGraphFromBinaryFile() {
 
 //TODO: FIX THE LEAKS
 void testCreateGraphDimensions() {
-    Graph* graph = createGraphFromBinaryFile("../datasets/dummy2.bin", 4); // Assume 4 dimensions
+    Graph* graph = createGraphFromBinaryFile("datasets/dummy2.bin", 4); // Assume 4 dimensions
     TEST_ASSERT(graph != NULL);
 
     double expectedCoordinates[] = {1.000000,   2.345678,   4.678923,   0.333333,
@@ -185,10 +185,34 @@ void testCreateGraphDimensions() {
 }
 
 
+void testFindAccurationResult() {
+    // Create the graph
+    Graph* graph = initGraph();
+    Graph* graphRightResults = initGraph(); // Define graphRightResults
+
+    Dimension* dimension1 = NULL;
+    // Add nodes and neighbors to the graph
+    addNode(&graph->nodes, dimension1);
+    addNode(&graph->nodes, dimension1);
+    addNode(&graph->nodes, dimension1);
+
+    graphRightResults->nodes = graph->nodes; // Copy the nodes to graphRightResults
+    // Test the function
+    double accuracy = findAccurationResult(graph, graphRightResults, 3);
+    printf("Accuracy: %f\n", accuracy);
+//    TEST_ASSERT(accuracy > 0.00); // All neighbors match
+    // Clean up
+    freeGraph(graph);
+    freeGraph(graphRightResults);
+
+}
+
+
 TEST_LIST = {
     {"testInitGraph", testInitGraph},
     {"testAddNodeToGraph", testAddNodeToGraph},
     {"testCreateGraphDimensions", testCreateGraphDimensions},
+   // {"testFindAccurationResult", testFindAccurationResult},
     // {"testCreateGraphFromBinaryFile", testCreateGraphFromBinaryFile},
     { NULL, NULL }
 };

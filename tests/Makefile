@@ -11,6 +11,8 @@ CFLAGS = -Wall -Werror -g -I$(INCLUDE)
 LDFLAGS = -lm
 
 # .o files
+OBJSKNN_IMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Cost.o $(MODULES)/knn_improvements.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o 
+
 OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 
 OBJSG = $(TESTS)/graph_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
@@ -27,6 +29,8 @@ OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MOD
 OBJSK = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 
 # Executables
+EXECKNN_IMP = knn_improvements_test
+
 EXECKNN = knn_test
 
 EXECG = graph_test
@@ -38,6 +42,9 @@ EXECD = dimension_test
 EXECNEI = neighbours_test
 
 EXECMATH = mathFunctions_test
+
+$(EXECKNN_IMP): $(OBJSKNN_IMP)
+	$(CC) $(OBJSKNN_IMP) -o $(EXECKNN_IMP) $(LDFLAGS)
 
 $(EXECKNN): $(OBJSKNN)
 	$(CC) $(OBJSKNN) -o $(EXECKNN) $(LDFLAGS)
@@ -58,7 +65,10 @@ $(EXECMATH): $(OBJSMATH)
 	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
 
 clean:
-	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)
+	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSKNN_IMP) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH) $(EXECKNN_IMP)
+
+runKNN_imp: $(EXECKNN_IMP)
+	./$(EXECKNN_IMP)
 
 runKNN: $(EXECKNN)
 	./$(EXECKNN)
@@ -78,7 +88,7 @@ runNEI: $(EXECNEI)
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
-run-all: runKNN runG runN runD runNEI runMath
+run-all: runMath runG runN runD runNEI  runKNN runKNN_imp
 
 valgrind-graph: $(EXECG)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECG)
@@ -94,3 +104,6 @@ valgrind-neighbours: $(EXECNEI)
 
 valgrind-knn: $(EXECKNN)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECKNN)
+
+valgrind-knn-imp: $(EXECKNN_IMP)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECKNN_IMP)

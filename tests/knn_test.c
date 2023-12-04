@@ -43,7 +43,6 @@ void testIsNumberUsed() {
     TEST_ASSERT(isNumberUsed(usedNumbers, 4, 10, 7) == 1); //number is being already used
     TEST_ASSERT(isNumberUsed(usedNumbers, 4, 6, 6) == 1); //node number same with number but number isn't already used
     TEST_ASSERT(isNumberUsed(usedNumbers, 4, 13, 13) == 1); //both node number is same with number and number is being already used
-    
     TEST_ASSERT(isNumberUsed(usedNumbers, 4, 55, 7) == 0); //number that is never been used before
 }
 
@@ -118,13 +117,13 @@ void testKRandomNodes(Graph* graph) {
 }
 
 void testKRandomNodesWithEuclidean() {
-    Graph* graphEuclidean = createGraphFromBinaryFile("../datasets/knn_test.bin", 2); // Assume 2 dimensions
+    Graph* graphEuclidean = createGraphFromBinaryFile("datasets/knn_test.bin", 2); // Assume 2 dimensions
     KRandomNodes(&graphEuclidean, 4, "euclidean"); //4 neighbors
     testKRandomNodes(graphEuclidean);
 }
 
 void testKRandomNodesWithManhattan() {
-    Graph* graphManhattan = createGraphFromBinaryFile("../datasets/knn_test.bin", 2); // Assume 2 dimensions
+    Graph* graphManhattan = createGraphFromBinaryFile("datasets/knn_test.bin", 2); // Assume 2 dimensions
     KRandomNodes(&graphManhattan, 4, "manhattan"); //4 neighbors
     testKRandomNodes(graphManhattan);
 }

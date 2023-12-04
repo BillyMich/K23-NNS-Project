@@ -9,9 +9,10 @@ Node* initNode() {
         fprintf(stderr, "Memory allocation error\n");
         exit(EXIT_FAILURE);
     }
-    node->dimension = NULL;//dimension;
+    node->dimension = NULL;
     node->neighbors = NULL;
     node->reversedNeighbors = NULL;
+    node->cost = NULL;
     node->next = NULL;
 
     return node;
