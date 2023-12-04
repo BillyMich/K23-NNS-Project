@@ -10,19 +10,52 @@
 #include "knn_improvments.h"
 #include "knn.h"
 
+void testLocalJoinAllNull() {
+    Node* node = NULL;
+    String distance_function = NULL;
+    int pK = 0;
+
+    localJoin(&node, distance_function, pK);
+    TEST_CHECK(node == NULL);
+}
 
 void testLocalJoin() {
-    
+    // Create a node with NULL neighbors
+    Node* node = malloc(sizeof(Node));
+    node->neighbors = NULL;
+    node->reversedNeighbors = NULL;
+    node->cost = NULL;
+
+    // Call the localJoin function
+    localJoin(&node, "euclidean", 5);
+
+    // Assert that the neighbors remain NULL
+    TEST_ASSERT(node->neighbors == NULL);
+    TEST_ASSERT(node->reversedNeighbors == NULL);
+    TEST_ASSERT(node->cost == NULL);
+
+    // Clean up
+    free(node);
 }
 
+void testLocalJoinOneNeighbor() {
+    // Create a node with one neighbor
+    Node* node = malloc(sizeof(Node));
+    node->neighbors = initNeighbor(node, 1.0);
+    node->reversedNeighbors = NULL;
+    node->cost = NULL;
 
-void testIncrementalSearch() {
-    
+    // Set the flag of the neighbor to 1
+    node->neighbors->flag = 1;
 
+    // Call the localJoin function
+    localJoin(&node, "euclidean", 1);
 
-
-    
+    // Clean up
+    freeNeighbors(node->neighbors);
+    free(node);
 }
+
 
 void testIncrementalSearchFailScenario() {
    
@@ -91,13 +124,40 @@ void testIncrementalSearchSucessScenario3() {
 }
 
 
-void testaddCost() {
-   
+void testSampling() {
+    // Create a linked list of neighbors
+    NodeNeighborsLinkedList* neighbors = initNeighbor(NULL, 1.0);
+    neighbors->flag = 1;
+    neighbors->next = initNeighbor(NULL, 2.0);
+    neighbors->next->flag = 0;
+    neighbors->next->next = initNeighbor(NULL, 3.0);
+    neighbors->next->next->flag = 1;
+    neighbors->next->next->next = NULL;
+
+    // Call the sampling function with pK = 2
+    NodeNeighborsLinkedList* sampledNeighbors = sampling(neighbors, 2);
+
+    // Assert that the sampled neighbors are correct
+    TEST_ASSERT(sampledNeighbors != NULL);
+    TEST_ASSERT(sampledNeighbors->node == neighbors->node);
+    TEST_ASSERT(sampledNeighbors->cost == neighbors->cost);
+    TEST_ASSERT(sampledNeighbors->next != NULL);
+    TEST_ASSERT(sampledNeighbors->next->node == neighbors->next->next->node);
+    TEST_ASSERT(sampledNeighbors->next->cost == neighbors->next->next->cost);
+    TEST_ASSERT(sampledNeighbors->next->next == NULL);
+
+    // Clean up
+    freeNeighbors(neighbors);
+    freeNeighbors(sampledNeighbors);
 }
 
 
+
 TEST_LIST = {
+    {"testSampling",testSampling},
+    {"testLocalJoinAllNull", testLocalJoinAllNull},
     {"testLocalJoin", testLocalJoin},
+    {"testLocalJoinOneNeighbor", testLocalJoinOneNeighbor},
     {"testIncrementalSearchFailScenario", testIncrementalSearchFailScenario},
     {"testIncrementalSearchFailScenario2", testIncrementalSearchFailScenario2},
     {"testIncrementalSearchFailScenario3", testIncrementalSearchFailScenario3},

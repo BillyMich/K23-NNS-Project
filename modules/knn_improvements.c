@@ -104,6 +104,9 @@ void localJoin(Node** node, String distance_function, int pK) {
     // without sampling method, we use the neighbours of the Node 
     // NodeNeighborsLinkedList* temp = (*node)->neighbors;
     
+    if (node == NULL || *node == NULL)
+        return;
+
     // With the Sampling method, we create a new list of the pK neighbors (that have the flag True)
     NodeNeighborsLinkedList* head = sampling((*node)->neighbors, pK);
     NodeNeighborsLinkedList* temp = head;
