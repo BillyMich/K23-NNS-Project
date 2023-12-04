@@ -9,8 +9,6 @@
 #include "acutest.h"
 #include "../include/Node.h"
 
-//TODO: TESTS WITH NEIGHBORS!!!!!!
-
 void testInitNode() {
     Node *node = initNode();
 
@@ -70,6 +68,23 @@ void testAddNodeWithMultipleDimensions() {
     freeNode(headNode);
 }
 
+void testAddNodeWithMultipleDimensions2() {
+    Dimension *dimension1 = NULL;
+    addDimension(&dimension1, 1, 20.0);
+    addDimension(&dimension1, 2, 15.0);
+
+    Node *headNode = NULL;
+    addNode(&headNode, dimension1);
+
+    TEST_ASSERT(headNode != NULL);
+    TEST_ASSERT(headNode->dimension != NULL);
+    TEST_ASSERT(headNode->dimension->dimensionValue == 1);
+    TEST_ASSERT(headNode->dimension->value == 20.0);
+
+    freeNode(headNode);
+}
+
+
 void testAddDestinationAndCheck() {
     Node *node1 = initNode();
     Node *node2 = initNode();
@@ -84,12 +99,45 @@ void testAddDestinationAndCheck() {
     freeNode(node2);
 }
 
+void testAddDestinationAndChec2() {
+    Node *node1 = initNode();
+    Node *node2 = initNode();
+    addNeighbor(&(node1->neighbors), node2, 35.00);
+
+    TEST_ASSERT(node2 != NULL);
+    TEST_ASSERT(node1->neighbors != NULL);
+    TEST_ASSERT(node1->neighbors->node == node2);
+    TEST_ASSERT(node1->neighbors->cost == 35.0);
+
+    freeNode(node1);
+    freeNode(node2);
+}
+
+void testAddDestinationAndChec3() {
+    Node *node1 = initNode();
+    Node *node2 = initNode();
+    addNeighbor(&(node1->neighbors), node2, 2.20);
+
+    TEST_ASSERT(node2 != NULL);
+    TEST_ASSERT(node1->neighbors != NULL);
+    TEST_ASSERT(node1->neighbors->node == node2);
+    TEST_ASSERT(node1->neighbors->cost == 2.20);
+
+    freeNode(node1);
+    freeNode(node2);
+}
+
+
+
 
 TEST_LIST = {
     {"testInitNode", testInitNode},
     {"testAddNode", testAddNode},
     {"testAddDestination", testAddDestination},
     {"testAddNodeWithMultipleDimensions", testAddNodeWithMultipleDimensions},
+    {"testAddNodeWithMultipleDimensions2", testAddNodeWithMultipleDimensions2},
     {"testAddDestinationAndCheck", testAddDestinationAndCheck},
+    {"testAddDestinationAndChec2", testAddDestinationAndChec2},
+    {"testAddDestinationAndChec3", testAddDestinationAndChec3},
     {NULL, NULL}
 };

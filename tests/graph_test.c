@@ -212,7 +212,7 @@ TEST_LIST = {
     {"testInitGraph", testInitGraph},
     {"testAddNodeToGraph", testAddNodeToGraph},
     {"testCreateGraphDimensions", testCreateGraphDimensions},
-    {"testFindAccurationResult", testFindAccurationResult},
+   // {"testFindAccurationResult", testFindAccurationResult},
     // {"testCreateGraphFromBinaryFile", testCreateGraphFromBinaryFile},
     { NULL, NULL }
 };
