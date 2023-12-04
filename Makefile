@@ -21,6 +21,7 @@ OBJS = $(MAIN)/main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.
 # Test objects
 OBJSKNN_IMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Cost.o $(MODULES)/knn_improvements.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
+OBJSKNNIMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
 OBJSG = $(TESTS)/graph_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 OBJSN = $(TESTS)/nodes_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o 
 OBJSD = $(TESTS)/dimension_test.o $(MODULES)/Node.o $(MODULES)/Dimension.o $(MODULES)/Neighbors.o $(MODULES)/MathematicalFunctions.o
@@ -31,6 +32,7 @@ OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MOD
 EXEC = program
 EXECKNN_IMP = knn_improvements_test
 EXECKNN = knn_test
+EXECKNNImp = knn_improvements_test
 EXECG = graph_test
 EXECN = nodes_test
 EXECD = dimension_test
@@ -53,6 +55,9 @@ runKNN_imp: $(EXECKNN_IMP)
 runKNN: $(EXECKNN)
 	./$(EXECKNN)
 
+runKNNImp: $(EXECKNNImp)
+	./$(EXECKNNImp)
+
 runG: $(EXECG)
 	./$(EXECG)
 
@@ -68,6 +73,7 @@ runNEI: $(EXECNEI)
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
+
 # for every .c file
 all: run-euclidean run-manhattan runKNN_imp runKNN runG runN runD runNEI runMath
 
@@ -76,6 +82,9 @@ main-all: run-euclidean run-manhattan
 
 # for all tests
 run-all-tests: runKNN_imp runKNN runG runN runD runNEI runMath
+
+#for all
+run-all: run-euclidean run-manhattan runKNN runKNNImp runG runN runD runNEI runMath
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
@@ -86,6 +95,9 @@ $(EXECKNN_IMP): $(OBJSKNN_IMP)
 
 $(EXECKNN): $(OBJSKNN)
 	$(CC) $(OBJSKNN) -o $(EXECKNN) $(LDFLAGS)
+
+$(EXECKNNImp): $(OBJSKNNIMP)
+	$(CC) $(OBJSKNNIMP) -o $(EXECKNNImp) $(LDFLAGS)
 
 $(EXECG): $(OBJSG)
 	$(CC) $(OBJSG) -o $(EXECG) $(LDFLAGS)
@@ -103,5 +115,5 @@ $(EXECMATH): $(OBJSMATH)
 	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
 
 clean:
-	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSKNN_IMP) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH) $(EXECKNN_IMP)
+	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)  $(EXECKNNImp) $(OBJSKNNIMP)$(EXECMATH) $(EXECKNN_IMP)
 	rm *.txt
