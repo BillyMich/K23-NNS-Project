@@ -28,6 +28,7 @@ $(EXEC): $(OBJS)
 
 clean:
 	rm -f $(OBJS) $(EXEC)
+	rm *.txt
 
 run-euclidean: $(EXEC)
 	./$(EXEC) $(ARGSEUCL)

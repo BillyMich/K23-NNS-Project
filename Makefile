@@ -19,6 +19,7 @@ LDFLAGS = -lm
 OBJS = $(MAIN)/main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
 
 # Test objects
+OBJSKNN_IMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Cost.o $(MODULES)/knn_improvements.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 OBJSKNNIMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
 OBJSG = $(TESTS)/graph_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
@@ -29,6 +30,7 @@ OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MOD
 
 # Executables
 EXEC = program
+EXECKNN_IMP = knn_improvements_test
 EXECKNN = knn_test
 EXECKNNImp = knn_improvements_test
 EXECG = graph_test
@@ -41,13 +43,14 @@ EXECMATH = mathFunctions_test
 ARGSEUCL = $(DATASETS)/00000020.bin 10 65 euclidean 0.8 0.001
 ARGSMAN = $(DATASETS)/00001000-4.bin 100 399 manhattan 0.1 0.001
 
-all: $(EXEC) $(EXECG) $(EXECN) $(EXECD)
-
 run-euclidean: $(EXEC)
 	./$(EXEC) $(ARGSEUCL)
 
 run-manhattan: $(EXEC)
 	./$(EXEC) $(ARGSMAN)
+
+runKNN_imp: $(EXECKNN_IMP)
+	./$(EXECKNN_IMP)
 
 runKNN: $(EXECKNN)
 	./$(EXECKNN)
@@ -70,11 +73,25 @@ runNEI: $(EXECNEI)
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
+
+# for every .c file
+all: run-euclidean run-manhattan runKNN_imp runKNN runG runN runD runNEI runMath
+
+# for 2 "main"
+main-all: run-euclidean run-manhattan
+
+# for all tests
+run-all-tests: runKNN_imp runKNN runG runN runD runNEI runMath
+
+#for all
 run-all: run-euclidean run-manhattan runKNN runKNNImp runG runN runD runNEI runMath
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
 	@if [ -f $(EXEC).exe ]; then ln -sf $(EXEC).exe $(EXEC); fi
+
+$(EXECKNN_IMP): $(OBJSKNN_IMP)
+	$(CC) $(OBJSKNN_IMP) -o $(EXECKNN_IMP) $(LDFLAGS)
 
 $(EXECKNN): $(OBJSKNN)
 	$(CC) $(OBJSKNN) -o $(EXECKNN) $(LDFLAGS)
@@ -98,5 +115,5 @@ $(EXECMATH): $(OBJSMATH)
 	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
 
 clean:
-	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)  $(EXECKNNImp) $(OBJSKNNIMP)
+	rm -f $(OBJS) $(EXEC) $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH)  $(EXECKNNImp) $(OBJSKNNIMP)$(EXECMATH) $(EXECKNN_IMP)
 	rm *.txt
