@@ -38,6 +38,6 @@ void FindAllRightNeighbors(Graph * graph, String distance_function)
 
 
 void OrderNodesByNeighbor(Node *dest , Node *src, String distance_function){
-    addNeighbor(&dest->neighbors,src, distance(dest->dimension,src->dimension, distance_function));
+    addNeighbor(&dest->neighbors,src, distance(dest, src, distance_function));
     //Here or in the addNeigbor i would like to add a sorting method base on distance
 }
