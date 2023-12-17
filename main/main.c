@@ -43,5 +43,7 @@ int main(int argc, char *argv[]) {
     freeGraph(graph);
     freeGraph(graphRightResults);
 
+    // createBinary("100000.bin");
+
     return 0;
 }
