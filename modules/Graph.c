@@ -63,6 +63,7 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
                 flag = 1;
                 break;
             }
+            // printf("coordinate-%f\n",coordinate);
             addDimension(&headDimension, i, coordinate);
         }
 

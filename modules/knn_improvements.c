@@ -118,7 +118,7 @@ void localJoin(Node** node, String distance_function, int pK) {
             int nodeName2 = tempNeig->node->nodeNameInt;
 
             if ( nodeName1 != nodeName2 && incrementalSearch(tempNeig, temp) == 1 ) {
-                double cost = distance(temp->node->dimension, tempNeig->node->dimension, distance_function);
+                double cost = distance(temp->node, tempNeig->node, distance_function);
                 addCost(&((*node)->cost), nodeName1, nodeName2, cost);
 
                 // Update the flags
@@ -133,7 +133,7 @@ void localJoin(Node** node, String distance_function, int pK) {
             int nodeName4 = tempRev->node->nodeNameInt;
 
             if (nodeName3 != nodeName4 && incrementalSearch(tempRev, temp) == 1) {
-                double cost = distance(temp->node->dimension, tempRev->node->dimension, distance_function);
+                double cost = distance(temp->node, tempRev->node, distance_function);
                 addCost(&((*node)->cost), nodeName3, nodeName4, cost);
 
                 // Update the flags

@@ -73,7 +73,7 @@ void checkNeighborofNeighbors(Graph** graph, Node** sourceNode, NodeNeighborsLin
 
         double cost = 0.0;
         if(matrixNodes[neighborName][sourceName] == -1.00){
-            cost = distance((*sourceNode)->dimension, tempNeighbors->node->dimension, distance_function);
+            cost = distance(*sourceNode, tempNeighbors->node, distance_function);
             matrixNodes[neighborName][sourceName] = cost;
         }
         else{
@@ -133,7 +133,7 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
                 neighborNode = neighborNode->next;
             }
 
-            double cost = distance(currentNode->dimension, neighborNode->dimension, distance_function);
+            double cost = distance(currentNode, neighborNode, distance_function);
             
             addNeighbor(&(currentNode->neighbors), neighborNode, cost);
             addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
