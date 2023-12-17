@@ -46,7 +46,9 @@ double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
     return distance;
 }
 
-//isws boleyei node1, node2
+/// @brief 
+/// @param head 
+/// @return 
 double calculate_norm(Dimension* head) { 
     double norm = 0.0;
 
@@ -60,6 +62,10 @@ double calculate_norm(Dimension* head) {
     return norm;
 }
 
+/// @brief 
+/// @param node1 
+/// @param node2 
+/// @return 
 double euclidean_distance_improved(Node* node1, Node* node2){
     //x^2+y^2-2xy
     double norm1 = node1->norm;

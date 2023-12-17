@@ -8,10 +8,12 @@ static int changes;
 /// @param graph 
 /// @param K 
 /// @param distance_function 
-void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p, double earlyTerminationParameter){
+void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p, double earlyTerminationParameter){
 
     // Using the existing function to "make" the random Nodes
     KRandomNodes(graph, K, distance_function);
+
+    //TODO: projection trees search neighbors...
 
     Node * tempNode = (*graph)->nodes;
     

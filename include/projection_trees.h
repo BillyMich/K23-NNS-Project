@@ -18,9 +18,11 @@ typedef struct TreeNode {
 
 int* generateRandomProjection(int dimension);
 
-double computeProjection(Node *point, int *projection, int dimension);
+double computeProjection(Node *point, int *projection);
 
-TreeNode* buildRandomProjectionTree(Node *data, int dimension, int depth);
+void addData(Node** headData, Node* data);
+
+TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K);
 
 void searchNeighbors(TreeNode *root, Node *query, int dimension, int k);
 
