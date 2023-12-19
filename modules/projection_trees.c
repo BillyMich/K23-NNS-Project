@@ -62,7 +62,7 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K) {
             printf("- %d\n", data->nodeNameInt);
             data = data->next;
         }
-        
+        printf("------------------\n");
         return leaf;
     }
 
@@ -108,6 +108,13 @@ Node* searchTree(TreeNode* root, Node* node) {
     // TODO: Implement the search for nearest neighbors in the tree
     
     if(root->left == NULL && root->right == NULL){
+        // Node* data = root->data;
+        // printf("in search\n");
+        // while (data != NULL){
+        //     printf("- %d\n", data->nodeNameInt);
+        //     data = data->next;
+        // }
+        // printf("---------------------\n");
         return root->data;
     }
     
@@ -134,18 +141,25 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
         fprintf(stderr, "Too many Neighbors. The Nodes are %d\n", numNodes);
         exit(EXIT_FAILURE);
     }
-    int counter = 0;
+    
     for(int numNode = 0; numNode < numNodes; numNode++){
         // printf("------- Node %d ------\n", numNode);
 
+        int counter = 0;
         Node* list = searchTree(root, currentNode);
         
         while (list != NULL) {
             // printf("Node = %d \n", list->nodeNameInt);
 
-            if(currentNode->nodeNameInt == list->nodeNameInt) continue;
+            if(currentNode->nodeNameInt == list->nodeNameInt) {
+                list = list->next;
+                continue;
+            } 
             
-            if (counter == K) break;
+            if (counter == K) {
+                // list = list->next;
+                break;
+            }
 
             Node* neighborNode = (*graph)->nodes;
 
