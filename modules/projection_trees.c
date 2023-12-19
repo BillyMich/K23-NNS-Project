@@ -29,14 +29,12 @@ void addData(Node** headData, Node* data) {
     Node* newData = (Node*)malloc(sizeof(Node));
 
     newData->nodeNameInt = data->nodeNameInt;
-    newData->cost = data->cost;
     newData->norm = data->norm;
-
-    //DANGER ZONE
     newData->dimension = data->dimension;
-    newData->neighbors = data->neighbors;
-    newData->reversedNeighbors = data->reversedNeighbors;
 
+    newData->cost = NULL;
+    newData->neighbors = NULL;
+    newData->reversedNeighbors = NULL;
     newData->next = NULL;
 
     if (*headData == NULL) {
@@ -59,6 +57,12 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K) {
         leaf->data = data;
         leaf->left = NULL;
         leaf->right = NULL;
+
+        while (data != NULL){
+            printf("- %d\n", data->nodeNameInt);
+            data = data->next;
+        }
+        
         return leaf;
     }
 
@@ -77,20 +81,22 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K) {
     while (data != NULL) {
         double dotProduct = computeProjection(data, treeNode->projection);
 
-        if (dotProduct >= treeNode->threshold) {
+        if (dotProduct >= 0) {
             //left tree node
+            // printf("the node %d goes left\n", data->nodeNameInt);
             addData(&leftData, data);
             DLeft++;
         } 
         else {
             //right tree node
+            // printf("the node %d goes right\n", data->nodeNameInt);
             addData(&rightData, data);
             DRight++;
         }
 
         data = data ->next;
     }
-    
+
     treeNode->left = buildRandomProjectionTree(leftData, dimension, DLeft, K);
     treeNode->right = buildRandomProjectionTree(rightData, dimension, DRight, K);
 
@@ -98,8 +104,71 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K) {
 }
 
 // Function to search for nearest neighbors in the tree
-void searchNeighbors(TreeNode *root, Node *query, int dimension, int k) {
+Node* searchTree(TreeNode* root, Node* node) {
     // TODO: Implement the search for nearest neighbors in the tree
+    
+    if(root->left == NULL && root->right == NULL){
+        return root->data;
+    }
+    
+    double dotProduct = computeProjection(node, root->projection);
+    Node* nodesList = NULL;
+
+    if (dotProduct >= 0) {
+        //left tree node
+        nodesList = searchTree(root->left, node);
+    } 
+    else {
+        //right tree node
+        nodesList = searchTree(root->right, node);
+    }
+    return nodesList;
+}
+
+void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_function) {
+    Node* currentNode = (*graph)->nodes;
+    int numNodes = (*graph)->numNodes;
+    // printf("The Nodes are %d\n", numNodes);
+
+    if(K > numNodes){
+        fprintf(stderr, "Too many Neighbors. The Nodes are %d\n", numNodes);
+        exit(EXIT_FAILURE);
+    }
+    int counter = 0;
+    for(int numNode = 0; numNode < numNodes; numNode++){
+        // printf("------- Node %d ------\n", numNode);
+
+        Node* list = searchTree(root, currentNode);
+        
+        while (list != NULL) {
+            // printf("Node = %d \n", list->nodeNameInt);
+
+            if(currentNode->nodeNameInt == list->nodeNameInt) continue;
+            
+            if (counter == K) break;
+
+            Node* neighborNode = (*graph)->nodes;
+
+            for(int j = 0; j < list->nodeNameInt; j++){
+                neighborNode = neighborNode->next;
+            }
+
+            double cost = distance(currentNode, neighborNode, distance_function);
+            
+            addNeighbor(&(currentNode->neighbors), neighborNode, cost);
+            addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
+
+            counter++;
+            list = list->next;
+        }
+        if(counter < K){
+            //
+        }
+
+        currentNode = currentNode->next;
+    }
+    
+    
 }
 
 // Function to free the memory allocated for the tree
