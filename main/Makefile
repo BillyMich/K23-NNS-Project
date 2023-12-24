@@ -20,7 +20,7 @@ EXEC = program
 # Args for examples
 ARGSEUCL = $(DATASETS)/00000020.bin 10 65 euclidean 0.8 0.001
 
-ARGSMAN = $(DATASETS)/00001000-4.bin 100 399 manhattan 0.1 0.001
+ARGSMAN = $(DATASETS)/00001000-4.bin 20 399 manhattan 0.5 0.001
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)

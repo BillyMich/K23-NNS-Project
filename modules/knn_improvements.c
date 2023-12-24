@@ -56,16 +56,8 @@ void changeNeighbors(Graph** graph) {
         Cost* tempCost = tempNode->cost;
         while (tempCost != NULL) {
 
-            Node* tempNode1 = (*graph)->nodes;
-            Node* tempNode2 = (*graph)->nodes;
-
-            // Find the two nodes 
-            while (tempNode1 != NULL && tempNode1->nodeNameInt != tempCost->node1) {
-                tempNode1 = tempNode1->next;
-            }
-            while (tempNode2 != NULL && tempNode2->nodeNameInt != tempCost->node2) {
-                tempNode2 = tempNode2->next;
-            }
+            Node* tempNode1 =  tempCost->node1;
+            Node* tempNode2 = tempCost->node2;
 
             // In tempNode2 we add tempNode1 as neighbor
             if (check(tempNode1->nodeNameInt, tempNode2->neighbors, tempNode2->nodeNameInt, tempCost->cost) == 0) {
@@ -119,7 +111,7 @@ void localJoin(Node** node, String distance_function, int pK) {
 
             if ( nodeName1 != nodeName2 && incrementalSearch(tempNeig, temp) == 1 ) {
                 double cost = distance(temp->node->dimension, tempNeig->node->dimension, distance_function);
-                addCost(&((*node)->cost), nodeName1, nodeName2, cost);
+                addCost(&((*node)->cost), temp->node, tempNeig->node, cost);
 
                 // Update the flags
                 tempNeig->flag = 0;
@@ -134,7 +126,7 @@ void localJoin(Node** node, String distance_function, int pK) {
 
             if (nodeName3 != nodeName4 && incrementalSearch(tempRev, temp) == 1) {
                 double cost = distance(temp->node->dimension, tempRev->node->dimension, distance_function);
-                addCost(&((*node)->cost), nodeName3, nodeName4, cost);
+                addCost(&((*node)->cost), temp->node, tempRev->node, cost);
 
                 // Update the flags
                 tempRev->flag = 0;
