@@ -5,7 +5,7 @@
 
 void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p,double earlyTerminationParameter);
 
-void changeNeighbors(Graph** graph);
+void changeNeighbors(Node* node);
 
 void localJoin(Node** node, String distance_function, int pK);
 

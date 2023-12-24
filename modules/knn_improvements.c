@@ -21,13 +21,14 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
 
     do {
         changes = 0;
+
         while (tempNode != NULL) {
             localJoin(&tempNode, distance_function, pK);
+            changeNeighbors(tempNode);
             tempNode = tempNode->next;
         }
         
         // Changes neighbors
-        changeNeighbors(graph);
         // Delete list with costs
         tempNode = (*graph)->nodes;
 
@@ -48,11 +49,8 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
     
 }
 
-void changeNeighbors(Graph** graph) {
+void changeNeighbors(Node* tempNode) {
 
-    Node* tempNode = (*graph)->nodes;
-
-    while (tempNode !=NULL) {
         Cost* tempCost = tempNode->cost;
         while (tempCost != NULL) {
 
@@ -65,9 +63,9 @@ void changeNeighbors(Graph** graph) {
                 addNeighbor(&(tempNode1->reversedNeighbors), tempNode2, tempCost->cost);    //add the reverse
 
                 // Update reverse neighbors
-                int nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode2->neighbors));                  //delete neighbor
-                if (nameOfDeletedNeighbor != -1) {
-                    deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, tempNode2->nodeNameInt); //delete reverse
+                Node*  nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode2->neighbors));                  //delete neighbor
+                if (nameOfDeletedNeighbor != NULL) {
+                    deleteReverseNeighbor(nameOfDeletedNeighbor, tempNode2->nodeNameInt); //delete reverse
                 }
                 changes++;
             }
@@ -77,16 +75,14 @@ void changeNeighbors(Graph** graph) {
                 addNeighbor(&(tempNode2->reversedNeighbors), tempNode1, tempCost->cost);    //add the reverse
                 
                 // Update reverse neighbors
-                int nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode1->neighbors));                  //delete neighbor
-                if (nameOfDeletedNeighbor != -1) {
-                    deleteReverseNeighbor(&((*graph)->nodes), nameOfDeletedNeighbor, tempNode1->nodeNameInt); //delete reverse
+                Node* nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode1->neighbors));                  //delete neighbor
+                if (nameOfDeletedNeighbor != NULL) {
+                    deleteReverseNeighbor(nameOfDeletedNeighbor, tempNode1->nodeNameInt); //delete reverse
                 }
                 changes++;
             }
             tempCost = tempCost->next;
         }
-        tempNode = tempNode->next;
-    }
 }
 
 

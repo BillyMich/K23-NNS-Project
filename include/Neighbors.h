@@ -20,9 +20,9 @@ NodeNeighborsLinkedList* initNeighbor(Node* dest, double cost);
 
 void addNeighbor(NodeNeighborsLinkedList** head, Node* dest, double cost);
 
-int deleteLastNeighborNode(NodeNeighborsLinkedList** head);
+Node* deleteLastNeighborNode(NodeNeighborsLinkedList** head);
 
-void deleteReverseNeighbor(Node** graph, int name, int nodeNameReverse);
+void deleteReverseNeighbor(Node* temp , int nodeNameReverse);
 
 void freeNeighbors(NodeNeighborsLinkedList* destination);
 
