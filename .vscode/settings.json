@@ -8,6 +8,8 @@
         "dimension_test.C": "cpp",
         "time.h": "c",
         "knn.h": "c",
-        "acutest.h": "c"
+        "acutest.h": "c",
+        "knn_improvments.h": "c",
+        "unistd.h": "c"
     }
 }

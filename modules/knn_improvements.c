@@ -1,8 +1,66 @@
 #include "../include/knn_improvments.h"
 #include <time.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
 
 static int changes;
+
+#define NUM_THREADS 10
+#define JOB_QUEUE_SIZE 30
+
+typedef struct {
+    Node* node;
+    String distance_function;
+    int pK;
+} JobInfo;
+
+
+JobInfo jobQueue[JOB_QUEUE_SIZE];
+int jobCount = 0;
+pthread_mutex_t queueMutex;
+pthread_mutex_t changeInMemory;
+
+pthread_cond_t jobAvailable;
+
+
+typedef enum {
+    IDLE,
+    WORKING 
+} ThreadState;
+
+typedef struct {
+    int threadId;
+    ThreadState state;
+} ThreadInfo;
+
+
+void *workerFunction(void *threadarg) {
+    ThreadInfo *myInfo = (ThreadInfo *)threadarg;
+    
+    while (1) {
+        // Wait for a job
+        pthread_mutex_lock(&queueMutex);
+        while (jobCount <= 0) {
+            myInfo->state = IDLE;
+            pthread_cond_wait(&jobAvailable, &queueMutex);
+        }
+
+        myInfo->state = WORKING;
+        JobInfo job = jobQueue[--jobCount];
+        // Report job completion and switch back to idle
+        pthread_mutex_unlock(&queueMutex);
+        printf("Thread %d: Working on node %d\n", myInfo->threadId, job.node->nodeNameInt);
+        localJoin(&job.node, job.distance_function,job.pK);  
+        changeNeighbors(job.node);
+        myInfo->state = IDLE;
+    }
+    pthread_exit(NULL);
+}
+
+
 
 /// @brief Main Function of KNN algorithm with improvements
 /// @param graph 
@@ -12,22 +70,49 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
 
     // Using the existing function to "make" the random Nodes
     KRandomNodes(graph, K, distance_function);
-
     Node * tempNode = (*graph)->nodes;
     
     int pK = p*K;
     double changerPersent;
     printf("The pK (neighbor) nodes for Sampling is %d\n", pK);
 
+    pthread_t threads[NUM_THREADS];
+    ThreadInfo threadInfo[NUM_THREADS];
+    pthread_mutex_init(&queueMutex, NULL);
+    pthread_mutex_init(&changeInMemory, NULL);
+    pthread_cond_init(&jobAvailable, NULL);
+
+      for(int i = 0; i < NUM_THREADS; i++) {
+        threadInfo[i].threadId = i;
+        threadInfo[i].state = IDLE;
+        int rc = pthread_create(&threads[i], NULL, workerFunction, (void *)&threadInfo[i]);
+        if (rc) {
+            printf("ERROR; return code from pthread_create() is %d\n", rc);
+            exit(-1);
+        }
+    }
+
     do {
         changes = 0;
 
         while (tempNode != NULL) {
-            localJoin(&tempNode, distance_function, pK);
-            changeNeighbors(tempNode);
+           while (jobCount == JOB_QUEUE_SIZE)
+            {
+            }
+            
+            pthread_mutex_lock(&queueMutex);
+            if (jobCount < JOB_QUEUE_SIZE) {
+                jobQueue[jobCount++] = (JobInfo){tempNode,distance_function,pK}; // Assign values to your Job struct
+                pthread_cond_signal(&jobAvailable);
+            }
+            pthread_mutex_unlock(&queueMutex);
             tempNode = tempNode->next;
         }
         
+        while (jobCount != 0) {
+            // Wait for all jobs to complete
+        }    
+
         // Changes neighbors
         // Delete list with costs
         tempNode = (*graph)->nodes;
@@ -46,17 +131,21 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
         printf("Changes-early-termination: %f\n", changerPersent);
 
     } while (changerPersent>earlyTerminationParameter);
+
+    pthread_mutex_destroy(&queueMutex);
+    pthread_cond_destroy(&jobAvailable);
     
 }
 
 void changeNeighbors(Node* tempNode) {
 
         Cost* tempCost = tempNode->cost;
+        pthread_mutex_lock(&changeInMemory);
+
         while (tempCost != NULL) {
 
             Node* tempNode1 =  tempCost->node1;
             Node* tempNode2 = tempCost->node2;
-
             // In tempNode2 we add tempNode1 as neighbor
             if (check(tempNode1->nodeNameInt, tempNode2->neighbors, tempNode2->nodeNameInt, tempCost->cost) == 0) {
                 addNeighbor(&(tempNode2->neighbors), tempNode1, tempCost->cost);            //add the neighbor
@@ -83,6 +172,7 @@ void changeNeighbors(Node* tempNode) {
             }
             tempCost = tempCost->next;
         }
+        pthread_mutex_unlock(&changeInMemory);
 }
 
 
