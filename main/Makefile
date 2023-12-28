@@ -18,9 +18,9 @@ OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODU
 EXEC = program
 
 # Args for examples
-ARGSEUCL = $(DATASETS)/100000.bin 10 65 euclidean 0.8 0.001
+ARGSEUCL = $(DATASETS)/100000.bin 1000 100 euclidean 0.8 0.01
 
-ARGSMAN = $(DATASETS)/1000000.bin 400  399  manhattan 0.5 0.001
+ARGSMAN = $(DATASETS)/1000000.bin 100 100  manhattan 0.9 0.1
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)

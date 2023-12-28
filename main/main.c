@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     knn_improved_algorithm(&graph, K, distance_function, p, earlyTerminationParameter);
     // knn_algorithm(&graph, K, distance_function);
-
+    printf("\n----- Finished KNN algorithm -----\n");
     knn_end = clock();
     printf("Time for KNN algorithm: %lf sec\n", (double)(knn_end - knn_start) / CLOCKS_PER_SEC);
     

@@ -14,6 +14,7 @@ typedef struct NodeNeighborsLinkedList {
     double cost;
     int flag;
     NodeNeighborsLinkedList* next;
+    NodeNeighborsLinkedList* privious;
 }NodeNeighborsLinkedList;
 
 NodeNeighborsLinkedList* initNeighbor(Node* dest, double cost);

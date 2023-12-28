@@ -8,8 +8,8 @@
 
 static int changes;
 
-#define NUM_THREADS 10
-#define JOB_QUEUE_SIZE 30
+#define NUM_THREADS 20  
+#define JOB_QUEUE_SIZE 10
 
 typedef struct {
     Node* node;
@@ -20,6 +20,7 @@ typedef struct {
 
 JobInfo jobQueue[JOB_QUEUE_SIZE];
 int jobCount = 0;
+int courentJobsProcessing = 0;
 pthread_mutex_t queueMutex;
 pthread_mutex_t changeInMemory;
 
@@ -28,7 +29,8 @@ pthread_cond_t jobAvailable;
 
 typedef enum {
     IDLE,
-    WORKING 
+    WORKING,
+    DONE
 } ThreadState;
 
 typedef struct {
@@ -39,9 +41,8 @@ typedef struct {
 
 void *workerFunction(void *threadarg) {
     ThreadInfo *myInfo = (ThreadInfo *)threadarg;
-    
+    //int jobsDone = 0;
     while (1) {
-        // Wait for a job
         pthread_mutex_lock(&queueMutex);
         while (jobCount <= 0) {
             myInfo->state = IDLE;
@@ -50,11 +51,12 @@ void *workerFunction(void *threadarg) {
 
         myInfo->state = WORKING;
         JobInfo job = jobQueue[--jobCount];
-        // Report job completion and switch back to idle
+        courentJobsProcessing++;
         pthread_mutex_unlock(&queueMutex);
-        printf("Thread %d: Working on node %d\n", myInfo->threadId, job.node->nodeNameInt);
+        //printf("Thread %d: Working on node %d and i have done %d \n", myInfo->threadId, job.node->nodeNameInt, jobsDone++);
         localJoin(&job.node, job.distance_function,job.pK);  
         changeNeighbors(job.node);
+        courentJobsProcessing--;
         myInfo->state = IDLE;
     }
     pthread_exit(NULL);
@@ -75,14 +77,16 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
     int pK = p*K;
     double changerPersent;
     printf("The pK (neighbor) nodes for Sampling is %d\n", pK);
-
+    pthread_mutex_destroy(&queueMutex);
+    pthread_cond_destroy(&jobAvailable);
+    pthread_mutex_destroy(&changeInMemory);
     pthread_t threads[NUM_THREADS];
     ThreadInfo threadInfo[NUM_THREADS];
     pthread_mutex_init(&queueMutex, NULL);
     pthread_mutex_init(&changeInMemory, NULL);
     pthread_cond_init(&jobAvailable, NULL);
 
-      for(int i = 0; i < NUM_THREADS; i++) {
+    for(int i = 0; i < NUM_THREADS; i++) {
         threadInfo[i].threadId = i;
         threadInfo[i].state = IDLE;
         int rc = pthread_create(&threads[i], NULL, workerFunction, (void *)&threadInfo[i]);
@@ -96,10 +100,11 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
         changes = 0;
 
         while (tempNode != NULL) {
+
+            //count wait for jobs
            while (jobCount == JOB_QUEUE_SIZE)
             {
             }
-            
             pthread_mutex_lock(&queueMutex);
             if (jobCount < JOB_QUEUE_SIZE) {
                 jobQueue[jobCount++] = (JobInfo){tempNode,distance_function,pK}; // Assign values to your Job struct
@@ -108,17 +113,29 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
             pthread_mutex_unlock(&queueMutex);
             tempNode = tempNode->next;
         }
-        
-        while (jobCount != 0) {
-            // Wait for all jobs to complete
-        }    
+        //see if you can add it anywhere else in the above loop
+        while (jobCount ==0)
+            {
+            }
 
-        // Changes neighbors
-        // Delete list with costs
+        while (1) {
+            int skip = 0;
+
+            for (int i = 0; i < NUM_THREADS; i++)
+            {
+                if (threadInfo[i].state == WORKING) {
+                    skip++;
+                    continue;
+                }
+            }
+            if (skip == 0) {
+                break;
+            };
+        }    
         tempNode = (*graph)->nodes;
 
         while (tempNode !=NULL) {
-            freeCost(tempNode->cost);
+            freeCost(tempNode->cost);   
             tempNode->cost = NULL;
             tempNode = tempNode->next;
         }
@@ -132,30 +149,32 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
 
     } while (changerPersent>earlyTerminationParameter);
 
-    pthread_mutex_destroy(&queueMutex);
-    pthread_cond_destroy(&jobAvailable);
+    //PUTH A SIGNAL 
+    // for (int i = 0; i < NUM_THREADS; i++) {
+    //      pthread_join(threads[i], NULL);
+    // }
+
+    // pthread_mutex_destroy(&queueMutex);
+    // pthread_cond_destroy(&jobAvailable);
+    // pthread_mutex_destroy(&changeInMemory);
     
 }
 
 void changeNeighbors(Node* tempNode) {
 
         Cost* tempCost = tempNode->cost;
-        pthread_mutex_lock(&changeInMemory);
 
         while (tempCost != NULL) {
-
+            pthread_mutex_lock(&changeInMemory);
             Node* tempNode1 =  tempCost->node1;
             Node* tempNode2 = tempCost->node2;
-            // In tempNode2 we add tempNode1 as neighbor
+            //In tempNode2 we add tempNode1 as neighbor
             if (check(tempNode1->nodeNameInt, tempNode2->neighbors, tempNode2->nodeNameInt, tempCost->cost) == 0) {
                 addNeighbor(&(tempNode2->neighbors), tempNode1, tempCost->cost);            //add the neighbor
                 addNeighbor(&(tempNode1->reversedNeighbors), tempNode2, tempCost->cost);    //add the reverse
-
                 // Update reverse neighbors
-                Node*  nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode2->neighbors));                  //delete neighbor
-                if (nameOfDeletedNeighbor != NULL) {
-                    deleteReverseNeighbor(nameOfDeletedNeighbor, tempNode2->nodeNameInt); //delete reverse
-                }
+                deleteLastNeighborNode(&(tempNode2->neighbors));                  //delete neighbor
+                
                 changes++;
             }
             // In tempNode1 we add tempNode2 as neighbor
@@ -164,15 +183,12 @@ void changeNeighbors(Node* tempNode) {
                 addNeighbor(&(tempNode2->reversedNeighbors), tempNode1, tempCost->cost);    //add the reverse
                 
                 // Update reverse neighbors
-                Node* nameOfDeletedNeighbor = deleteLastNeighborNode(&(tempNode1->neighbors));                  //delete neighbor
-                if (nameOfDeletedNeighbor != NULL) {
-                    deleteReverseNeighbor(nameOfDeletedNeighbor, tempNode1->nodeNameInt); //delete reverse
-                }
+                deleteLastNeighborNode(&(tempNode1->neighbors));                  //delete neighbor
                 changes++;
             }
             tempCost = tempCost->next;
+            pthread_mutex_unlock(&changeInMemory);
         }
-        pthread_mutex_unlock(&changeInMemory);
 }
 
 
