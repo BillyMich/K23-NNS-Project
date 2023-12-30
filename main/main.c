@@ -13,12 +13,13 @@ int main(int argc, char *argv[]) {
     String distance_function = argv[4];
     double p = atof(argv[5]);
     double earlyTerminationParameter = atof(argv[6]);
+    int D = atoi(argv[7]);
 
     //TODO-- time calc
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
     
     //TODO-- time calc
-    TreeNode* treeRoot = buildRandomProjectionTree(graph->nodes, dimensions, graph->numNodes, K);
+    TreeNode* treeRoot = buildRandomProjectionTree(graph->nodes, dimensions, D, graph->numNodes);
         
     printf("\n----- Starting KNN algorithm -----\n");
 

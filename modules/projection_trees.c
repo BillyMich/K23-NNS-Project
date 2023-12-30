@@ -50,8 +50,8 @@ void addData(Node** headData, Node* data) {
 }
 
 // Function to build a random projection tree
-TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K) {
-    if (D <= K) {
+TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNodes) {
+    if (numNodes <= D) {
         // Create a leaf node
         TreeNode* leaf = (TreeNode*)malloc(sizeof(TreeNode));
         leaf->data = data;
@@ -73,9 +73,9 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K) {
 
     // Partition the data based on the random hyperplane
     Node* leftData = NULL;    
-    int DLeft = 0;
+    int nodesLeft = 0;
     Node* rightData = NULL;
-    int DRight = 0;
+    int nodesRight = 0;
 
     // Implement data partitioning based on the hyperplane
     while (data != NULL) {
@@ -85,20 +85,20 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K) {
             //left tree node
             // printf("the node %d goes left\n", data->nodeNameInt);
             addData(&leftData, data);
-            DLeft++;
+            nodesLeft++;
         } 
         else {
             //right tree node
             // printf("the node %d goes right\n", data->nodeNameInt);
             addData(&rightData, data);
-            DRight++;
+            nodesRight++;
         }
 
         data = data ->next;
     }
 
-    treeNode->left = buildRandomProjectionTree(leftData, dimension, DLeft, K);
-    treeNode->right = buildRandomProjectionTree(rightData, dimension, DRight, K);
+    treeNode->left = buildRandomProjectionTree(leftData, dimension, D, nodesLeft);
+    treeNode->right = buildRandomProjectionTree(rightData, dimension, D, nodesRight);
 
     return treeNode;
 }
@@ -148,8 +148,10 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
         int counter = 0;
         Node* list = searchTree(root, currentNode);
         
+        int usedNumbers[K];
+
         while (list != NULL) {
-            // printf("Node = %d \n", list->nodeNameInt);
+            printf("Node = %d \n", list->nodeNameInt);
 
             if(currentNode->nodeNameInt == list->nodeNameInt) {
                 list = list->next;
@@ -172,17 +174,59 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
             addNeighbor(&(currentNode->neighbors), neighborNode, cost);
             addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
 
+            usedNumbers[counter] = neighborNode->nodeNameInt;
+
             counter++;
             list = list->next;
         }
+        
         if(counter < K){
-            //
+            int remainigNumbers = K - counter;
+
+            remainingRandomNodes(graph, currentNode, usedNumbers, remainigNumbers, K, distance_function);
+            
+            NodeNeighborsLinkedList* tempNode = currentNode->neighbors;
+            int lala = 0;
+            printf("current node = %d\n", currentNode->nodeNameInt);
+
+            while (tempNode != NULL) {
+                printf("neig %d\n", tempNode->node->nodeNameInt);
+                lala++;
+                tempNode = tempNode->next;
+            }
+            printf("----- Counter ---- %d\n", lala);
         }
 
         currentNode = currentNode->next;
     }
-    
-    
+     
+}
+
+void remainingRandomNodes(Graph** graph, Node* currentNode, int* usedNumbers, int remainingNodes, int K, String distance_function) {
+
+    int numNodes = (*graph)->numNodes;
+
+    for (int i = remainingNodes; i < K; i++) {
+
+        int randomNumber;
+        do {
+            randomNumber = rand() % numNodes; 
+
+        } while (isNumberUsed(usedNumbers, i, randomNumber, currentNode->nodeNameInt));   // Check if the number has been used before
+        usedNumbers[i] = randomNumber;
+
+        Node* neighborNode = (*graph)->nodes;
+
+        for(int j = 0; j < randomNumber; j++){
+            neighborNode = neighborNode->next;
+        }
+
+        double cost = distance(currentNode, neighborNode, distance_function);
+        
+        addNeighbor(&(currentNode->neighbors), neighborNode, cost);
+        addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
+    }
+    currentNode = currentNode->next;
 }
 
 // Function to free the memory allocated for the tree

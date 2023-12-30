@@ -7,6 +7,7 @@
 #include "Node.h"
 #include "Graph.h"
 #include "MathematicalFunctions.h"
+#include "knn.h"
 
 // Define a data structure for a node in the tree
 typedef struct TreeNode {
@@ -24,11 +25,13 @@ double computeProjection(Node* point, int* projection);
 
 void addData(Node** headData, Node* data);
 
-TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int K);
+TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNodes);
 
 Node* searchTree(TreeNode* root, Node* node);
 
 void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_function);
+
+void remainingRandomNodes(Graph** graph, Node* currentNode, int* usedNumbers, int remainingNodes, int K, String distance_function);
 
 void freeTree(TreeNode* root);
 
