@@ -58,11 +58,11 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
         leaf->left = NULL;
         leaf->right = NULL;
 
-        while (data != NULL){
-            printf("- %d\n", data->nodeNameInt);
-            data = data->next;
-        }
-        printf("------------------\n");
+        // while (data != NULL){
+        //     printf("- %d\n", data->nodeNameInt);
+        //     data = data->next;
+        // }
+        // printf("------------------\n");
         return leaf;
     }
 
@@ -151,7 +151,7 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
         int usedNumbers[K];
 
         while (list != NULL) {
-            printf("Node = %d \n", list->nodeNameInt);
+            // printf("Node = %d \n", list->nodeNameInt);
 
             if(currentNode->nodeNameInt == list->nodeNameInt) {
                 list = list->next;
@@ -185,16 +185,16 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
 
             remainingRandomNodes(graph, currentNode, usedNumbers, remainigNumbers, K, distance_function);
             
-            NodeNeighborsLinkedList* tempNode = currentNode->neighbors;
-            int lala = 0;
-            printf("current node = %d\n", currentNode->nodeNameInt);
+            // NodeNeighborsLinkedList* tempNode = currentNode->neighbors;
+            // int lala = 0;
+            // printf("current node = %d\n", currentNode->nodeNameInt);
 
-            while (tempNode != NULL) {
-                printf("neig %d\n", tempNode->node->nodeNameInt);
-                lala++;
-                tempNode = tempNode->next;
-            }
-            printf("----- Counter ---- %d\n", lala);
+            // while (tempNode != NULL) {
+            //     printf("neig %d\n", tempNode->node->nodeNameInt);
+            //     lala++;
+            //     tempNode = tempNode->next;
+            // }
+            // printf("----- Counter ---- %d\n", lala);
         }
 
         currentNode = currentNode->next;
@@ -206,7 +206,7 @@ void remainingRandomNodes(Graph** graph, Node* currentNode, int* usedNumbers, in
 
     int numNodes = (*graph)->numNodes;
 
-    for (int i = remainingNodes; i < K; i++) {
+    for (int i = K-remainingNodes ; i < K; i++) {
 
         int randomNumber;
         do {
