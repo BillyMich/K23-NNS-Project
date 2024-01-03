@@ -14,24 +14,35 @@ LDFLAGS = -lm -fsanitize=address -lpthread
 # .o files
 OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
 
+OBJSAccuarion = accuration.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
 # Executable
 EXEC = program
 
-# Args for examples
-ARGSEUCL = $(DATASETS)/100000.bin 1000 100 euclidean 0.8 0.01
+EXECAccuration = programAccuration
 
-ARGSMAN = $(DATASETS)/1000000.bin 100 100  manhattan 0.9 0.1
+
+# Args for examples
+ARGSEUCL = $(DATASETS)/1000000.bin 100 100 euclidean 0.9 0.01
+
+ARGSMAN =  $(DATASETS)/1000000.bin 100 100  manhattan 0.9 0.1
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)
 	@if [ -f $(EXEC).exe ]; then ln -sf $(EXEC).exe $(EXEC); fi
 
+$(EXECAccuration): $(OBJSAccuarion)
+	$(CC) $(OBJSAccuarion) -o $(EXECAccuration) $(LDFLAGS)
+	@if [ -f $(EXECAccuration).exe ]; then ln -sf $(EXECAccuration).exe $(EXECAccuration); fi	
+
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -f $(OBJS) $(EXEC) $(EXECAccuration) *.o *.exe *.stackdump *.out *.bin *.txt
 	rm *.txt
 
 run-euclidean: $(EXEC)
 	./$(EXEC) $(ARGSEUCL)
+
+run-accuration: $(EXECAccuration)
+	./$(EXECAccuration)
 
 run-manhattan: $(EXEC)
 	./$(EXEC) $(ARGSMAN)

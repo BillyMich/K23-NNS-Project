@@ -104,8 +104,8 @@ double** matrixNodes;
 /// @param K 
 /// @param distance_function 
 void KRandomNodes(Graph** graph, int K, String distance_function) {
-    time_t t;
-    srand((unsigned) time(&t));
+    //time_t t;
+    srand(0);
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
