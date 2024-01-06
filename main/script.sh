@@ -1,4 +1,5 @@
 #!/bin/bash
+LC_NUMERIC="C"
 
 
 while true

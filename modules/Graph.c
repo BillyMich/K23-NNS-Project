@@ -119,6 +119,7 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbo
     Node * tempNodeRight = graphRightResults->nodes;
     double count = 0 ;
     double correct = 0;
+    int checked = 0;
 
     while (tempNodeKNS != NULL)
     {
@@ -145,6 +146,7 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbo
 
         tempNodeRight = tempNodeRight->next;
         tempNodeKNS = tempNodeKNS->next;
+        printf("%d",++checked);
     }
         return  (correct / count )* 100;
 }

@@ -104,8 +104,8 @@ double** matrixNodes;
 /// @param K 
 /// @param distance_function 
 void KRandomNodes(Graph** graph, int K, String distance_function) {
-    //time_t t;
-    srand(0);
+    time_t t;
+    srand((unsigned) time(&t));
 
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
@@ -167,26 +167,35 @@ int isNumberUsed(int usedNumbers[], int count, int number, int numNode) {
 /// @param nodeNeighbors 
 /// @param sourceNodeName 
 /// @return 
-int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName, double cost) {
-    if(neighborsNodeName == sourceNodeName){
-        return 1;
+int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, Node* sourceNode, double cost) {
+
+
+    if (sourceNode->MaxCostToInsert != -1) {
+        if (cost > sourceNode->MaxCostToInsert) {
+            return 1;
+        }
+        else {
+            sourceNode->MaxCostToInsert = -1;
+            return 0;
+        }
     }
 
     NodeNeighborsLinkedList* tempNode = nodeNeighbors;
-    NodeNeighborsLinkedList* lastNode = nodeNeighbors;
-    while (tempNode != NULL) {
+    while (tempNode->next != NULL) {
         if(neighborsNodeName == tempNode->node->nodeNameInt)
             return 1;
-
-        if (tempNode->next != NULL) 
-            lastNode = lastNode->next;
 
         tempNode = tempNode->next;
     }
 
-    if (cost >= lastNode->cost) {
+    if (cost >= tempNode->cost) {
+        sourceNode->MaxCostToInsert = tempNode->cost;
         return 1;
+    }else {
+        sourceNode->MaxCostToInsert = tempNode->cost;
+        return 0;
     }
-
+    
+    sourceNode->MaxCostToInsert = -1;
     return 0;
 }

@@ -22,7 +22,7 @@ EXECAccuration = programAccuration
 
 
 # Args for examples
-ARGSEUCL = $(DATASETS)/1000000.bin 100 100 euclidean 0.9 0.01
+ARGSEUCL = $(DATASETS)/1000000.bin 500 100 euclidean 0.9 0.01
 
 ARGSMAN =  $(DATASETS)/1000000.bin 100 100  manhattan 0.9 0.1
 

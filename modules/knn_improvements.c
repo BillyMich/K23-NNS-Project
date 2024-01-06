@@ -8,14 +8,8 @@
 
 static int changes;
 
-#define NUM_THREADS 20  
-#define JOB_QUEUE_SIZE 10
-
-typedef struct {
-    Node* node;
-    String distance_function;
-    int pK;
-} JobInfo;
+#define NUM_THREADS 5  
+#define JOB_QUEUE_SIZE 2
 
 
 JobInfo jobQueue[JOB_QUEUE_SIZE];
@@ -41,7 +35,6 @@ typedef struct {
 
 void *workerFunction(void *threadarg) {
     ThreadInfo *myInfo = (ThreadInfo *)threadarg;
-    //int jobsDone = 0;
     while (1) {
         pthread_mutex_lock(&queueMutex);
         while (jobCount <= 0) {
@@ -52,12 +45,26 @@ void *workerFunction(void *threadarg) {
         myInfo->state = WORKING;
         JobInfo job = jobQueue[--jobCount];
         courentJobsProcessing++;
-        pthread_mutex_unlock(&queueMutex);
-        //printf("Thread %d: Working on node %d and i have done %d \n", myInfo->threadId, job.node->nodeNameInt, jobsDone++);
-        localJoin(&job.node, job.distance_function,job.pK);  
-        changeNeighbors(job.node);
+        pthread_mutex_unlock(&queueMutex);        
+        DataJob* tempNode = job.job->dataJob;
+
+        if (job.type == 0)
+            while (tempNode != NULL)
+            {
+                localJoin(&tempNode->node, job.distance_function,job.pK);
+                tempNode = tempNode->next;
+            }
+        if (job.type == 2){
+            while (tempNode != NULL)
+            {
+                changeNeighbors(tempNode->node);
+                tempNode = tempNode->next;
+            }
+        }
+        pthread_mutex_lock(&queueMutex);
         courentJobsProcessing--;
         myInfo->state = IDLE;
+        pthread_mutex_unlock(&queueMutex);        
     }
     pthread_exit(NULL);
 }
@@ -96,28 +103,82 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
         }
     }
 
+    int jobsPerThread = (*graph)->numNodes / NUM_THREADS;
+    int jobsListed = 0;
+
+        Job* head = NULL;
+    DataJob* dataJob = NULL;
+    
+    while (tempNode != NULL) 
+    {
+        if (jobsListed == jobsPerThread)
+        {
+            addJob(&head, dataJob);
+            dataJob = NULL;
+            jobsListed =0;
+        }
+        
+        addDataJob(&dataJob, tempNode);
+        ++jobsListed;
+        tempNode = tempNode->next;
+        
+    }
+
+    addJob(&head, dataJob);
+
+
     do {
+
         changes = 0;
+        Job* temp = head; 
 
-        while (tempNode != NULL) {
-
-            //count wait for jobs
-           while (jobCount == JOB_QUEUE_SIZE)
+        while ( temp != NULL) {
+            while (jobCount == JOB_QUEUE_SIZE)
             {
             }
+            
             pthread_mutex_lock(&queueMutex);
             if (jobCount < JOB_QUEUE_SIZE) {
-                jobQueue[jobCount++] = (JobInfo){tempNode,distance_function,pK}; // Assign values to your Job struct
+                jobQueue[jobCount++] = (JobInfo){temp,distance_function,pK,0}; // Assign values to your Job struct
+                jobsListed++;
                 pthread_cond_signal(&jobAvailable);
             }
             pthread_mutex_unlock(&queueMutex);
-            tempNode = tempNode->next;
-        }
-        //see if you can add it anywhere else in the above loop
-        while (jobCount ==0)
+            temp = temp->next;
+        }        
+        while (jobCount !=0)
             {
             }
+        while (1) {
+            int skip = 0;
 
+            for (int i = 0; i < NUM_THREADS; i++)
+            {
+                if (threadInfo[i].state == WORKING) {
+                    ++skip;
+                    continue;
+                }
+            }
+            if (skip == 0) {
+                break;
+            };
+        }    
+
+        temp = head; 
+
+        while ( temp != NULL) {
+            pthread_mutex_lock(&queueMutex);
+            if (jobCount < JOB_QUEUE_SIZE) {
+                jobQueue[jobCount++] = (JobInfo){temp,distance_function,pK,2}; // Assign values to your Job struct
+                jobsListed++;
+                pthread_cond_signal(&jobAvailable);
+            }
+            pthread_mutex_unlock(&queueMutex);
+            temp = temp->next;
+        }        
+        while (jobCount !=0)
+            {
+            }
         while (1) {
             int skip = 0;
 
@@ -132,6 +193,8 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
                 break;
             };
         }    
+
+
         tempNode = (*graph)->nodes;
 
         while (tempNode !=NULL) {
@@ -147,18 +210,74 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
         printf("Changes: %d\n", changes);
         printf("Changes-early-termination: %f\n", changerPersent);
 
+
     } while (changerPersent>earlyTerminationParameter);
 
-    //PUTH A SIGNAL 
-    // for (int i = 0; i < NUM_THREADS; i++) {
-    //      pthread_join(threads[i], NULL);
-    // }
-
-    // pthread_mutex_destroy(&queueMutex);
-    // pthread_cond_destroy(&jobAvailable);
-    // pthread_mutex_destroy(&changeInMemory);
+            freeJOB(head);
     
 }
+
+///////////////////////////////////////
+
+
+void addJob(Job** head, DataJob* dataJob) {
+    Job* newDimension = (Job*)malloc(sizeof(Job));
+    newDimension->dataJob = dataJob;
+    newDimension->next = NULL;
+    if (*head == NULL) {
+        *head = newDimension;
+    }
+    else {
+        Job* temp = *head;
+        while (temp->next!=NULL) {
+            temp = temp->next;
+        }
+        temp->next = newDimension;
+    }
+}
+
+void addDataJob(DataJob** head, Node* Node) {
+    DataJob* newDimension = (DataJob*)malloc(sizeof(DataJob));
+    newDimension->node =Node;
+    newDimension->next = NULL;
+    if (*head == NULL) {
+        *head = newDimension;
+    }
+    else {
+        DataJob* temp = *head;
+        while (temp->next!=NULL) {
+            temp = temp->next;
+        }
+        temp->next = newDimension;
+    }
+}
+
+
+void freeJOB(Job* cost){
+     if (cost == NULL)
+        return;
+
+    while (cost != NULL ) {
+        Job* next = cost->next;
+        freeAddDataJob(cost->dataJob);
+        free(cost);
+        cost = next;
+    }
+
+}
+
+void freeAddDataJob(DataJob* cost){
+    if (cost == NULL)
+    return;
+    while (cost != NULL ) {
+        DataJob* next = cost->next;
+        free(cost);
+        cost = next;
+    }
+
+}
+
+///////////////////////////////////////
 
 void changeNeighbors(Node* tempNode) {
 
@@ -169,7 +288,7 @@ void changeNeighbors(Node* tempNode) {
             Node* tempNode1 =  tempCost->node1;
             Node* tempNode2 = tempCost->node2;
             //In tempNode2 we add tempNode1 as neighbor
-            if (check(tempNode1->nodeNameInt, tempNode2->neighbors, tempNode2->nodeNameInt, tempCost->cost) == 0) {
+            if (check(tempNode1->nodeNameInt, tempNode2->neighbors, tempNode2, tempCost->cost) == 0) {
                 addNeighbor(&(tempNode2->neighbors), tempNode1, tempCost->cost);            //add the neighbor
                 addNeighbor(&(tempNode1->reversedNeighbors), tempNode2, tempCost->cost);    //add the reverse
                 // Update reverse neighbors
@@ -178,7 +297,7 @@ void changeNeighbors(Node* tempNode) {
                 changes++;
             }
             // In tempNode1 we add tempNode2 as neighbor
-            if (check(tempNode2->nodeNameInt, tempNode1->neighbors, tempNode1->nodeNameInt, tempCost->cost) == 0) {
+            if (check(tempNode2->nodeNameInt, tempNode1->neighbors, tempNode1, tempCost->cost) == 0) {
                 addNeighbor(&(tempNode1->neighbors), tempNode2, tempCost->cost);            //add the neighbor
                 addNeighbor(&(tempNode2->reversedNeighbors), tempNode1, tempCost->cost);    //add the reverse
                 
@@ -190,8 +309,6 @@ void changeNeighbors(Node* tempNode) {
             pthread_mutex_unlock(&changeInMemory);
         }
 }
-
-
 // ----- functions for improvements -----
 
 void localJoin(Node** node, String distance_function, int pK) { 

@@ -36,6 +36,6 @@ int isNumberUsed(int usedNumbers[], int count, int number, int numNode);
 /// @param nodeNeighbors 
 /// @param sourceNodeName 
 /// @return 
-int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, int sourceNodeName, double cost);
+int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, Node* sourceNodeName, double cost);
 
 #endif
