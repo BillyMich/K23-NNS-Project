@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
 
     Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
     FindAllRightNeighbors(graphRightResults, distance_function,K);
+    
     double accurationRate = findAccurationResult(graph, graphRightResults,K);
     //double accurationSuperRate = findAccurationResultSuperAccurate(graph, graphRightResults);
     printf("\n~ Acurate by %f %% ~\n", accurationRate);

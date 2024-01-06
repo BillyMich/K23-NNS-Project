@@ -8,8 +8,8 @@
 
 static int changes;
 
-#define NUM_THREADS 5  
-#define JOB_QUEUE_SIZE 2
+#define NUM_THREADS 10  
+#define JOB_QUEUE_SIZE 10
 
 
 JobInfo jobQueue[JOB_QUEUE_SIZE];
@@ -106,7 +106,7 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
     int jobsPerThread = (*graph)->numNodes / NUM_THREADS;
     int jobsListed = 0;
 
-        Job* head = NULL;
+    Job* head = NULL;
     DataJob* dataJob = NULL;
     
     while (tempNode != NULL) 
@@ -170,7 +170,7 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
             pthread_mutex_lock(&queueMutex);
             if (jobCount < JOB_QUEUE_SIZE) {
                 jobQueue[jobCount++] = (JobInfo){temp,distance_function,pK,2}; // Assign values to your Job struct
-                jobsListed++;
+                ++jobsListed;
                 pthread_cond_signal(&jobAvailable);
             }
             pthread_mutex_unlock(&queueMutex);
@@ -185,7 +185,7 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
             for (int i = 0; i < NUM_THREADS; i++)
             {
                 if (threadInfo[i].state == WORKING) {
-                    skip++;
+                    ++skip;
                     continue;
                 }
             }
@@ -369,6 +369,7 @@ int incrementalSearch(NodeNeighborsLinkedList* neighbor1, NodeNeighborsLinkedLis
     if (neighbor1->flag == 0 && neighbor2->flag == 0){
         return 0; // At least one flag is false, local join not allowed
     }
+
     return 1; // Both flags are true, local join allowed
 
 }

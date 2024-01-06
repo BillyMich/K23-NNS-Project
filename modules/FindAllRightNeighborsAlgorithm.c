@@ -12,7 +12,6 @@ void FindAllRightNeighbors(Graph * graph, String distance_function,int neighbors
     Node *tempNode = graph->nodes;
     Node *tempNodeFor = graph->nodes;
     int flag = 0;
-    int counted = 1;
     while (tempNode !=NULL)
     {
         if (tempNode->nodeNameInt != tempNodeFor->nodeNameInt)
@@ -35,9 +34,9 @@ void FindAllRightNeighbors(Graph * graph, String distance_function,int neighbors
             if (tempNode->next!=NULL)
             {
                 flag = 0;
-                printf("%d\n",++counted);
                 tempNode = tempNode->next;
-            };    
+            }else
+            break;    
         }   
     }
 
