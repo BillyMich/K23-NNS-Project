@@ -12,7 +12,6 @@
 // Define a data structure for a node in the tree
 typedef struct TreeNode {
     int* projection; // Random projection vector
-    double threshold; // Threshold for the hyperplane
     struct TreeNode* left;
     struct TreeNode* right;
     Node* data; // Only for leaf nodes

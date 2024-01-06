@@ -55,6 +55,7 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
         // Create a leaf node
         TreeNode* leaf = (TreeNode*)malloc(sizeof(TreeNode));
         leaf->data = data;
+        leaf->projection = NULL;
         leaf->left = NULL;
         leaf->right = NULL;
 
@@ -68,8 +69,8 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
 
     // Create a non-leaf node
     TreeNode* treeNode = (TreeNode*)malloc(sizeof(TreeNode));
+    treeNode->data = NULL;
     treeNode->projection = generateRandomProjection(dimension);
-    treeNode->threshold = (double)rand() / RAND_MAX; // Random threshold between 0 and 1 ή always threshold = 0??
 
     // Partition the data based on the random hyperplane
     Node* leftData = NULL;    
@@ -96,9 +97,13 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
 
         data = data ->next;
     }
-
+    
     treeNode->left = buildRandomProjectionTree(leftData, dimension, D, nodesLeft);
     treeNode->right = buildRandomProjectionTree(rightData, dimension, D, nodesRight);
+
+    //free left right
+    freeNode(leftData);
+    freeNode(rightData);
 
     return treeNode;
 }
@@ -234,26 +239,19 @@ void freeTree(TreeNode *root) {
     if (root != NULL) {
         freeTree(root->left);
         freeTree(root->right);
-        free(root->projection);
+        printf("1\n");
+        if(root->projection != NULL)
+            free(root->projection); // -> sta leaf den exei projection
+        printf("2\n");
+
+        if(root->left == NULL && root->right == NULL){
+            printf("leaf\n");
+            freeNode(root->data); // -> sto root den exei data
+        }
+        printf("3\n");
         free(root);
+        printf("4\n");
 
         ///TODO also free nodes!!!
     }
 }
-
-// int main() {
-//     // TODO: Load your dataset and initialize data points
-
-//     int dimension = 10; // Replace with the actual dimensionality of your data
-//     int treeDepth = 5;   // Adjust the tree depth based on your requirements
-
-//     // Build the random projection tree
-//     TreeNode *root = buildRandomProjectionTree(/* Your data */, dimension, treeDepth);
-
-//     // TODO: Query for nearest neighbors using the searchNeighbors function
-
-//     // Free the allocated memory for the tree
-//     freeTree(root);
-
-//     return 0;
-// }

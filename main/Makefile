@@ -43,4 +43,4 @@ run-euclidean-improved: $(EXEC)
 
 
 valgrind: $(EXEC)
-	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGSEUCL)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGSIMP)
