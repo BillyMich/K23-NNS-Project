@@ -101,9 +101,20 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
     treeNode->left = buildRandomProjectionTree(leftData, dimension, D, nodesLeft);
     treeNode->right = buildRandomProjectionTree(rightData, dimension, D, nodesRight);
 
-    //free left right
-    freeNode(leftData);
-    freeNode(rightData);
+    // //free left right
+    // freeNode(leftData);
+    // freeNode(rightData);
+
+    while (leftData != NULL) {
+        Node* temp_leftData = leftData;
+        leftData = leftData->next;
+        free(temp_leftData);
+    }
+    while (rightData != NULL) {
+        Node* temp_rightData = rightData;
+        rightData = rightData->next;
+        free(temp_rightData);
+    }
 
     return treeNode;
 }
@@ -240,18 +251,40 @@ void freeTree(TreeNode *root) {
         freeTree(root->left);
         freeTree(root->right);
         printf("1\n");
-        if(root->projection != NULL)
-            free(root->projection); // -> sta leaf den exei projection
-        printf("2\n");
+        if (root->projection != NULL)
+            free(root->projection);
 
-        if(root->left == NULL && root->right == NULL){
-            printf("leaf\n");
-            freeNode(root->data); // -> sto root den exei data
+        printf("2\n");
+        if (root->data != NULL) {
+            freeNodeProj(root->data);  // Free the memory associated with the leaf node data
+            free(root->data);
         }
+
         printf("3\n");
         free(root);
-        printf("4\n");
+    }
+}
 
-        ///TODO also free nodes!!!
+
+void freeNodeProj(Node* node) {
+    while (node != NULL) {
+        Node* temp = node;
+        node = node->next;
+        
+        // Free the memory associated with the dimension linked list
+        freeDimensionProj(temp->dimension);
+
+        // Free any other memory associated with the node (e.g., cost, neighbors, etc.)
+        // Add additional free calls if needed
+        
+        free(temp);
+    }
+}
+
+void freeDimensionProj(Dimension* dimension) {
+    while (dimension != NULL) {
+        Dimension* temp = dimension;
+        dimension = dimension->next;
+        free(temp);
     }
 }
