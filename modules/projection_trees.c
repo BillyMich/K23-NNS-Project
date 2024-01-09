@@ -22,7 +22,6 @@ double computeProjection(Node* node, int *projection) {
         count++;
     }
     return result;
-    //maybe an array with all the computed projections
 }
 
 void addData(Node** headData, Node* data) {
@@ -54,16 +53,16 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
     if (numNodes <= D) {
         // Create a leaf node
         TreeNode* leaf = (TreeNode*)malloc(sizeof(TreeNode));
-        leaf->data = data;
         leaf->projection = NULL;
         leaf->left = NULL;
         leaf->right = NULL;
+        leaf->data = NULL;
 
-        // while (data != NULL){
-        //     printf("- %d\n", data->nodeNameInt);
-        //     data = data->next;
-        // }
-        // printf("------------------\n");
+        // leaf->data = data;
+        while (data != NULL) {
+            addData(&(leaf->data), data);
+            data = data->next;
+        }
         return leaf;
     }
 
@@ -84,13 +83,11 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
 
         if (dotProduct >= 0) {
             //left tree node
-            // printf("the node %d goes left\n", data->nodeNameInt);
             addData(&leftData, data);
             nodesLeft++;
         } 
         else {
             //right tree node
-            // printf("the node %d goes right\n", data->nodeNameInt);
             addData(&rightData, data);
             nodesRight++;
         }
@@ -101,15 +98,13 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
     treeNode->left = buildRandomProjectionTree(leftData, dimension, D, nodesLeft);
     treeNode->right = buildRandomProjectionTree(rightData, dimension, D, nodesRight);
 
-    // //free left right
-    // freeNode(leftData);
-    // freeNode(rightData);
-
+    // free left data
     while (leftData != NULL) {
         Node* temp_leftData = leftData;
         leftData = leftData->next;
         free(temp_leftData);
     }
+    // free right data
     while (rightData != NULL) {
         Node* temp_rightData = rightData;
         rightData = rightData->next;
@@ -120,17 +115,8 @@ TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNod
 }
 
 // Function to search for nearest neighbors in the tree
-Node* searchTree(TreeNode* root, Node* node) {
-    // TODO: Implement the search for nearest neighbors in the tree
-    
+Node* searchTree(TreeNode* root, Node* node) {    
     if(root->left == NULL && root->right == NULL){
-        // Node* data = root->data;
-        // printf("in search\n");
-        // while (data != NULL){
-        //     printf("- %d\n", data->nodeNameInt);
-        //     data = data->next;
-        // }
-        // printf("---------------------\n");
         return root->data;
     }
     
@@ -151,7 +137,6 @@ Node* searchTree(TreeNode* root, Node* node) {
 void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_function) {
     Node* currentNode = (*graph)->nodes;
     int numNodes = (*graph)->numNodes;
-    // printf("The Nodes are %d\n", numNodes);
 
     if(K > numNodes){
         fprintf(stderr, "Too many Neighbors. The Nodes are %d\n", numNodes);
@@ -159,7 +144,6 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
     }
     
     for(int numNode = 0; numNode < numNodes; numNode++){
-        // printf("------- Node %d ------\n", numNode);
 
         int counter = 0;
         Node* list = searchTree(root, currentNode);
@@ -167,7 +151,6 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
         int usedNumbers[K];
 
         while (list != NULL) {
-            // printf("Node = %d \n", list->nodeNameInt);
 
             if(currentNode->nodeNameInt == list->nodeNameInt) {
                 list = list->next;
@@ -175,7 +158,6 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
             } 
             
             if (counter == K) {
-                // list = list->next;
                 break;
             }
 
@@ -200,17 +182,6 @@ void randomNeighbors(Graph** graph, TreeNode* root, int K, String distance_funct
             int remainigNumbers = K - counter;
 
             remainingRandomNodes(graph, currentNode, usedNumbers, remainigNumbers, K, distance_function);
-            
-            // NodeNeighborsLinkedList* tempNode = currentNode->neighbors;
-            // int lala = 0;
-            // printf("current node = %d\n", currentNode->nodeNameInt);
-
-            // while (tempNode != NULL) {
-            //     printf("neig %d\n", tempNode->node->nodeNameInt);
-            //     lala++;
-            //     tempNode = tempNode->next;
-            // }
-            // printf("----- Counter ---- %d\n", lala);
         }
 
         currentNode = currentNode->next;
@@ -250,41 +221,44 @@ void freeTree(TreeNode *root) {
     if (root != NULL) {
         freeTree(root->left);
         freeTree(root->right);
-        printf("1\n");
+
         if (root->projection != NULL)
             free(root->projection);
 
-        printf("2\n");
-        if (root->data != NULL) {
-            freeNodeProj(root->data);  // Free the memory associated with the leaf node data
-            free(root->data);
+        //free data at leaves
+        if (root->left == NULL && root->right == NULL) {
+            while (root->data != NULL) {
+                Node* temp_Data = root->data;
+                root->data = root->data->next;
+                free(temp_Data);
+            }
+
         }
 
-        printf("3\n");
         free(root);
     }
 }
 
 
-void freeNodeProj(Node* node) {
-    while (node != NULL) {
-        Node* temp = node;
-        node = node->next;
+// void freeNodeProj(Node* node) {
+//     while (node != NULL) {
+//         Node* temp = node;
+//         node = node->next;
         
-        // Free the memory associated with the dimension linked list
-        freeDimensionProj(temp->dimension);
+//         // Free the memory associated with the dimension linked list
+//         // freeDimensionProj(temp->dimension);
 
-        // Free any other memory associated with the node (e.g., cost, neighbors, etc.)
-        // Add additional free calls if needed
+//         // Free any other memory associated with the node (e.g., cost, neighbors, etc.)
+//         // Add additional free calls if needed
         
-        free(temp);
-    }
-}
+//         free(temp);
+//     }
+// }
 
-void freeDimensionProj(Dimension* dimension) {
-    while (dimension != NULL) {
-        Dimension* temp = dimension;
-        dimension = dimension->next;
-        free(temp);
-    }
-}
+// void freeDimensionProj(Dimension* dimension) {
+//     while (dimension != NULL) {
+//         Dimension* temp = dimension;
+//         dimension = dimension->next;
+//         free(temp);
+//     }
+// }
