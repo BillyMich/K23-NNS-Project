@@ -8,8 +8,8 @@
 
 static int changes;
 
-#define NUM_THREADS 3  
-#define JOB_QUEUE_SIZE 3
+#define NUM_THREADS 1  
+#define JOB_QUEUE_SIZE 1
 
 
 JobInfo jobQueue[JOB_QUEUE_SIZE];
@@ -87,6 +87,7 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
     
     int pK = p*K;
     double changerPersent;
+    printf("Total noes are %d\n", (*graph)->numNodes);
     printf("The pK (neighbor) nodes for Sampling is %d\n", pK);
     pthread_mutex_destroy(&queueMutex);
     pthread_cond_destroy(&jobAvailable);
@@ -331,7 +332,7 @@ void localJoin(Node** node, String distance_function, int pK) {
             int nodeName2 = tempNeig->node->nodeNameInt;
 
             if ( nodeName1 != nodeName2 && incrementalSearch(tempNeig, temp) == 1 ) {
-                double cost = distance(temp->node->dimension, tempNeig->node->dimension, distance_function);
+                double cost = distance(temp->node, tempNeig->node, distance_function);
                 addCost(&((*node)->cost), temp->node, tempNeig->node, cost);
 
 
@@ -347,7 +348,7 @@ void localJoin(Node** node, String distance_function, int pK) {
             int nodeName4 = tempRev->node->nodeNameInt;
 
             if (nodeName3 != nodeName4 && incrementalSearch(tempRev, temp) == 1) {
-                double cost = distance(temp->node->dimension, tempRev->node->dimension, distance_function);
+                double cost = distance(temp->node, tempRev->node, distance_function);
                 addCost(&((*node)->cost), temp->node, tempRev->node, cost);
 
                 // Update the flags

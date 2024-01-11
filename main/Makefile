@@ -25,15 +25,11 @@ EXECAccuration = programAccuration
 
 # Args for examples
 
-ARGSEUCL = $(DATASETS)/1000000.bin 500 100 euclidean 0.4 0.002050
+ARGSEUCL = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
 
-ARGSMAN =  $(DATASETS)/1000000.bin 100 100  manhattan 0.9 0.1
+ARGSMAN = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
 
-ARGSEUCL = $(DATASETS)/1000000.bin 1000 500 euclidean 0.8 0.001 50
-
-ARGSMAN = $(DATASETS)/100000.bin 100 80 manhattan 0.1 0.001 50
-
-ARGSIMP = $(DATASETS)/asciiData3.bin 10 50 improved 0.1 0.001 50
+ARGSIMP = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
 
 
 

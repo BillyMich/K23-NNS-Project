@@ -49,7 +49,7 @@ void addData(Node** headData, Node* data) {
 }
 
 // Function to build a random projection tree
-TreeNode* buildRandomProjectionTree(Node* data, int dimension, int D, int numNodes) {
+TreeNode*   buildRandomProjectionTree(Node* data, int dimension, int D, int numNodes) {
     if (numNodes <= D) {
         // Create a leaf node
         TreeNode* leaf = (TreeNode*)malloc(sizeof(TreeNode));

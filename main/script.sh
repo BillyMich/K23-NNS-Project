@@ -18,7 +18,10 @@ do
 
     printf "Running with parameters: $param1 $param2 threads $threads jobs for threads $jobs id:$run_count \n"
     printf "./program ../datasets/1000000.bin 100 100 euclidean $param1 $param2 $threads $jobs $run_count \n" 
-    ./program ../datasets/1000000.bin 100 100 euclidean $param1 $param2 $threads $jobs $run_count
+    timeout 120 ./program ../datasets/1000000.bin 100 100 euclidean $param1 $param2 $threads $jobs $run_count
 
+    if [ $? -eq 124 ]; then
+        echo "Program terminated after reaching 5-minute timeout"
+    fi
     
 done
