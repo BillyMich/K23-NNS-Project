@@ -8,8 +8,8 @@
 
 static int changes;
 
-#define NUM_THREADS 10  
-#define JOB_QUEUE_SIZE 10
+#define NUM_THREADS 3  
+#define JOB_QUEUE_SIZE 3
 
 
 JobInfo jobQueue[JOB_QUEUE_SIZE];
@@ -123,10 +123,8 @@ void knn_improved_algorithm(Graph** graph, int K, String distance_function, doub
         tempNode = tempNode->next;
         
     }
-
     addJob(&head, dataJob);
-
-
+    
     do {
 
         changes = 0;
@@ -284,26 +282,26 @@ void changeNeighbors(Node* tempNode) {
         Cost* tempCost = tempNode->cost;
 
         while (tempCost != NULL) {
-            pthread_mutex_lock(&changeInMemory);
+             pthread_mutex_lock(&changeInMemory);
             Node* tempNode1 =  tempCost->node1;
             Node* tempNode2 = tempCost->node2;
-            //In tempNode2 we add tempNode1 as neighbor
+            // In tempNode2 we add tempNode1 as neighbor
             if (check(tempNode1->nodeNameInt, tempNode2->neighbors, tempNode2, tempCost->cost) == 0) {
                 addNeighbor(&(tempNode2->neighbors), tempNode1, tempCost->cost);            //add the neighbor
                 addNeighbor(&(tempNode1->reversedNeighbors), tempNode2, tempCost->cost);    //add the reverse
                 // Update reverse neighbors
                 deleteLastNeighborNode(&(tempNode2->neighbors));                  //delete neighbor
                 
-                changes++;
+                ++changes;
             }
-            // In tempNode1 we add tempNode2 as neighbor
+            //In tempNode1 we add tempNode2 as neighbor
             if (check(tempNode2->nodeNameInt, tempNode1->neighbors, tempNode1, tempCost->cost) == 0) {
                 addNeighbor(&(tempNode1->neighbors), tempNode2, tempCost->cost);            //add the neighbor
                 addNeighbor(&(tempNode2->reversedNeighbors), tempNode1, tempCost->cost);    //add the reverse
                 
                 // Update reverse neighbors
                 deleteLastNeighborNode(&(tempNode1->neighbors));                  //delete neighbor
-                changes++;
+                ++changes;
             }
             tempCost = tempCost->next;
             pthread_mutex_unlock(&changeInMemory);
@@ -384,7 +382,7 @@ NodeNeighborsLinkedList* sampling(NodeNeighborsLinkedList* neighbors, int pK) {
     while (tempNeighbor != NULL && pK > 0) {
         if (tempNeighbor->flag == 1) {
             addNeighbor(&samplingNeighborsHead, tempNeighbor->node, tempNeighbor->cost); //free after use
-            pK--;
+            --pK;
         }
         tempNeighbor = tempNeighbor->next;
     }

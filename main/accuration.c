@@ -66,7 +66,6 @@ int processFile(const char* filename, Graph* rightGraphResults) {
 int main() {
     printf("Starting...\n");
     Graph* graphRightResults = createGraphFromBinaryFile("../datasets/1000000.bin", 100);
-    printf("Starting...\n");
     FindAllRightNeighbors(graphRightResults, "euclidean", 100);
     const char *directoryPath = "."; 
     DIR *dir;
