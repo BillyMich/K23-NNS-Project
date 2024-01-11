@@ -12,15 +12,17 @@ CFLAGS = -Wall -g -I$(INCLUDE)
 LDFLAGS = -lm -fsanitize=address
 
 # .o files
-OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
+OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o $(MODULES)/projection_trees.o
 
 # Executable
 EXEC = program
 
 # Args for examples
-ARGSEUCL = $(DATASETS)/00000020.bin 10 65 euclidean 0.8 0.001
+ARGSEUCL = $(DATASETS)/1000000.bin 1000 500 euclidean 0.8 0.001 50
 
-ARGSMAN = $(DATASETS)/00001000-4.bin 100 399 manhattan 0.1 0.001
+ARGSMAN = $(DATASETS)/100000.bin 100 80 manhattan 0.1 0.001 50
+
+ARGSIMP = $(DATASETS)/asciiData3.bin 10 50 improved 0.1 0.001 50
 
 ARGSIMP = $(DATASETS)/asciiData3.bin 10 50 improved 0.1 0.001
 
@@ -43,4 +45,4 @@ run-euclidean-improved: $(EXEC)
 
 
 valgrind: $(EXEC)
-	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGSEUCL)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXEC) $(ARGSIMP)
