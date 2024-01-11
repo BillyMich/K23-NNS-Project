@@ -46,9 +46,13 @@ double manhattan_distance(Dimension* nodeDimension1 , Dimension* nodeDimension2)
     return distance;
 }
 
+
 /// @brief 
 /// @param head 
 /// @return 
+
+//isws boleyei node1, node2
+
 double calculate_norm(Dimension* head) { 
     double norm = 0.0;
 
@@ -62,10 +66,12 @@ double calculate_norm(Dimension* head) {
     return norm;
 }
 
+
 /// @brief 
 /// @param node1 
 /// @param node2 
 /// @return 
+
 double euclidean_distance_improved(Node* node1, Node* node2){
     //x^2+y^2-2xy
     double norm1 = node1->norm;
@@ -81,7 +87,9 @@ double euclidean_distance_improved(Node* node1, Node* node2){
         tempDimension1 = tempDimension1->next;
         tempDimension2 = tempDimension2->next;
     }
+
     // printf("improved cost-%f\n",norm1+norm2-2.0*mult);
+    printf("improved cost-%f\n",norm1+norm2-2.0*mult);
     return norm1+norm2-2.0*mult;
 }
 
