@@ -75,10 +75,14 @@ void *workerFunction(void *threadarg) {
 /// @param graph 
 /// @param K 
 /// @param distance_function 
-void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p, double earlyTerminationParameter){
+void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p, double earlyTerminationParameter){
 
     // Using the existing function to "make" the random Nodes
-    KRandomNodes(graph, K, distance_function);
+    // KRandomNodes(graph, K, distance_function);
+
+    // Projection trees search neighbors...
+    randomNeighbors(graph, treeRoot, K, distance_function);
+
     Node * tempNode = (*graph)->nodes;
     
     int pK = p*K;
@@ -329,6 +333,7 @@ void localJoin(Node** node, String distance_function, int pK) {
             if ( nodeName1 != nodeName2 && incrementalSearch(tempNeig, temp) == 1 ) {
                 double cost = distance(temp->node->dimension, tempNeig->node->dimension, distance_function);
                 addCost(&((*node)->cost), temp->node, tempNeig->node, cost);
+
 
                 // Update the flags
                 tempNeig->flag = 0;

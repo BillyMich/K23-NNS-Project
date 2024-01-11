@@ -1,7 +1,9 @@
 #ifndef KNN_IMPROVEMENTS_H
 #define KNN_IMPROVEMENTS_H
 
-#include "../include/knn.h"
+#include "knn.h"
+#include "projection_trees.h"
+
 
 typedef struct DataJob {
     Node* node;
@@ -21,6 +23,9 @@ typedef struct {
 } JobInfo;
 
 void knn_improved_algorithm(Graph** graph, int K, String distance_function, double p,double earlyTerminationParameter);
+
+void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p,double earlyTerminationParameter);
+
 
 void changeNeighbors(Node* node);
 

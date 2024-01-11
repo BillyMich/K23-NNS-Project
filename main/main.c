@@ -13,18 +13,34 @@ int main(int argc, char* argv[]) {
     String distance_function = argv[4];
     double p = atof(argv[5]);
     double earlyTerminationParameter = atof(argv[6]);
+
     //int threads = atoi(argv[7]);
     //int jobs = atoi(argv[8]);
     int proccesId = atoi(argv[9]);
     
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
     
+
+    int D = atoi(argv[7]);
+
+    //TODO-- time calc
+    Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
+    
+    //TODO-- time calc
+    TreeNode* treeRoot = buildRandomProjectionTree(graph->nodes, dimensions, D, graph->numNodes);
+        
+
     printf("\n----- Starting KNN algorithm -----\n");
     
     clock_t knn_start, knn_end;
     knn_start = clock();
+
     
     knn_improved_algorithm(&graph, K, distance_function, p, earlyTerminationParameter);
+
+
+    knn_improved_algorithm(&graph, treeRoot, K, distance_function, p, earlyTerminationParameter);
+
     // knn_algorithm(&graph, K, distance_function);
     
     printf("\n----- Finished KNN algorithm -----\n");
@@ -49,6 +65,10 @@ int main(int argc, char* argv[]) {
     //writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
     freeGraph(graph);
     freeGraph(graphRightResults);
+
+    freeTree(treeRoot);
+
+    // createBinary("100000.bin");
 
     return 0;
 }

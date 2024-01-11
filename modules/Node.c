@@ -1,5 +1,5 @@
 #include "../include/Node.h"
-
+#include "../include/MathematicalFunctions.h"
 
 /// @brief Initialzation of a node
 /// @return 
@@ -25,6 +25,9 @@ Node* initNode() {
 void addNode(Node** headNode, Dimension* headDimension) {
     Node* newNode = initNode();
     newNode->dimension = headDimension;
+    // printf("head->value-%f\n", headDimension->value);
+    newNode->norm = calculate_norm(headDimension);
+
     if (*headNode == NULL) {
         newNode->nodeNameInt = 0;
         *headNode = newNode;

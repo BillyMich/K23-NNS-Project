@@ -65,6 +65,7 @@ double** matrixNodes;
 /// @return 
 // void checkNeighborofNeighbors(Graph** graph, Node** sourceNode, NodeNeighborsLinkedList* neighbor, String distance_function ){
     
+//<<<<<<< 47-job-sceduler
 //     NodeNeighborsLinkedList* tempNeighbors = neighbor;
 
 //     while (tempNeighbors != NULL) {
@@ -81,6 +82,24 @@ double** matrixNodes;
 //         }
 //         if (check(neighborName, (*sourceNode)->neighbors, sourceName, cost) == 0) {
 //             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost); //add the neighbor
+// =======
+//     NodeNeighborsLinkedList* tempNeighbors = neighbor;
+
+//     while (tempNeighbors != NULL) {
+//         int neighborName = tempNeighbors->node->nodeNameInt;
+//         int sourceName = (*sourceNode)->nodeNameInt;
+
+//         double cost = 0.0;
+//         if(matrixNodes[neighborName][sourceName] == -1.00){
+//             cost = distance(*sourceNode, tempNeighbors->node, distance_function);
+//             matrixNodes[neighborName][sourceName] = cost;
+//         }
+//         else{
+//             cost = matrixNodes[neighborName][sourceName];
+//         }
+//         if (check(neighborName, (*sourceNode)->neighbors, sourceName, cost) == 0) {
+//             addNeighbor(&(*sourceNode)->neighbors, tempNeighbors->node, cost); //add the neighbor
+// >>>>>>> Master
             
 //             Node* temp = (*graph)->nodes;
 //             while (temp != NULL && temp->nodeNameInt != neighborName){     
@@ -133,7 +152,7 @@ void KRandomNodes(Graph** graph, int K, String distance_function) {
                 neighborNode = neighborNode->next;
             }
 
-            double cost = distance(currentNode->dimension, neighborNode->dimension, distance_function);
+            double cost = distance(currentNode, neighborNode, distance_function);
             
             addNeighbor(&(currentNode->neighbors), neighborNode, cost);
             addNeighbor(&(neighborNode->reversedNeighbors), currentNode, cost);
