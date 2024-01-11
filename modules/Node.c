@@ -14,6 +14,7 @@ Node* initNode() {
     node->reversedNeighbors = NULL;
     node->cost = NULL;
     node->next = NULL;
+    node->MaxCostToInsert = -1;
 
     return node;
 }

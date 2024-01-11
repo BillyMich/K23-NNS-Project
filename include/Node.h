@@ -18,6 +18,7 @@ typedef struct Node {
     NodeNeighborsLinkedList* neighbors;
     NodeNeighborsLinkedList* reversedNeighbors;
     Cost* cost;
+    double MaxCostToInsert;
     Node* next;
 }Node;
 

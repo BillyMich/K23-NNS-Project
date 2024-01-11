@@ -122,6 +122,7 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbo
     double count = 0 ;
     double correct = 0;
 
+
     while (tempNodeKNS != NULL)
     {
         
@@ -130,13 +131,12 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbo
 
         while (tempNodeListKNS !=NULL)
         {
-            count++;
-
+            ++count;
             for (int  i = 0; i < neighbors; i++)
             {
                 if (tempNodeListKNS->node->nodeNameInt == tempNodeListRight->node->nodeNameInt)
                 {   
-                    correct++;
+                    ++correct;
                     break;
                 }
                 tempNodeListRight = tempNodeListRight->next;            

@@ -4,18 +4,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct Node Node;
 typedef struct Cost Cost;
 
 typedef struct Cost{
-    int node1;
-    int node2;
+    Node* node1;
+    Node* node2;
     double cost;
     Cost* next;
 }Cost;
 
-Cost* initCost(int name1, int name2, double dis_cost);
+Cost* initCost(Node* name1, Node* name2, double dis_cost);
 
-void addCost(Cost** headCost, int node1, int node2, double cost);
+void addCost(Cost** headCost,  Node* node1,  Node* node2, double cost);
 
 void freeCost(Cost* cost);
 
