@@ -24,7 +24,6 @@ ARGSMAN = $(DATASETS)/100000.bin 100 80 manhattan 0.1 0.001 50
 
 ARGSIMP = $(DATASETS)/asciiData3.bin 10 50 improved 0.1 0.001 50
 
-ARGSIMP = $(DATASETS)/asciiData3.bin 10 50 improved 0.1 0.001
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $(EXEC) $(LDFLAGS)

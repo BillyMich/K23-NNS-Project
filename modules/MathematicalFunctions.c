@@ -88,8 +88,7 @@ double euclidean_distance_improved(Node* node1, Node* node2){
         tempDimension2 = tempDimension2->next;
     }
 
-    // printf("improved cost-%f\n",norm1+norm2-2.0*mult);
-    printf("improved cost-%f\n",norm1+norm2-2.0*mult);
+    //printf("improved cost-%f\n",norm1+norm2-2.0*mult);
     return norm1+norm2-2.0*mult;
 }
 
