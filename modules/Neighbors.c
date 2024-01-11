@@ -62,8 +62,8 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
 // }
 
 // New delete for last node
-int deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
-    if (*head == NULL) return -1;
+Node*  deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
+    if (*head == NULL) return NULL;
 
     NodeNeighborsLinkedList* current = *head;
     NodeNeighborsLinkedList* previous = NULL;
@@ -74,7 +74,7 @@ int deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
         current = current->next;
     }
 
-    int name = current->node->nodeNameInt;
+    Node* name = current->node;
     
     if (previous == NULL) {
         // There is only one neighbor
@@ -90,12 +90,7 @@ int deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
     return name;
 }
 
-void deleteReverseNeighbor(Node** head, int nodeName, int nodeNameReverse) {
-    Node* temp = *head;
-
-    while (temp != NULL && temp->nodeNameInt != nodeName) {
-        temp = temp->next;
-    }
+void deleteReverseNeighbor(Node* temp, int nodeNameReverse) {
 
     NodeNeighborsLinkedList** reverseHead = &(temp->reversedNeighbors);
     NodeNeighborsLinkedList* reverseTemp = *reverseHead;

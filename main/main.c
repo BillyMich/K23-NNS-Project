@@ -13,35 +13,43 @@ int main(int argc, char *argv[]) {
     String distance_function = argv[4];
     double p = atof(argv[5]);
     double earlyTerminationParameter = atof(argv[6]);
+    int D = atoi(argv[7]);
+    int proccesId = atoi(argv[8]);
+   // int numProcesses = atoi(argv[9]);
+    //int numJobs = atoi(argv[10]);
 
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
+    
+    TreeNode* treeRoot = buildRandomProjectionTree(graph->nodes, dimensions, D, graph->numNodes);
         
     printf("\n----- Starting KNN algorithm -----\n");
 
     clock_t knn_start, knn_end;
     knn_start = clock();
 
-    knn_improved_algorithm(&graph, K, distance_function, p, earlyTerminationParameter);
+    knn_improved_algorithm(&graph, treeRoot, K, distance_function, p, earlyTerminationParameter);
     // knn_algorithm(&graph, K, distance_function);
 
     knn_end = clock();
     printf("Time for KNN algorithm: %lf sec\n", (double)(knn_end - knn_start) / CLOCKS_PER_SEC);
-    
-    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
-    
-    FindAllRightNeighbors(graphRightResults, distance_function);
 
+    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
+    FindAllRightNeighbors(graphRightResults, distance_function,K);
+    
     double accurationRate = findAccurationResult(graph, graphRightResults,K);
-    double accurationSuperRate = findAccurationResultSuperAccurate(graph, graphRightResults);
 
     printf("\n~ Acurate by %f %% ~\n", accurationRate);
-    printf("~ Acurate Supper  by %f %% ~\n", accurationSuperRate);
 
-    writeGraphToFile(graph, "Graph.txt"); 
-    writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
+    char originalStr[] = "Graph.txt";  // Original string
+    char newStr[100];
+    sprintf(newStr, "%d %s", proccesId, originalStr);
 
+    writeGraphToFile(graph, newStr);
+
+    //writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
     freeGraph(graph);
     freeGraph(graphRightResults);
+    freeTree(treeRoot);
 
     return 0;
 }

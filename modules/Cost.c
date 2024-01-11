@@ -1,6 +1,6 @@
 #include "../include/Cost.h"
 
-Cost* initCost(int name1, int name2, double dis_cost) {
+Cost* initCost(Node* name1, Node* name2, double dis_cost) {
     Cost* cost = (Cost*)malloc(sizeof(Cost));
     if (cost == NULL) {
         fprintf(stderr, "Memory allocation error\n");
@@ -15,7 +15,7 @@ Cost* initCost(int name1, int name2, double dis_cost) {
     return cost;
 }
 
-void addCost(Cost** headCost, int node1, int node2, double cost) {
+void addCost(Cost** headCost, Node* node1, Node* node2, double cost) {
     Cost* newCost = initCost(node1, node2, cost);
 
     if (*headCost == NULL) {
