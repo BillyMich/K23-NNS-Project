@@ -16,7 +16,7 @@ LDFLAGS = -lm -fsanitize=address -lpthread
 # .o files
 OBJS = main.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o $(MODULES)/projection_trees.o
 
-OBJSAccuarion = accuration.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o
+OBJSAccuarion = accuration.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o $(MODULES)/knn_improvements.o $(MODULES)/Cost.o $(MODULES)/projection_trees.o
 # Executable
 EXEC = program
 
@@ -29,7 +29,7 @@ ARGSEUCL = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
 
 ARGSMAN = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
 
-ARGSIMP = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
+ARGSIMP = $(DATASETS)/asciiData3.bin 5 20 improved 0.6 0.0151 30 1
 
 
 
@@ -43,7 +43,7 @@ $(EXECAccuration): $(OBJSAccuarion)
 
 clean:
 	rm -f $(OBJS) $(EXEC) $(EXECAccuration) *.o *.exe *.stackdump *.out *.bin *.txt
-	rm *.txt
+	rm txtfiles/*.txt
 
 run-euclidean: $(EXEC)
 	./$(EXEC) $(ARGSEUCL)

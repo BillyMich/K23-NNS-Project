@@ -8,7 +8,7 @@
 
 static int changes;
 
-#define NUM_THREADS 1  
+#define NUM_THREADS 1
 #define JOB_QUEUE_SIZE 1
 
 

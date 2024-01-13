@@ -172,8 +172,6 @@ void writeGraphToFile(Graph* graph, const char* filename) {
             fprintf(file, "Neighbor: %d\n", currentNeighbor->node->nodeNameInt);
             currentNeighbor = currentNeighbor->next;
         }
-
-        fprintf(file, "\n");
         currentNode = currentNode->next;
     }
 

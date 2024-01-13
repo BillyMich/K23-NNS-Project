@@ -40,9 +40,9 @@ int main(int argc, char *argv[]) {
 
     printf("\n~ Acurate by %f %% ~\n", accurationRate);
 
-    char originalStr[] = "Graph.txt";  // Original string
+    char originalStr[] = "Graph";  // Original string
     char newStr[100];
-    sprintf(newStr, "%d %s", proccesId, originalStr);
+    sprintf(newStr, "txtfiles/%d%s-%lf.txt", proccesId, originalStr,(double)(knn_end - knn_start) / CLOCKS_PER_SEC);
 
     writeGraphToFile(graph, newStr);
 

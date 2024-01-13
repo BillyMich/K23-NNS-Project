@@ -16,15 +16,14 @@ int processFile(const char* filename, Graph* rightGraphResults) {
     }
     char line[100];
     int neighbor;
-    int points [10000][100]  ;
+    int points [200][20];
     int i = -1;
     int j=0;
 
     while (fgets(line, sizeof(line), file)) {
         if (strncmp(line, "Node:", 5) == 0) {
-            printf("Node: %d\n", i);
             i++;
-            j=-1;
+            j=0;
         } else if (strncmp(line, "Neighbor:", 9) == 0) {
             sscanf(line, "Neighbor: %d", &neighbor);
             points[i][j++] =neighbor;        
@@ -40,47 +39,68 @@ int processFile(const char* filename, Graph* rightGraphResults) {
     while (tempNodeRight != NULL)
     {
         NodeNeighborsLinkedList * tempNodeListRight = tempNodeRight->neighbors;
+                    count+=20;
         while (tempNodeListRight !=NULL)
         {
-            count++;
-            for (int  i = 0; i < 100; i++)
+            for (int  i = 0; i < 20; i++)
             {
                 if (tempNodeListRight->node->nodeNameInt == points[j][i])
                 {   
                     correct++;
-                    break;
                 }
-                tempNodeListRight = tempNodeListRight->next;            
             }
-            tempNodeListRight = tempNodeRight->neighbors;
-            
+
+            tempNodeListRight = tempNodeListRight->next;
         }
         j++;
         tempNodeRight = tempNodeRight->next;
     }
     
+    printf("%f , %f \n",correct , count);
     printf("This is the accuartion %f /n",(correct / count )* 100);
+
+    file = fopen("example.txt", "a");
+
+    if (file == NULL) {
+        printf("Error opening the file.\n");
+        return 1; // Exit with an error code
+    }
+
+    // Write a line to the file
+    fprintf(file, " %f\n",(correct/count)*100);
+
+    // Close the file
+    fclose(file);
     return 0;
 }
 
 int main() {
-    printf("Starting...\n");
-    Graph* graphRightResults = createGraphFromBinaryFile("../datasets/1000000.bin", 100);
-    FindAllRightNeighbors(graphRightResults, "euclidean", 100);
-    const char *directoryPath = "."; 
+    Graph* graphRightResults = createGraphFromBinaryFile("../datasets/asciiData3.bin", 5);
+    FindAllRightNeighbors(graphRightResults, "improved", 20);
+    const char *directoryPath = "./txtfiles"; 
     DIR *dir;
     struct dirent *ent;
+
     while (1) { 
         if ((dir = opendir(directoryPath)) != NULL) {
             while ((ent = readdir(dir)) != NULL) {
-                    processFile(ent->d_name,graphRightResults);
-                    remove(ent->d_name);                 
+                    printf("%s\n",ent->d_name);
+                    if (!(strcmp(ent->d_name, ".")==0) &&  !(strcmp(ent->d_name, "..")==0))
+                    {
+                    printf( "%s\n", ent->d_name);
+                    char originalStr[] = "./txtfiles";  // Original string
+                    char newStr[500];
+                    sprintf(newStr, "%s/%s", originalStr, ent->d_name);
+                    printf("%s\n",newStr);
+                    processFile(newStr,graphRightResults);
+                    }//remove(newStr);                 
             }
             closedir(dir);
         } else {
             perror("Unable to read directory");
             return 1;
         }
+        printf("Sleeping for 10 seconds...\n");
         sleep(10);
     }
 
