@@ -51,7 +51,6 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     int flag = 0; // Flag for feof  
 
     Dimension* headDimension = NULL;
-
     // Read and process data from the binary file
     while (!feof(file)) {
         

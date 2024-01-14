@@ -8,7 +8,7 @@
 #include "../include/knn.h"
 #include "../include/knn_improvments.h"
 
-int processFile(const char* filename, Graph* rightGraphResults) {
+int processFile(const char* filename, Graph* rightGraphResults, int geitones , int K) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("Unable to open the file.");
@@ -16,7 +16,7 @@ int processFile(const char* filename, Graph* rightGraphResults) {
     }
     char line[100];
     int neighbor;
-    int points [200][20];
+    int points [K][geitones];
     int i = -1;
     int j=0;
 
@@ -39,10 +39,10 @@ int processFile(const char* filename, Graph* rightGraphResults) {
     while (tempNodeRight != NULL)
     {
         NodeNeighborsLinkedList * tempNodeListRight = tempNodeRight->neighbors;
-                    count+=20;
+        count+=geitones;
         while (tempNodeListRight !=NULL)
         {
-            for (int  i = 0; i < 20; i++)
+            for (int  i = 0; i < geitones; i++)
             {
                 if (tempNodeListRight->node->nodeNameInt == points[j][i])
                 {   
@@ -67,16 +67,21 @@ int processFile(const char* filename, Graph* rightGraphResults) {
     }
 
     // Write a line to the file
-    fprintf(file, " %f\n",(correct/count)*100);
+    fprintf(file, "accuration:%f-%s\n",(correct/count)*100,filename);
 
     // Close the file
     fclose(file);
     return 0;
 }
 
-int main() {
-    Graph* graphRightResults = createGraphFromBinaryFile("../datasets/asciiData3.bin", 5);
-    FindAllRightNeighbors(graphRightResults, "improved", 20);
+int main(int argc, char *argv[]) {
+
+    int geitones = atoi(argv[1]);
+    int K = atoi(argv[2]);
+    int dimension = atoi(argv[3]);
+
+    Graph* graphRightResults = createGraphFromBinaryFile(argv[4], dimension);
+    FindAllRightNeighbors(graphRightResults, "improved", geitones);
     const char *directoryPath = "./txtfiles"; 
     DIR *dir;
     struct dirent *ent;
@@ -92,8 +97,9 @@ int main() {
                     char newStr[500];
                     sprintf(newStr, "%s/%s", originalStr, ent->d_name);
                     printf("%s\n",newStr);
-                    processFile(newStr,graphRightResults);
-                    }//remove(newStr);                 
+                    processFile(newStr,graphRightResults,geitones,K);
+                    remove(newStr);
+                    }                 
             }
             closedir(dir);
         } else {

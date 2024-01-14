@@ -15,8 +15,7 @@ int main(int argc, char *argv[]) {
     double earlyTerminationParameter = atof(argv[6]);
     int D = atoi(argv[7]);
     int proccesId = atoi(argv[8]);
-   // int numProcesses = atoi(argv[9]);
-    //int numJobs = atoi(argv[10]);
+    int numProcesses = atoi(argv[9]);
 
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
     
@@ -27,28 +26,29 @@ int main(int argc, char *argv[]) {
     clock_t knn_start, knn_end;
     knn_start = clock();
 
-    knn_improved_algorithm(&graph, treeRoot, K, distance_function, p, earlyTerminationParameter);
+    knn_improved_algorithm(&graph, treeRoot, K, distance_function, p, earlyTerminationParameter,numProcesses);
     // knn_algorithm(&graph, K, distance_function);
 
     knn_end = clock();
     printf("Time for KNN algorithm: %lf sec\n", (double)(knn_end - knn_start) / CLOCKS_PER_SEC);
 
-    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
-    FindAllRightNeighbors(graphRightResults, distance_function,K);
+    // Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
+    // FindAllRightNeighbors(graphRightResults, distance_function,K);
     
-    double accurationRate = findAccurationResult(graph, graphRightResults,K);
+    // double accurationRate = findAccurationResult(graph, graphRightResults,K);
 
-    printf("\n~ Acurate by %f %% ~\n", accurationRate);
+    // printf("\n~ Acurate by %f %% ~\n", accurationRate);
 
     char originalStr[] = "Graph";  // Original string
     char newStr[100];
-    sprintf(newStr, "txtfiles/%d%s-%lf.txt", proccesId, originalStr,(double)(knn_end - knn_start) / CLOCKS_PER_SEC);
+    sprintf(newStr, "txtfiles/%d%s-%lf-%f-%f-%d-%d.txt", 
+    proccesId, originalStr,(double)(knn_end - knn_start) / CLOCKS_PER_SEC,p,earlyTerminationParameter,D,numProcesses);
 
     writeGraphToFile(graph, newStr);
 
-    //writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
+    //writeGraphToFile(graphRightResults, newStr); 
     freeGraph(graph);
-    freeGraph(graphRightResults);
+    //freeGraph(graphRightResults);
     freeTree(treeRoot);
 
     return 0;

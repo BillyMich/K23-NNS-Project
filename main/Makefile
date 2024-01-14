@@ -20,16 +20,18 @@ OBJSAccuarion = accuration.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Nei
 # Executable
 EXEC = program
 
-EXECAccuration = programAccuration
+EXECAccuration = programAccuration 
 
 
 # Args for examples
 
-ARGSEUCL = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
+ARGSEUCL = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1 2
 
-ARGSMAN = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1
+ARGSMAN = $(DATASETS)/asciiData3.bin 5 20 improved 0.5 0.019 30 1 2
 
-ARGSIMP = $(DATASETS)/asciiData3.bin 5 20 improved 0.6 0.0151 30 1
+ARGSIMP = $(DATASETS)/100000.bin 400 400 improved 0.8 0.00001 100 333 10
+
+DEMOVAR = 400 2500 400 $(DATASETS)/100000.bin
 
 
 
@@ -42,14 +44,14 @@ $(EXECAccuration): $(OBJSAccuarion)
 	@if [ -f $(EXECAccuration).exe ]; then ln -sf $(EXECAccuration).exe $(EXECAccuration); fi	
 
 clean:
-	rm -f $(OBJS) $(EXEC) $(EXECAccuration) *.o *.exe *.stackdump *.out *.bin *.txt
+	rm -f $(OBJS) $(EXEC) $(EXECAccuration) *.o *.exe *.stackdump *.out *.bin
 	rm txtfiles/*.txt
 
 run-euclidean: $(EXEC)
 	./$(EXEC) $(ARGSEUCL)
 
 run-accuration: $(EXECAccuration)
-	./$(EXECAccuration)
+	./$(EXECAccuration) $(DEMOVAR)
 
 run-manhattan: $(EXEC)
 	./$(EXEC) $(ARGSMAN)

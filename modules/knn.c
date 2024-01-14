@@ -190,12 +190,8 @@ int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, Node* s
 
 
     if (sourceNode->MaxCostToInsert != -1) {
-        if (cost > sourceNode->MaxCostToInsert) {
+        if (cost >= sourceNode->MaxCostToInsert) {
             return 1;
-        }
-        else {
-            sourceNode->MaxCostToInsert = -1;
-            return 0;
         }
     }
 
@@ -203,7 +199,6 @@ int check(int neighborsNodeName, NodeNeighborsLinkedList* nodeNeighbors, Node* s
     while (tempNode->next != NULL) {
         if(neighborsNodeName == tempNode->node->nodeNameInt)
             return 1;
-
         tempNode = tempNode->next;
     }
 
