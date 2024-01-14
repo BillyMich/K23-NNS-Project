@@ -34,8 +34,4 @@ void remainingRandomNodes(Graph** graph, Node* currentNode, int* usedNumbers, in
 
 void freeTree(TreeNode* root);
 
-void freeNodeProj(Node* node);
-
-void freeDimensionProj(Dimension* dimension);
-
 #endif 
