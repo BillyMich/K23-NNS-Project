@@ -24,6 +24,7 @@ Time for KNN algorithm: 711.582880 sec
 
 /* FOR KNN IMPROVEMENTS */
 
+
 datasets/00001000-4.bin 100 399 euclidean 0.2 0.001
 Time for KNN algorithm: 10.568234 sec
 ~ Acurate by 97.468672 % ~
@@ -31,6 +32,7 @@ Time for KNN algorithm: 10.568234 sec
 
 
 --------------------------------------------------------
+
 
 
 datasets/00001000-4.bin 100 399 manhattan 0.1 0.001

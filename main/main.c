@@ -13,35 +13,43 @@ int main(int argc, char *argv[]) {
     String distance_function = argv[4];
     double p = atof(argv[5]);
     double earlyTerminationParameter = atof(argv[6]);
+    int D = atoi(argv[7]);
+    int proccesId = atoi(argv[8]);
+    int numProcesses = atoi(argv[9]);
 
     Graph* graph = createGraphFromBinaryFile(argv[1], dimensions);
+    
+    TreeNode* treeRoot = buildRandomProjectionTree(graph->nodes, dimensions, D, graph->numNodes);
         
     printf("\n----- Starting KNN algorithm -----\n");
 
     clock_t knn_start, knn_end;
     knn_start = clock();
 
-    knn_improved_algorithm(&graph, K, distance_function, p, earlyTerminationParameter);
+    knn_improved_algorithm(&graph, treeRoot, K, distance_function, p, earlyTerminationParameter,numProcesses);
     // knn_algorithm(&graph, K, distance_function);
 
     knn_end = clock();
     printf("Time for KNN algorithm: %lf sec\n", (double)(knn_end - knn_start) / CLOCKS_PER_SEC);
+
+    // Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
+    // FindAllRightNeighbors(graphRightResults, distance_function,K);
     
-    Graph* graphRightResults = createGraphFromBinaryFile(argv[1], dimensions);
-    
-    FindAllRightNeighbors(graphRightResults, distance_function);
+    // double accurationRate = findAccurationResult(graph, graphRightResults,K);
 
-    double accurationRate = findAccurationResult(graph, graphRightResults,K);
-    double accurationSuperRate = findAccurationResultSuperAccurate(graph, graphRightResults);
+    // printf("\n~ Acurate by %f %% ~\n", accurationRate);
 
-    printf("\n~ Acurate by %f %% ~\n", accurationRate);
-    printf("~ Acurate Supper  by %f %% ~\n", accurationSuperRate);
+    char originalStr[] = "Graph";  // Original string
+    char newStr[100];
+    sprintf(newStr, "txtfiles/%d%s-%lf-%f-%f-%d-%d.txt", 
+    proccesId, originalStr,(double)(knn_end - knn_start) / CLOCKS_PER_SEC,p,earlyTerminationParameter,D,numProcesses);
 
-    writeGraphToFile(graph, "Graph.txt"); 
-    writeGraphToFile(graphRightResults, "GraphWithBrutal.txt"); 
+    writeGraphToFile(graph, newStr);
 
+    //writeGraphToFile(graphRightResults, newStr); 
     freeGraph(graph);
-    freeGraph(graphRightResults);
+    //freeGraph(graphRightResults);
+    freeTree(treeRoot);
 
     return 0;
 }

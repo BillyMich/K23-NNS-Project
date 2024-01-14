@@ -24,8 +24,12 @@ double findAccurationResultSuperAccurate(Graph* graph , Graph* graphRightResults
 
 void freeGraph(Graph* graph);
 
-void makeFile(String filename);
-
 void writeGraphToFile(Graph* graph, const char* filename);
+
+
+/*-----for creating binary files-----*/
+double randDouble(double min, double max, long long int i);
+
+void createBinary(String filename);
 
 #endif // GRAPH_H

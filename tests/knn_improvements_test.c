@@ -108,9 +108,9 @@ void testIncrementalSearchFailScenario3() {
 
 void testSampling() {
     // Create a list of neighbors
-    Node node1 = {1, NULL, NULL, NULL, NULL};
-    Node node2 = {2, NULL, NULL, NULL, NULL};
-    Node node3 = {3, NULL, NULL, NULL, NULL};
+    Node node1 = {1, 0.0, NULL, NULL, NULL};
+    Node node2 = {2, 0.0, NULL, NULL, NULL};
+    Node node3 = {3, 0.0, NULL, NULL, NULL};
     
     NodeNeighborsLinkedList neighbor1 = {&node1, 1.0, 1, NULL};
     NodeNeighborsLinkedList neighbor2 = {&node2, 2.0, 0, NULL};

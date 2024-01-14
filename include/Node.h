@@ -13,10 +13,12 @@ typedef struct NodeNeighborsLinkedList NodeNeighborsLinkedList;
 
 typedef struct Node {
     int nodeNameInt;
+    double norm;
     Dimension* dimension;
     NodeNeighborsLinkedList* neighbors;
     NodeNeighborsLinkedList* reversedNeighbors;
     Cost* cost;
+    double MaxCostToInsert;
     Node* next;
 }Node;
 

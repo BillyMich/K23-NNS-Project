@@ -11,7 +11,7 @@ CFLAGS = -Wall -Werror -g -I$(INCLUDE)
 LDFLAGS = -lm
 
 # .o files
-OBJSKNN_IMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Cost.o $(MODULES)/knn_improvements.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
+OBJSKNN_IMP = $(TESTS)/knn_improvements_test.o $(MODULES)/Cost.o $(MODULES)/knn_improvements.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o $(MODULES)/projection_trees.o
 
 OBJSKNN = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 
@@ -25,6 +25,7 @@ OBJSNEI = $(TESTS)/neighbours_test.o $(MODULES)/Neighbors.o $(MODULES)/Node.o $(
 
 OBJSMATH = $(TESTS)/mathematical_test.o $(MODULES)/MathematicalFunctions.o $(MODULES)/Dimension.o
 
+OBJSTREE = $(TESTS)/projection_trees_tests.o $(MODULES)/projection_trees.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/knn.o
 
 OBJSK = $(TESTS)/knn_test.o $(MODULES)/Graph.o $(MODULES)/Node.o $(MODULES)/Neighbors.o $(MODULES)/Dimension.o $(MODULES)/MathematicalFunctions.o $(MODULES)/FindAllRightNeighborsAlgorithm.o $(MODULES)/knn.o
 
@@ -42,6 +43,8 @@ EXECD = dimension_test
 EXECNEI = neighbours_test
 
 EXECMATH = mathFunctions_test
+
+EXECTREES = projection_trees_tests
 
 $(EXECKNN_IMP): $(OBJSKNN_IMP)
 	$(CC) $(OBJSKNN_IMP) -o $(EXECKNN_IMP) $(LDFLAGS)
@@ -64,8 +67,11 @@ $(EXECNEI): $(OBJSNEI)
 $(EXECMATH): $(OBJSMATH)
 	$(CC) $(OBJSMATH) -o $(EXECMATH) $(LDFLAGS)
 
+$(EXECTREES): $(OBJSTREE)
+	$(CC) $(OBJSTREE) -o $(EXECTREES) $(LDFLAGS)
+
 clean:
-	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSKNN_IMP) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH) $(EXECKNN_IMP)
+	rm -f $(OBJSG) $(OBJSN) $(OBJSD) $(OBJSKNN) $(OBJSKNN_IMP) $(OBJSMATH) $(OBJSNEI) $(EXECG) $(EXECN) $(EXECD) $(EXECKNN) $(EXECNEI) $(EXECMATH) $(EXECKNN_IMP) $(EXECTREES) $(OBJSTREE)
 	
 runKNN_imp: $(EXECKNN_IMP)
 	./$(EXECKNN_IMP)
@@ -88,7 +94,10 @@ runNEI: $(EXECNEI)
 runMath: $(EXECMATH)
 	./$(EXECMATH)
 
-run-all: runMath runG runN runD runNEI  runKNN runKNN_imp
+runTrees: $(EXECTREES)
+	./$(EXECTREES)
+
+run-all: runMath runG runN runD runNEI  runKNN runKNN_imp runTrees
 
 valgrind-graph: $(EXECG)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECG)
@@ -107,3 +116,6 @@ valgrind-knn: $(EXECKNN)
 
 valgrind-knn-imp: $(EXECKNN_IMP)
 	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECKNN_IMP)
+
+valgrind-trees: $(EXECTREES)
+	valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./$(EXECTREES)

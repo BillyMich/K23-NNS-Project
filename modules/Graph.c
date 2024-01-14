@@ -1,4 +1,5 @@
 #include "../include/Graph.h"
+#include "time.h"
 
 
 Graph* initGraph() {
@@ -50,7 +51,6 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     int flag = 0; // Flag for feof  
 
     Dimension* headDimension = NULL;
-
     // Read and process data from the binary file
     while (!feof(file)) {
         
@@ -62,6 +62,7 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
                 flag = 1;
                 break;
             }
+            // printf("coordinate-%f\n",coordinate);
             addDimension(&headDimension, i, coordinate);
         }
 
@@ -120,6 +121,7 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbo
     double count = 0 ;
     double correct = 0;
 
+
     while (tempNodeKNS != NULL)
     {
         
@@ -128,13 +130,12 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbo
 
         while (tempNodeListKNS !=NULL)
         {
-            count++;
-
+            ++count;
             for (int  i = 0; i < neighbors; i++)
             {
                 if (tempNodeListKNS->node->nodeNameInt == tempNodeListRight->node->nodeNameInt)
                 {   
-                    correct++;
+                    ++correct;
                     break;
                 }
                 tempNodeListRight = tempNodeListRight->next;            
@@ -150,6 +151,9 @@ double findAccurationResult(Graph* graph , Graph* graphRightResults, int neighbo
 }
 
 // Function to write the graph data to a file
+/// @brief 
+/// @param graph 
+/// @param filename 
 void writeGraphToFile(Graph* graph, const char* filename) {
     FILE* file = fopen(filename, "w");
     if (file == NULL) {
@@ -167,10 +171,41 @@ void writeGraphToFile(Graph* graph, const char* filename) {
             fprintf(file, "Neighbor: %d\n", currentNeighbor->node->nodeNameInt);
             currentNeighbor = currentNeighbor->next;
         }
-
-        fprintf(file, "\n");
         currentNode = currentNode->next;
     }
 
+    fclose(file);
+}
+
+
+/*-----for creating binary files-----*/
+/// @brief 
+/// @param min 
+/// @param max 
+/// @param i 
+/// @return 
+double randDouble(double min, double max, long long int i) {
+    time_t t;
+    srand((unsigned) time(&t)*i);
+
+    double range = (max-min); 
+    double div = RAND_MAX/range;
+    return min + (rand()/div);
+}
+
+/// @brief 
+/// @param filename 
+void createBinary(String filename) {
+    FILE* file = fopen(filename, "wb");
+    if (file == NULL) {
+        perror("Error opening file");
+        exit(1);
+    }
+
+    for(int i = 0; i < 1000000; i++) {
+        double num = randDouble(-100, 100, i);
+        //randomly make doubles and write one by one in the filename
+        fwrite(&num, sizeof(double), 1, file); // Read one double at a time
+    }
     fclose(file);
 }
