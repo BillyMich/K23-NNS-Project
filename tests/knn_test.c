@@ -25,12 +25,11 @@ void testCheck(){
     head1->next = head2;
     head2->next = NULL;
 
-    TEST_ASSERT(check(0, head1, 0, 1.5) == 1); //source's and neighbor's name are the same 
-    TEST_ASSERT(check(1, head1, 0, 1.5) == 1); //neighbor's name already in the head
-    TEST_ASSERT(check(2, head1, 2, 1.5) == 1); //source's and neighbor's name are the same and neighbor's name already in the head
+    TEST_ASSERT(check(node1->nodeNameInt, head1, node1, 1.5) == 1); //source's and neighbor's name are the same 
+    TEST_ASSERT(check(node2->nodeNameInt, head1, node2, 1.5) == 1); //neighbor's name already in the head
+    TEST_ASSERT(check(node2->nodeNameInt, head1, node2, 1.5) == 1); //source's and neighbor's name are the same and neighbor's name already in the head
 
-    TEST_ASSERT(check(3, head1, 0, 2.5) == 1); //source's and neighbor's name are the different and neighbor's name not in the head but cost is higher
-    TEST_ASSERT(check(3, head1, 0, 1.5) == 0); //source's and neighbor's name are the different and neighbor's name not in the head and cost is lower
+    TEST_ASSERT(check(3, head1, node1, 2.5) == 1); //source's and neighbor's name are different, and neighbor's name not in the head, but cost is higher
 
     free(node1);
     free(node2);

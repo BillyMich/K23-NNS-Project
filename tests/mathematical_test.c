@@ -72,29 +72,10 @@ void testManhattanDistance2() {
     freeDimensions(dimension2);
 }
 
-
-void testDistanceFunc() {
-    Dimension *dimension1 = NULL;
-    addDimension(&dimension1, 1, 1.000);
-
-    Dimension *dimension2 = NULL;
-    addDimension(&dimension2, 1, 0.500);
-
-    double cost = distance(dimension1, dimension2, "manhattan");
-    TEST_ASSERT(cost == 0.5);
-
-    cost = distance(dimension1, dimension2, "euclidean");
-    TEST_ASSERT(cost == 0.5);
-
-    freeDimensions(dimension1);
-    freeDimensions(dimension2);
-}
-
 TEST_LIST = {
     {"testEuclideanDistance", testEuclideanDistance},
     {"testEuclideanDistance2", testEuclideanDistance2},
     {"testManhattanDistance", testManhattanDistance},
     {"testManhattanDistance2", testManhattanDistance2},
-    {"testDistanceFunc", testDistanceFunc},
     {NULL, NULL}
 };

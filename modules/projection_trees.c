@@ -238,27 +238,3 @@ void freeTree(TreeNode *root) {
         free(root);
     }
 }
-
-
-// void freeNodeProj(Node* node) {
-//     while (node != NULL) {
-//         Node* temp = node;
-//         node = node->next;
-        
-//         // Free the memory associated with the dimension linked list
-//         // freeDimensionProj(temp->dimension);
-
-//         // Free any other memory associated with the node (e.g., cost, neighbors, etc.)
-//         // Add additional free calls if needed
-        
-//         free(temp);
-//     }
-// }
-
-// void freeDimensionProj(Dimension* dimension) {
-//     while (dimension != NULL) {
-//         Dimension* temp = dimension;
-//         dimension = dimension->next;
-//         free(temp);
-//     }
-// }
