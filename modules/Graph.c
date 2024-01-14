@@ -51,7 +51,6 @@ Graph* createGraphFromBinaryFile(String filename, int dimensions) {
     int flag = 0; // Flag for feof  
 
     Dimension* headDimension = NULL;
-
     // Read and process data from the binary file
     while (!feof(file)) {
         
@@ -172,8 +171,6 @@ void writeGraphToFile(Graph* graph, const char* filename) {
             fprintf(file, "Neighbor: %d\n", currentNeighbor->node->nodeNameInt);
             currentNeighbor = currentNeighbor->next;
         }
-
-        fprintf(file, "\n");
         currentNode = currentNode->next;
     }
 

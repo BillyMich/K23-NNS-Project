@@ -22,7 +22,7 @@ typedef struct {
     int type;
 } JobInfo;
 
-void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p,double earlyTerminationParameter);
+void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p,double earlyTerminationParameter,int numberProssec);
 
 void changeNeighbors(Node* node);
 

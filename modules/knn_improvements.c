@@ -8,7 +8,6 @@
 
 static int changes;
 
-#define NUM_THREADS 1  
 #define JOB_QUEUE_SIZE 1
 
 
@@ -54,13 +53,13 @@ void *workerFunction(void *threadarg) {
                 localJoin(&tempNode->node, job.distance_function,job.pK);
                 tempNode = tempNode->next;
             }
-        if (job.type == 2){
-            while (tempNode != NULL)
-            {
-                changeNeighbors(tempNode->node);
-                tempNode = tempNode->next;
-            }
-        }
+        // if (job.type == 2){
+        //     while (tempNode != NULL)
+        //     {
+        //         changeNeighbors(tempNode->node);
+        //         tempNode = tempNode->next;
+        //     }
+        // }
         pthread_mutex_lock(&queueMutex);
         courentJobsProcessing--;
         myInfo->state = IDLE;
@@ -75,10 +74,10 @@ void *workerFunction(void *threadarg) {
 /// @param graph 
 /// @param K 
 /// @param distance_function 
-void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p, double earlyTerminationParameter){
+void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p, double earlyTerminationParameter,int numProcesses){
 
     // Using the existing function to "make" the random Nodes
-    // KRandomNodes(graph, K, distance_function);
+    //KRandomNodes(graph, K, distance_function);
 
     // Projection trees search neighbors...
     randomNeighbors(graph, treeRoot, K, distance_function);
@@ -92,13 +91,13 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
     pthread_mutex_destroy(&queueMutex);
     pthread_cond_destroy(&jobAvailable);
     pthread_mutex_destroy(&changeInMemory);
-    pthread_t threads[NUM_THREADS];
-    ThreadInfo threadInfo[NUM_THREADS];
+    pthread_t threads[numProcesses];
+    ThreadInfo threadInfo[numProcesses];
     pthread_mutex_init(&queueMutex, NULL);
     pthread_mutex_init(&changeInMemory, NULL);
     pthread_cond_init(&jobAvailable, NULL);
 
-    for(int i = 0; i < NUM_THREADS; i++) {
+    for(int i = 0; i < numProcesses; i++) {
         threadInfo[i].threadId = i;
         threadInfo[i].state = IDLE;
         int rc = pthread_create(&threads[i], NULL, workerFunction, (void *)&threadInfo[i]);
@@ -108,29 +107,31 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
         }
     }
 
-    int jobsPerThread = (*graph)->numNodes / NUM_THREADS;
+    int jobsPerThread = (*graph)->numNodes / numProcesses;
+
     int jobsListed = 0;
 
-    Job* head = NULL;
-    DataJob* dataJob = NULL;
-    
-    while (tempNode != NULL) 
-    {
-        if (jobsListed == jobsPerThread)
-        {
+            Job* head = NULL;
+            DataJob* dataJob = NULL;
+            
+            while (tempNode != NULL) 
+            {
+                if (jobsListed == jobsPerThread)
+                {
+                    addJob(&head, dataJob);
+                    dataJob = NULL;
+                    jobsListed =0;
+                }
+                
+                addDataJob(&dataJob, tempNode);
+                ++jobsListed;
+                tempNode = tempNode->next;
+                
+            }
             addJob(&head, dataJob);
-            dataJob = NULL;
-            jobsListed =0;
-        }
-        
-        addDataJob(&dataJob, tempNode);
-        ++jobsListed;
-        tempNode = tempNode->next;
-        
-    }
-    addJob(&head, dataJob);
-    
     do {
+
+            
 
         changes = 0;
         Job* temp = head; 
@@ -155,7 +156,7 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
         while (1) {
             int skip = 0;
 
-            for (int i = 0; i < NUM_THREADS; i++)
+            for (int i = 0; i < numProcesses; i++)
             {
                 if (threadInfo[i].state == WORKING) {
                     ++skip;
@@ -169,35 +170,43 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
 
         temp = head; 
 
-        while ( temp != NULL) {
-            pthread_mutex_lock(&queueMutex);
-            if (jobCount < JOB_QUEUE_SIZE) {
-                jobQueue[jobCount++] = (JobInfo){temp,distance_function,pK,2}; // Assign values to your Job struct
-                ++jobsListed;
-                pthread_cond_signal(&jobAvailable);
-            }
-            pthread_mutex_unlock(&queueMutex);
-            temp = temp->next;
-        }        
-        while (jobCount !=0)
+        // while ( temp != NULL) {
+        //     pthread_mutex_lock(&queueMutex);
+        //     if (jobCount < JOB_QUEUE_SIZE) {
+        //         jobQueue[jobCount++] = (JobInfo){temp,distance_function,pK,2}; // Assign values to your Job struct
+        //         ++jobsListed;
+        //         pthread_cond_signal(&jobAvailable);
+        //     }
+        //     pthread_mutex_unlock(&queueMutex);
+        //     temp = temp->next;
+        // }        
+        // while (jobCount !=0)
+        //     {
+        //     }
+        // while (1) {
+        //     int skip = 0;
+
+        //     for (int i = 0; i < numProcesses; i++)
+        //     {
+        //         if (threadInfo[i].state == WORKING) {
+        //             ++skip;
+        //             continue;
+        //         }
+        //     }
+        //     if (skip == 0) {
+        //         break;
+        //     };
+        // }    
+
+
+        tempNode = (*graph)->nodes;
+
+         while (tempNode != NULL)
             {
+                changeNeighbors(tempNode);
+                tempNode = tempNode->next;
             }
-        while (1) {
-            int skip = 0;
-
-            for (int i = 0; i < NUM_THREADS; i++)
-            {
-                if (threadInfo[i].state == WORKING) {
-                    ++skip;
-                    continue;
-                }
-            }
-            if (skip == 0) {
-                break;
-            };
-        }    
-
-
+        
         tempNode = (*graph)->nodes;
 
         while (tempNode !=NULL) {
@@ -215,8 +224,8 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
 
 
     } while (changerPersent>earlyTerminationParameter);
-
-            freeJOB(head);
+    
+    freeJOB(head);
     
 }
 
@@ -287,7 +296,7 @@ void changeNeighbors(Node* tempNode) {
         Cost* tempCost = tempNode->cost;
 
         while (tempCost != NULL) {
-             pthread_mutex_lock(&changeInMemory);
+            //pthread_mutex_lock(&changeInMemory);
             Node* tempNode1 =  tempCost->node1;
             Node* tempNode2 = tempCost->node2;
             // In tempNode2 we add tempNode1 as neighbor
@@ -309,7 +318,7 @@ void changeNeighbors(Node* tempNode) {
                 ++changes;
             }
             tempCost = tempCost->next;
-            pthread_mutex_unlock(&changeInMemory);
+            //pthread_mutex_unlock(&changeInMemory);
         }
 }
 // ----- functions for improvements -----
