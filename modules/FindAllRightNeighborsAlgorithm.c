@@ -24,7 +24,6 @@ void FindAllRightNeighbors(Graph * graph, String distance_function,int neighbors
             }            
         }
     
-
         if (tempNodeFor->next !=NULL)
         {
             tempNodeFor=tempNodeFor->next;

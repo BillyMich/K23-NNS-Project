@@ -37,57 +37,29 @@ void addNeighbor(NodeNeighborsLinkedList** head, Node* nodeNeighbor, double cost
     }
 }
 
-/// @brief Deleted last node 
+/// @brief Delete the last neighbor node
 /// @param head 
-// void deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
-//     NodeNeighborsLinkedList* current = *head;
-//     NodeNeighborsLinkedList* previous;
-
-//     if (current == NULL) return;
-//     //one neighbor
-//     if (current->next ==NULL) {
-//         *head = NULL;
-//         //free(current);
-//         return;
-//     }
-//     //more than one neighbor
-//     while (current->next != NULL) {
-//         if (current->next->next == NULL) {
-//             previous = current;
-//         }
-//         current = current->next;        
-//     }
-//     //free(current->next);
-//     current->next=NULL;
-// }
-
-// New delete for last node
+/// @return 
 Node*  deleteLastNeighborNode(NodeNeighborsLinkedList** head) {
     if (*head == NULL) return NULL;
-
     NodeNeighborsLinkedList* current = *head;
     NodeNeighborsLinkedList* previous = NULL;
-
     // Find the last node and its previous node
     while (current->next != NULL) {
         previous = current;
         current = current->next;
     }
-
-    Node* name = current->node;
-    
+    Node* node = current->node;
     if (previous == NULL) {
         // There is only one neighbor
         free(*head);
         *head = NULL;
-
     } else {
         // There is more than one neighbor
         free(previous->next);
         previous->next = NULL;
     }
-
-    return name;
+    return node;
 }
 
 void deleteReverseNeighbor(Node* temp, int nodeNameReverse) {

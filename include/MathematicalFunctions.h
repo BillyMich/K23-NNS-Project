@@ -18,4 +18,5 @@ double euclidean_distance_improved(Node* node1, Node* node2);
 
 double distance(Node* node1, Node* node2, String distance_function);
 
+double calculateEuclideanExpression(double norm1, double norm2, double mult);
 #endif 

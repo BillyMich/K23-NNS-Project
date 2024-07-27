@@ -25,9 +25,7 @@ Node* initNode() {
 void addNode(Node** headNode, Dimension* headDimension) {
     Node* newNode = initNode();
     newNode->dimension = headDimension;
-    // printf("head->value-%f\n", headDimension->value);
     newNode->norm = calculate_norm(headDimension);
-
     if (*headNode == NULL) {
         newNode->nodeNameInt = 0;
         *headNode = newNode;
@@ -42,14 +40,13 @@ void addNode(Node** headNode, Dimension* headDimension) {
     }
 }
 
-
+/// @brief Free the node
+/// @param node 
 void freeNode(Node* node) {
     if (node == NULL)
         return;
-
     freeNeighbors(node->neighbors);
     freeNeighbors(node->reversedNeighbors);
     freeDimensions(node->dimension);
-    
     free(node);
 }

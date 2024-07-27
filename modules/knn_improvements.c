@@ -76,14 +76,8 @@ void *workerFunction(void *threadarg) {
 /// @param distance_function 
 void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String distance_function, double p, double earlyTerminationParameter,int numProcesses){
 
-    // Using the existing function to "make" the random Nodes
-    //KRandomNodes(graph, K, distance_function);
-
-    // Projection trees search neighbors...
     randomNeighbors(graph, treeRoot, K, distance_function);
-
     Node * tempNode = (*graph)->nodes;
-    
     int pK = p*K;
     double changerPersent;
     printf("Total noes are %d\n", (*graph)->numNodes);
@@ -106,14 +100,11 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
             exit(-1);
         }
     }
-
     int jobsPerThread = (*graph)->numNodes / numProcesses;
-
     int jobsListed = 0;
 
             Job* head = NULL;
             DataJob* dataJob = NULL;
-            
             while (tempNode != NULL) 
             {
                 if (jobsListed == jobsPerThread)
@@ -130,9 +121,6 @@ void knn_improved_algorithm(Graph** graph, TreeNode* treeRoot, int K, String dis
             }
             addJob(&head, dataJob);
     do {
-
-            
-
         changes = 0;
         Job* temp = head; 
 

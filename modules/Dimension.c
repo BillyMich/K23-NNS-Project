@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "../include/Dimension.h"
 
+/// @brief Initializes a dimension
 Dimension* initDimension() {
     Dimension* newDimension = (Dimension*)malloc(sizeof(Dimension));
     if (newDimension == NULL) {
@@ -14,6 +15,10 @@ Dimension* initDimension() {
     return newDimension;
 }
 
+/// @brief Adds a dimension to the list
+/// @param head 
+/// @param dimValue 
+/// @param val 
 void addDimension(Dimension** head, int dimValue, double val) {
     Dimension* newDimension = initDimension();
     newDimension->dimensionValue = dimValue;
@@ -30,6 +35,7 @@ void addDimension(Dimension** head, int dimValue, double val) {
     }
 }
 
+/// @brief Prints the dimensions
 void printDimensions(Dimension *head) {
     while (head != NULL) {
         printf("%f \n", head->value);
@@ -37,6 +43,7 @@ void printDimensions(Dimension *head) {
     }
 }
 
+/// @brief Free the dimensions
 void freeDimensions(Dimension* dimensions) {
     while (dimensions != NULL) {
         Dimension* next = dimensions->next;
